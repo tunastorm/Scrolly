@@ -26,6 +26,8 @@
 		BC8F1D0F2C6CB3B4005D63CB /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = BC8F1D0E2C6CB3B4005D63CB /* SnapKit */; };
 		BC8F1D122C6CB3BE005D63CB /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = BC8F1D112C6CB3BE005D63CB /* Then */; };
 		BC8F1D152C6CB3C7005D63CB /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BC8F1D142C6CB3C7005D63CB /* IQKeyboardManagerSwift */; };
+		BC8F1D172C6CB50F005D63CB /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D162C6CB50F005D63CB /* APIError.swift */; };
+		BC8F1D1A2C6CC079005D63CB /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D192C6CC079005D63CB /* UserDefaultsManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +44,8 @@
 		BC8F1CF02C6CB25A005D63CB /* APIRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRouter.swift; sourceTree = "<group>"; };
 		BC8F1CF22C6CB267005D63CB /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		BC8F1CF42C6CB26F005D63CB /* TargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetType.swift; sourceTree = "<group>"; };
+		BC8F1D162C6CB50F005D63CB /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
+		BC8F1D192C6CC079005D63CB /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +87,7 @@
 		BC8F1CD42C6CAE4B005D63CB /* Scrolly */ = {
 			isa = PBXGroup;
 			children = (
+				BC8F1D182C6CC059005D63CB /* Storage */,
 				BC8F1CEB2C6CB074005D63CB /* Network */,
 				BC8F1CD52C6CAE4B005D63CB /* AppDelegate.swift */,
 				BC8F1CD72C6CAE4B005D63CB /* SceneDelegate.swift */,
@@ -134,8 +139,17 @@
 				BC8F1CF22C6CB267005D63CB /* APIManager.swift */,
 				BC8F1CF02C6CB25A005D63CB /* APIRouter.swift */,
 				BC8F1CF42C6CB26F005D63CB /* TargetType.swift */,
+				BC8F1D162C6CB50F005D63CB /* APIError.swift */,
 			);
 			path = Manager;
+			sourceTree = "<group>";
+		};
+		BC8F1D182C6CC059005D63CB /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				BC8F1D192C6CC079005D63CB /* UserDefaultsManager.swift */,
+			);
+			path = Storage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -234,8 +248,10 @@
 				BC8F1CD62C6CAE4B005D63CB /* AppDelegate.swift in Sources */,
 				BC8F1CF52C6CB26F005D63CB /* TargetType.swift in Sources */,
 				BC8F1CED2C6CB083005D63CB /* APIKey.swift in Sources */,
+				BC8F1D1A2C6CC079005D63CB /* UserDefaultsManager.swift in Sources */,
 				BC8F1CD82C6CAE4B005D63CB /* SceneDelegate.swift in Sources */,
 				BC8F1CF32C6CB267005D63CB /* APIManager.swift in Sources */,
+				BC8F1D172C6CB50F005D63CB /* APIError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
