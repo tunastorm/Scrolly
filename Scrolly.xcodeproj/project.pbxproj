@@ -28,6 +28,18 @@
 		BC8F1D152C6CB3C7005D63CB /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BC8F1D142C6CB3C7005D63CB /* IQKeyboardManagerSwift */; };
 		BC8F1D172C6CB50F005D63CB /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D162C6CB50F005D63CB /* APIError.swift */; };
 		BC8F1D1A2C6CC079005D63CB /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D192C6CC079005D63CB /* UserDefaultsManager.swift */; };
+		BC8F1D1C2C6CF289005D63CB /* SigninQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D1B2C6CF289005D63CB /* SigninQuery.swift */; };
+		BC8F1D1E2C6CF609005D63CB /* EmailValidationQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D1D2C6CF609005D63CB /* EmailValidationQuery.swift */; };
+		BC8F1D202C6CF65D005D63CB /* LoginQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D1F2C6CF65D005D63CB /* LoginQuery.swift */; };
+		BC8F1D242C6CF711005D63CB /* UpdateFilesQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D232C6CF711005D63CB /* UpdateFilesQuery.swift */; };
+		BC8F1D262C6CF817005D63CB /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D252C6CF817005D63CB /* APIClient.swift */; };
+		BC8F1D282C6D17CB005D63CB /* PostsQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D272C6D17CB005D63CB /* PostsQuery.swift */; };
+		BC8F1D2A2C6D187E005D63CB /* GetPostsQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D292C6D187E005D63CB /* GetPostsQuery.swift */; };
+		BC8F1D2C2C6D1CD2005D63CB /* CommentsQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D2B2C6D1CD2005D63CB /* CommentsQuery.swift */; };
+		BC8F1D2E2C6D1DE1005D63CB /* LikeQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D2D2C6D1DE1005D63CB /* LikeQuery.swift */; };
+		BC8F1D302C6D1F45005D63CB /* LikedPostsQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D2F2C6D1F45005D63CB /* LikedPostsQuery.swift */; };
+		BC8F1D322C6D1FD3005D63CB /* MyProfileQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D312C6D1FD3005D63CB /* MyProfileQuery.swift */; };
+		BC8F1D342C6D2026005D63CB /* HashTagsQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D332C6D2026005D63CB /* HashTagsQuery.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +58,18 @@
 		BC8F1CF42C6CB26F005D63CB /* TargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetType.swift; sourceTree = "<group>"; };
 		BC8F1D162C6CB50F005D63CB /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
 		BC8F1D192C6CC079005D63CB /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
+		BC8F1D1B2C6CF289005D63CB /* SigninQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninQuery.swift; sourceTree = "<group>"; };
+		BC8F1D1D2C6CF609005D63CB /* EmailValidationQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailValidationQuery.swift; sourceTree = "<group>"; };
+		BC8F1D1F2C6CF65D005D63CB /* LoginQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginQuery.swift; sourceTree = "<group>"; };
+		BC8F1D232C6CF711005D63CB /* UpdateFilesQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFilesQuery.swift; sourceTree = "<group>"; };
+		BC8F1D252C6CF817005D63CB /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		BC8F1D272C6D17CB005D63CB /* PostsQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsQuery.swift; sourceTree = "<group>"; };
+		BC8F1D292C6D187E005D63CB /* GetPostsQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPostsQuery.swift; sourceTree = "<group>"; };
+		BC8F1D2B2C6D1CD2005D63CB /* CommentsQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsQuery.swift; sourceTree = "<group>"; };
+		BC8F1D2D2C6D1DE1005D63CB /* LikeQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeQuery.swift; sourceTree = "<group>"; };
+		BC8F1D2F2C6D1F45005D63CB /* LikedPostsQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedPostsQuery.swift; sourceTree = "<group>"; };
+		BC8F1D312C6D1FD3005D63CB /* MyProfileQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileQuery.swift; sourceTree = "<group>"; };
+		BC8F1D332C6D2026005D63CB /* HashTagsQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashTagsQuery.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +144,17 @@
 		BC8F1CF72C6CB30A005D63CB /* QueryModel */ = {
 			isa = PBXGroup;
 			children = (
+				BC8F1D1B2C6CF289005D63CB /* SigninQuery.swift */,
+				BC8F1D1D2C6CF609005D63CB /* EmailValidationQuery.swift */,
+				BC8F1D1F2C6CF65D005D63CB /* LoginQuery.swift */,
+				BC8F1D232C6CF711005D63CB /* UpdateFilesQuery.swift */,
+				BC8F1D272C6D17CB005D63CB /* PostsQuery.swift */,
+				BC8F1D292C6D187E005D63CB /* GetPostsQuery.swift */,
+				BC8F1D2B2C6D1CD2005D63CB /* CommentsQuery.swift */,
+				BC8F1D2D2C6D1DE1005D63CB /* LikeQuery.swift */,
+				BC8F1D2F2C6D1F45005D63CB /* LikedPostsQuery.swift */,
+				BC8F1D312C6D1FD3005D63CB /* MyProfileQuery.swift */,
+				BC8F1D332C6D2026005D63CB /* HashTagsQuery.swift */,
 			);
 			path = QueryModel;
 			sourceTree = "<group>";
@@ -140,6 +175,7 @@
 				BC8F1CF02C6CB25A005D63CB /* APIRouter.swift */,
 				BC8F1CF42C6CB26F005D63CB /* TargetType.swift */,
 				BC8F1D162C6CB50F005D63CB /* APIError.swift */,
+				BC8F1D252C6CF817005D63CB /* APIClient.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -243,15 +279,27 @@
 			buildActionMask = 2147483647;
 			files = (
 				BC8F1CDA2C6CAE4B005D63CB /* ViewController.swift in Sources */,
+				BC8F1D2A2C6D187E005D63CB /* GetPostsQuery.swift in Sources */,
 				BC8F1CF12C6CB25A005D63CB /* APIRouter.swift in Sources */,
 				BC8F1CEF2C6CB08F005D63CB /* APIConstants.swift in Sources */,
 				BC8F1CD62C6CAE4B005D63CB /* AppDelegate.swift in Sources */,
 				BC8F1CF52C6CB26F005D63CB /* TargetType.swift in Sources */,
+				BC8F1D282C6D17CB005D63CB /* PostsQuery.swift in Sources */,
+				BC8F1D342C6D2026005D63CB /* HashTagsQuery.swift in Sources */,
 				BC8F1CED2C6CB083005D63CB /* APIKey.swift in Sources */,
+				BC8F1D202C6CF65D005D63CB /* LoginQuery.swift in Sources */,
 				BC8F1D1A2C6CC079005D63CB /* UserDefaultsManager.swift in Sources */,
+				BC8F1D2C2C6D1CD2005D63CB /* CommentsQuery.swift in Sources */,
+				BC8F1D262C6CF817005D63CB /* APIClient.swift in Sources */,
 				BC8F1CD82C6CAE4B005D63CB /* SceneDelegate.swift in Sources */,
+				BC8F1D242C6CF711005D63CB /* UpdateFilesQuery.swift in Sources */,
+				BC8F1D2E2C6D1DE1005D63CB /* LikeQuery.swift in Sources */,
 				BC8F1CF32C6CB267005D63CB /* APIManager.swift in Sources */,
+				BC8F1D1C2C6CF289005D63CB /* SigninQuery.swift in Sources */,
+				BC8F1D322C6D1FD3005D63CB /* MyProfileQuery.swift in Sources */,
+				BC8F1D1E2C6CF609005D63CB /* EmailValidationQuery.swift in Sources */,
 				BC8F1D172C6CB50F005D63CB /* APIError.swift in Sources */,
+				BC8F1D302C6D1F45005D63CB /* LikedPostsQuery.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,6 +443,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = F8FT97JYZT;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Scrolly/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -426,6 +475,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = F8FT97JYZT;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Scrolly/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
