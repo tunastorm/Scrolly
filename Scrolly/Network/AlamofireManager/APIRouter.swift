@@ -148,13 +148,6 @@ extension APIRouter: TargetType {
         }
     }
     
-    var multipartFormData: MultipartFormData?  {
-        return switch self {
-        case .uploadFiles(let query): setMultipartFormData(query)
-        default: nil
-        }
-    }
-    
     var encoder: ParameterEncoder {
         return URLEncodedFormParameterEncoder.default
     }
@@ -162,18 +155,6 @@ extension APIRouter: TargetType {
     private func encodeQuery(_ query: Encodable) -> Data? {
         let encoder = JSONEncoder()
         return try? encoder.encode(query)
-    }
-    
-    private func setMultipartFormData(_ query: UploadFilesQuery) -> MultipartFormData? {
-        guard query.files.count > 0, query.files.count <= 2 else {
-            return nil
-        }
-        var data = MultipartFormData()
-        query.files.enumerated().forEach { idx, file in
-            let mimeType = idx == 0 ? "image/jpg" : "application/pdf"
-            data.append(file, withName: "files", fileName: query.names[idx], mimeType: mimeType)
-        }
-        return data
     }
     
 }

@@ -10,7 +10,7 @@ import Alamofire
 import RxSwift
 import PDFKit
 
-final class ViewController: UIViewController {
+final class DummyDataViewController: UIViewController {
     
     private let disposeBag = DisposeBag()
     
@@ -24,7 +24,6 @@ final class ViewController: UIViewController {
     
     lazy var files = [
         UIImage(named: coverName)?.jpegData(compressionQuality: 1.0) ?? Data(),
-        LocalFileManager.shared.loadPDFToDocument(filename: episodeName)?.dataRepresentation() ?? Data()
     ]
     
     lazy var signinQuery = SigninQuery(email: self.email, password: self.password, nick: self.nick, phoneNum: self.phoneNum, birthDay: self.birthDay)
@@ -32,7 +31,6 @@ final class ViewController: UIViewController {
     lazy var loginQuery = LoginQuery(email: self.email, password: self.password)
     // 요청양식
     lazy var myProfileQuery = MyProfileQuery(nick: "secondTester", phoneNum: "01087654321", birthDay: "19951231", profile: Data())
-    lazy var uploadfielsQuery = UploadFilesQuery(names: [coverName, episodeName], files: self.files)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +40,7 @@ final class ViewController: UIViewController {
 //        withDraw()
 //        getMyProfile()
 //        updateMyProfile()
-//        uploadPostImage()
+        uploadPostImage()
     }
     
     private func testSubscribe(single: Single<APIManager.APIResult>) {
@@ -93,9 +91,31 @@ final class ViewController: UIViewController {
     }
     
     private func uploadPostImage() {
-        let result = APIManager.shared.callRequestUploadPostImage(uploadfielsQuery)
+        guard let data = LocalFileManager.shared.loadPDFFromAsset(filename: "novel_f1") else {
+            print(#function, "data 없음")
+            return
+        }
+//        guard let data = document.dataRepresentation() else {
+//            print(#function, "data 없음")
+//            return
+//        }
+        print(#function, "data: ", data)
+        self.files.append(data)
+        let query = UploadFilesQuery(names: [coverName, episodeName], files: self.files)
+        let result = APIManager.shared.callRequestUploadPostImage(query)
         testSubscribe(single: result)
     }
+    
+//    private func test() {
+//        let directoryPath = "/Users/ucheol/dev/SeSAC/assignment/Scrolly/Scrolly/Assets.xcassets/novel"
+//        do {
+//            let contents = try FileManager().contentsOfDirectory(atPath: directoryPath)
+//            print(contents)
+//        } catch {
+//            print("error 발생")
+//        }
+//      
+//    }
    
 
 }

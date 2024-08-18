@@ -14,7 +14,6 @@ protocol TargetType: URLRequestConvertible {
     var path: String { get }
     var headers: HTTPHeaders { get }
     var body: Data? { get }
-    var multipartFormData: MultipartFormData? { get }
     var encoder: ParameterEncoder { get }
 }
 
@@ -24,14 +23,11 @@ extension TargetType {
         let url = try (baseURL + APIConstants.version.latest + path).asURL()
         var request = try URLRequest(url: url, method: method, headers: headers)
         if var body {
-            if let multipartFormData, let data = encodeMultipartFormData(multipartFormData) {
-                body.append(data)
-            }
             request.httpBody = body
         }
         print(#function, "request: ", request)
-        print(#function, "headers: ", headers)
-        print(#function, "body: ", body)
+//        print(#function, "headers: ", headers)
+//        print(#function, "body: ", body)
         return request
     }
     

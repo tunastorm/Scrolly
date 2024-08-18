@@ -113,7 +113,10 @@ final class APIManager {
                 single(.success(.success(model)))
             } failure: { [weak self] error in
                 if error == .expiredToken {
-                    self?.callRequestRefreshToken { self?.callRequestUploadPostImage(query) }
+                    self?.callRequestRefreshToken {
+                        print("callRequestUploadPostImage 재실행 시도")
+                        self?.callRequestUploadPostImage(query)
+                    }
                 }
                 single(.success(.failure(error)))
             }

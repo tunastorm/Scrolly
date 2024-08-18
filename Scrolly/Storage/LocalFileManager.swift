@@ -15,22 +15,23 @@ enum FileType {
     case pdf
 }
 
-
 final class LocalFileManager: FileManager {
     
     static let shared = LocalFileManager()
-
+    
     private var documentDirectory: URL?
-
+    
+    private var assetDirectory: URL?
+    
     private override init() {
-        self.documentDirectory = FileManager.default.urls(
-            for: .documentDirectory,
-            in: .userDomainMask).first
+        self.documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+        self.assetDirectory = URL(string: "/Users/ucheol/dev/SeSAC/assignment/Scrolly/Scrolly/Assets.xcassets/novel")
     }
     
     private func getSendable(_ filename: String, fileType: FileType) -> Sendable? {
         
         guard let documentDirectory else { return nil }
+        
         let fileURL = documentDirectory.appendingPathComponent(filename)
         //이 경로에 실제로 파일이 존재하는 지 확인
         var path: String?
@@ -60,7 +61,7 @@ final class LocalFileManager: FileManager {
         guard let document = file as? PDFDocument else { return nil }
         var options: [PDFDocumentWriteOption : Bool] = [:]
         if #available(iOS 16.4, *) {
-           options[ PDFDocumentWriteOption.optimizeImagesForScreenOption ] = true
+            options[ PDFDocumentWriteOption.optimizeImagesForScreenOption ] = true
         }
         return document.dataRepresentation(options: options)
     }
@@ -69,11 +70,33 @@ final class LocalFileManager: FileManager {
         return getSendable("\(filename).jpg", fileType: .image) as? UIImage
     }
     
-    func loadPDFToDocument(filename: String) -> PDFDocument? {
+    func loadPDFFromDocument(filename: String) -> PDFDocument? {
         guard let fileURL = getSendable("\(filename).pdf", fileType: .pdf) as? URL else {
             return nil
         }
         return PDFDocument(url: fileURL)
+    }
+    
+    func loadPDFFromAsset(filename: String) -> Data? {
+        guard let assetDirectory else { return nil }
+        
+        let fileURL = assetDirectory.appendingPathComponent("/\(filename).imageset/\(filename).pdf")
+        print(#function, "fileURL: ", fileURL)
+        
+        var path: String?
+        if #available(iOS 16.0, *) {
+            path = fileURL.path()
+        } else {
+            path = fileURL.path
+        }
+        
+        if let path, FileManager.default.fileExists(atPath: path) {
+            print(#function, "URL 존재", fileURL)
+            return FileManager.default.contents(atPath: path)
+        } else {
+            return nil
+        }
+        
     }
     
     func saveFileToDocument(file: NSObject, filename: String, fileType: FileType) {
@@ -162,5 +185,5 @@ final class LocalFileManager: FileManager {
             return nil
         }
     }
-    
+
 }

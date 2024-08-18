@@ -53,7 +53,8 @@ final class APIClient {
         AF.upload(multipartFormData: { multipartFormData in
             query.files.enumerated().forEach { idx, file in
                 let mimeType = idx == 0 ? "image/jpg" : "application/pdf"
-                multipartFormData.append(file, withName: "files", fileName: query.names[idx], mimeType: mimeType)
+                let fileType = ".\(mimeType.split(separator: "/")[1])"
+                multipartFormData.append(file, withName: "files", fileName: query.names[idx] + fileType, mimeType: mimeType)
             }
         }, with: router)
         .validate(statusCode: 200...419)
