@@ -8,8 +8,9 @@
 import Foundation
 import Alamofire
 
-struct UpdateFilesQuery: Encodable {
+struct UploadFilesQuery: Encodable {
     
-    let files: Data
+    let names: [String]
+    let files: [Data]
     
 }

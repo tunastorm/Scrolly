@@ -9,6 +9,7 @@ import Foundation
 
 struct PostsQuery: Encodable {
     
+    let productId: String
     let title: String?
     let content: String?
     let content1: String?
@@ -16,7 +17,6 @@ struct PostsQuery: Encodable {
     let content3: String?
     let content4: String?
     let content5: String?
-    let productId: String?
     let files: [String]?
     
 }
