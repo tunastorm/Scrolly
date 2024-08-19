@@ -17,18 +17,19 @@ final class APIClient {
     typealias onSuccess<T> = ((T) -> Void)
     typealias onFailure = ((_ error: APIError) -> Void)
     
+    static let session = Session(interceptor: RetryInterceptor())
+    
     static func request<T>(_ object: T.Type,
                            router: APIRouter,
                            success: @escaping onSuccess<T>,
-                           failure: @escaping onFailure) where T:
-    Decodable {
+                           failure: @escaping onFailure) where T:Decodable {
 //        AF.request(router)
 //            .responseString { response in
 //                print(#function)
 //                dump(response.result)
 //            }
 //        
-        AF.request(router)
+        session.request(router)
             .validate(statusCode: 200...445)
             .responseDecodable(of: object) { response in
                 if let error = responseErrorHandler(response) {
@@ -42,23 +43,26 @@ final class APIClient {
                     failure(error)
                 }
             }
+        
+        
+        
     }
     
     static func upload<T>(_ object: T.Type,
                           query: UploadFilesQuery,
                           router: APIRouter,
                           success: @escaping onSuccess<T>,
-                          failure: @escaping onFailure) where T:
-    Decodable {
-        AF.upload(multipartFormData: { multipartFormData in
+                          failure: @escaping onFailure) where T: Decodable {
+        
+        session.upload(multipartFormData: { multipartFormData in
             query.files.enumerated().forEach { idx, file in
                 let mimeType = idx == 0 ? "image/jpg" : "application/pdf"
                 let fileType = ".\(mimeType.split(separator: "/")[1])"
                 multipartFormData.append(file, withName: "files", fileName: query.names[idx] + fileType, mimeType: mimeType)
             }
-        }, with: router)
+        }, with: router, usingThreshold: UInt64.init())
         .validate(statusCode: 200...419)
-        .responseDecodable(of: T.self){ response in
+        .responseDecodable(of: T.self ){ response in
             if let error = responseErrorHandler(response) {
                 return failure(error)
             }
@@ -70,12 +74,16 @@ final class APIClient {
                 failure(error)
             }
         }
+        .uploadProgress { progress in
+            
+        }
     }
     
     private static func responseErrorHandler<T: Decodable>(_ response: AFDataResponse<T>) -> APIError? {
         if let statusCode = response.response?.statusCode, let statusError = convertResponseStatus(statusCode){
             return statusError
         }
+        dump(response.result)
         guard let decodedData = response.value else {
             return .noResponseData
         }
@@ -92,10 +100,14 @@ final class APIClient {
         case 410: .taskFailed
         case 418: .expiredRefreshToken
         case 419: .expiredToken
+//        case 420:
+//        case 429:
+//        case 444:
+//        case 500:
         case 445: .unAuthorizedRequest
         case 300 ..< 400: .redirectError
         case 402 ..< 500: .clientError
-        case 500 ..< 600: .serverError
+        case 501 ..< 600: .serverError
         default: .networkError
         }
     }

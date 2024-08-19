@@ -19,49 +19,50 @@ final class APIManager {
     
     static let shared = APIManager()
     
+    typealias CallResult = Single<APIResult>
     typealias APIResult = Result<Decodable, APIError>
     typealias TokenHandler = (Decodable) -> Void
-    typealias RefereshHandler = (APIError) -> Void
-    typealias RetryHandler = () -> Void
+    typealias RefreshHandler = (APIError) -> Observable<APIResult>?
+    typealias RetryHandler = () -> Observable<APIResult>?
     
-    private func callRequestAPI<T: Decodable>(model: T.Type, router: APIRouter, tokenHandler: TokenHandler? = nil, refreshHandler: RefereshHandler? = nil) -> Single<APIResult> {
+    private let disposeBag = DisposeBag()
+    
+    private func callRequestAPI<T: Decodable>(model: T.Type, router: APIRouter, tokenHandler: TokenHandler? = nil) -> CallResult {
         return Single.create { single in
             APIClient.request(T.self, router: router) { model in
                 if let tokenHandler { tokenHandler(model) }
                 single(.success(.success(model)))
             } failure: { error in
-                if let refreshHandler { refreshHandler(error) }
                 single(.success(.failure(error)))
             }
             return Disposables.create()
        }
     }
+
     
-    private func callRequestRefreshToken(retryHandler: @escaping RetryHandler) {
+    func callRequestRefreshToken(completion: @escaping (APIResult) -> Void) {
         let router = APIRouter.refreshAccessToken
         APIClient.request(RefreshTokenModel.self, router: router) { model in
             UserDefaultsManager.token = model.accessToken
             KingfisherManager.shared.setHeaders()
-            retryHandler()
+            completion(.success(model))
         } failure: { error in
-            guard error != .expiredRefreshToken else {
-                print(error.message)
-                return
-            }
+            completion(.failure(error))
         }
     }
     
-    func callRequestSignin(_ query: SigninQuery) -> Single<APIResult> {
+    
+    func callRequestSignin(_ query: SigninQuery) -> CallResult {
         let router = APIRouter.signin(query)
-        return callRequestAPI(model: SigninModel.self, router: router).debug("callRequestSignin")
+        return callRequestAPI(model: SigninModel.self, router: router).debug(#function.description)
     }
     
-    func callRequestEmailValidation(_ query: EmailValidationQuery) -> Single<APIResult> {
+    func callRequestEmailValidation(_ query: EmailValidationQuery) -> CallResult {
         let router = APIRouter.emailValidation(query)
-        return callRequestAPI(model: EmailValidationModel.self, router: router).debug("callRequestEmailValidation")
+        return callRequestAPI(model: EmailValidationModel.self, router: router).debug(#function.description)
     }
 
-    func callRequestLogin(_ query: LoginQuery) -> Single<APIResult> {
+    func callRequestLogin(_ query: LoginQuery) -> CallResult {
         let router = APIRouter.login(query)
         return callRequestAPI(model: LoginModel.self, router: router, tokenHandler: { model in
             let loginModel = model as! LoginModel
@@ -69,73 +70,35 @@ final class APIManager {
             UserDefaultsManager.refresh = loginModel.refreshToken
             KingfisherManager.shared.setHeaders()
         })
-        .debug("callRequestLogin")
+        .debug(#function.description)
     }
 
-    func callRequestWithDraw() -> Single<APIResult> {
+    func callRequestWithDraw() -> CallResult {
         let router = APIRouter.withdraw
-        return callRequestAPI(model: WithDrawModel.self, router: router, refreshHandler: { [weak self] error in
-            switch error {
-            case .expiredToken:
-                self?.callRequestRefreshToken() { self?.callRequestWithDraw() }
-            default: break
-            }
-        }).debug("callRequestWithDraw")
+        return callRequestAPI(model: WithDrawModel.self, router: router).debug(#function.description)
     }
     
-    func callRequestMyProfile() -> Single<APIResult> {
+    func callRequestMyProfile() -> CallResult {
         let router = APIRouter.getMyProfile
-        return callRequestAPI(model: MyProfileModel.self, router: router, refreshHandler: { [weak self] error in
-            switch error {
-            case .expiredToken:
-                self?.callRequestRefreshToken() { self?.callRequestMyProfile() }
-            default: break
-            }
-        })
-        .debug("callRequestMyProfile")
+        return callRequestAPI(model: MyProfileModel.self, router: router).debug(#function.description)
     }
     
-    func callRequestUpdateMyProfile(_ query: MyProfileQuery) -> Single<APIResult> {
+    func callRequestUpdateMyProfile(_ query: MyProfileQuery) -> CallResult {
         let router = APIRouter.updateMyProfile(query)
-        return callRequestAPI(model: MyProfileModel.self, router: router, refreshHandler: { [weak self] error in
-            switch error {
-            case .expiredToken:
-                self?.callRequestRefreshToken() { self?.callRequestUpdateMyProfile(query) }
-            default: break
-            }
-        }).debug("callRequestUpdateMyProfile")
+        return callRequestAPI(model: MyProfileModel.self, router: router).debug(#function.description)
     }
     
     func callRequestUploadPostImage(_ query: UploadFilesQuery) -> Single<APIResult> {
+        print(#function, "업로드 이미지")
         let router = APIRouter.uploadFiles(query)
         return Single.create { single in
             APIClient.upload(UploadFilesModel.self, query: query, router: router) { model in
                 single(.success(.success(model)))
-            } failure: { [weak self] error in
-                if error == .expiredToken {
-                    self?.callRequestRefreshToken {
-                        print("callRequestUploadPostImage 재실행 시도")
-                        self?.callRequestUploadPostImage(query)
-                    }
-                }
+            } failure: { error in
                 single(.success(.failure(error)))
             }
             return Disposables.create()
-        }
-        .debug("callRequestUploadPostImage")
-        
-//        return callRequestAPI(model: UploadFilesModel.self, router: router, refreshHandler: { [weak self] error in
-//            switch error {
-//            case .expiredToken:
-//                self?.callRequestRefreshToken() { self?.callRequestUploadPostImage(query) }
-//            default: break
-//            }
-//        })
-        
+        }.debug(#function.description)
     }
-    
-    
-    
- 
     
 }

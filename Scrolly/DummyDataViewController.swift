@@ -19,8 +19,8 @@ final class DummyDataViewController: UIViewController {
     let nick = "tester"
     let phoneNum = "01012345678"
     let birthDay = "19930101"
-    let coverName = "dummyImage_1"
-    let episodeName = "novel_f1"
+    let coverName = "dummyImage_5"
+    let episodeName = "novel_f5"
     
     lazy var files = [
         UIImage(named: coverName)?.jpegData(compressionQuality: 1.0) ?? Data(),
@@ -43,8 +43,8 @@ final class DummyDataViewController: UIViewController {
         uploadPostImage()
     }
     
-    private func testSubscribe(single: Single<APIManager.APIResult>) {
-        single.subscribe(with: self) { owner, result in
+    private func testSubscribe(observable: Single<APIManager.APIResult>) {
+        observable.subscribe(with: self) { owner, result in
             switch result {
             case .success(let model):
                 dump(model)
@@ -62,61 +62,47 @@ final class DummyDataViewController: UIViewController {
     
     private func validateEmail() {
         let result = APIManager.shared.callRequestEmailValidation(emailValidationQuery)
-        testSubscribe(single: result)
+        testSubscribe(observable: result)
     }
     
     private func signin() {
         let result = APIManager.shared.callRequestSignin(signinQuery)
-        testSubscribe(single: result)
+        testSubscribe(observable: result)
     }
     
     private func login() {
         let result = APIManager.shared.callRequestLogin(loginQuery)
-        testSubscribe(single: result)
+        testSubscribe(observable: result)
     }
     
     private func withDraw() {
         let result = APIManager.shared.callRequestWithDraw()
-        testSubscribe(single: result)
+        testSubscribe(observable: result)
     }
     
     private func getMyProfile() {
         let result = APIManager.shared.callRequestMyProfile()
-        testSubscribe(single: result)
+        testSubscribe(observable: result)
     }
     
     private func updateMyProfile() {
         let result = APIManager.shared.callRequestUpdateMyProfile(myProfileQuery)
-        testSubscribe(single: result)
+        testSubscribe(observable: result)
     }
     
     private func uploadPostImage() {
-        guard let data = LocalFileManager.shared.loadPDFFromAsset(filename: "novel_f1") else {
+        guard let data = LocalFileManager.shared.loadPDFFromAsset(filename: self.episodeName) else {
             print(#function, "data 없음")
             return
         }
-//        guard let data = document.dataRepresentation() else {
-//            print(#function, "data 없음")
-//            return
-//        }
-        print(#function, "data: ", data)
         self.files.append(data)
+//        print(#function, "files: ", self.files)
         let query = UploadFilesQuery(names: [coverName, episodeName], files: self.files)
         let result = APIManager.shared.callRequestUploadPostImage(query)
-        testSubscribe(single: result)
+        testSubscribe(observable: result)
     }
     
-//    private func test() {
-//        let directoryPath = "/Users/ucheol/dev/SeSAC/assignment/Scrolly/Scrolly/Assets.xcassets/novel"
-//        do {
-//            let contents = try FileManager().contentsOfDirectory(atPath: directoryPath)
-//            print(contents)
-//        } catch {
-//            print("error 발생")
-//        }
-//      
-//    }
-   
+    
 
 }
 

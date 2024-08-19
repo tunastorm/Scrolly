@@ -136,7 +136,6 @@ extension APIRouter: TargetType {
         case .signin(let query): encodeQuery(query)
         case .emailValidation(let query): encodeQuery(query)
         case .login(let query): encodeQuery(query)
-        case .uploadFiles(let query): encodeQuery(query)
         case .getPosts(let query): encodeQuery(query)
         case .updatePosts(let id, let query): encodeQuery(query)
         case .uploadComments(let id, let query), .updateComments(let id, let query): encodeQuery(query)

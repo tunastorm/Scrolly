@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BC097C622C7330120038A21C /* NetworkInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC097C612C7330120038A21C /* NetworkInterceptor.swift */; };
 		BC8F1CD62C6CAE4B005D63CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1CD52C6CAE4B005D63CB /* AppDelegate.swift */; };
 		BC8F1CD82C6CAE4B005D63CB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1CD72C6CAE4B005D63CB /* SceneDelegate.swift */; };
 		BC8F1CDA2C6CAE4B005D63CB /* DummyDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1CD92C6CAE4B005D63CB /* DummyDataViewController.swift */; };
@@ -52,6 +53,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BC097C612C7330120038A21C /* NetworkInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkInterceptor.swift; sourceTree = "<group>"; };
 		BC8F1CD22C6CAE4B005D63CB /* Scrolly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Scrolly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC8F1CD52C6CAE4B005D63CB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BC8F1CD72C6CAE4B005D63CB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				BC8F1D252C6CF817005D63CB /* APIClient.swift */,
 				BC8F1CF02C6CB25A005D63CB /* APIRouter.swift */,
 				BC8F1CF42C6CB26F005D63CB /* TargetType.swift */,
+				BC097C612C7330120038A21C /* NetworkInterceptor.swift */,
 				BC8F1D162C6CB50F005D63CB /* APIError.swift */,
 			);
 			path = AlamofireManager;
@@ -325,6 +328,7 @@
 				BC8F1D3C2C70B14C005D63CB /* RefreshTokenModel.swift in Sources */,
 				BC8F1D342C6D2026005D63CB /* HashTagsQuery.swift in Sources */,
 				BC8F1CED2C6CB083005D63CB /* APIKey.swift in Sources */,
+				BC097C622C7330120038A21C /* NetworkInterceptor.swift in Sources */,
 				BC8F1D202C6CF65D005D63CB /* LoginQuery.swift in Sources */,
 				BC8F1D3A2C70ACA8005D63CB /* EmailValidationModel.swift in Sources */,
 				BC8F1D1A2C6CC079005D63CB /* UserDefaultsManager.swift in Sources */,
