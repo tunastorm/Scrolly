@@ -43,8 +43,6 @@ extension APIRouter: TargetType {
         case tokenAndRefresh
         case tokenAndMulipart
         case tokenAndJson
-        case tokenAndProductId
-        case tokenJsonProductId
         
         var headers: [String: String] {
             return switch self {
@@ -61,13 +59,13 @@ extension APIRouter: TargetType {
             case .tokenAndJson:
                 [ APIConstants.authorization : UserDefaultsManager.token,
                   APIConstants.contentType : APIConstants.json ]
-            case .tokenAndProductId:
-                [ APIConstants.authorization : UserDefaultsManager.token,
-                  APIConstants.productId : "" ]
-            case .tokenJsonProductId:
-                [ APIConstants.authorization : UserDefaultsManager.token,
-                  APIConstants.contentType : APIConstants.json,
-                  APIConstants.productId : "" ]
+//            case .tokenAndProductId:
+//                [ APIConstants.authorization : UserDefaultsManager.token,
+//                  APIConstants.productId : "" ]
+//            case .tokenJsonProductId:
+//                [ APIConstants.authorization : UserDefaultsManager.token,
+//                  APIConstants.contentType : APIConstants.json,
+//                  APIConstants.productId : "" ]
             }
         }
         
@@ -108,21 +106,13 @@ extension APIRouter: TargetType {
         switch self {
         case .refreshAccessToken:
             return HeadersOption.tokenAndRefresh.combineHeaders
-        case .uploadPosts(let query):
-            var headers = HeadersOption.tokenJsonProductId.combineHeaders
-            headers[APIConstants.productId] = query.productId
-            return headers
-        case .getPosts(let query):
-            var headers = HeadersOption.tokenAndProductId.combineHeaders
-            headers[APIConstants.productId] = query.productId
-            return headers
-        case .withdraw, .getPostsImage, .queryOnePosts, .deletePosts, .deleteComments, .likePosts, .cancleLikedPosts, .getLikedPosts, .likePostsSub, .cancleLikedPostsSub, .getLikedPostsSub, .getMyProfile, .searchHashTags:
+        case .withdraw, .getPosts, .getPostsImage, .queryOnePosts, .deletePosts, .deleteComments, .likePosts, .cancleLikedPosts, .getLikedPosts, .likePostsSub, .cancleLikedPostsSub, .getLikedPostsSub, .getMyProfile, .searchHashTags:
             return HeadersOption.token.combineHeaders
         case .signin, .emailValidation, .login:
             return HeadersOption.json.combineHeaders
         case .uploadFiles, .updateMyProfile:
             return HeadersOption.tokenAndMulipart.combineHeaders
-        case .updatePosts, .uploadComments, .updateComments:
+        case .uploadPosts, .updatePosts, .uploadComments, .updateComments:
             return HeadersOption.tokenAndJson.combineHeaders
         }
     }
@@ -136,7 +126,7 @@ extension APIRouter: TargetType {
         case .signin(let query): encodeQuery(query)
         case .emailValidation(let query): encodeQuery(query)
         case .login(let query): encodeQuery(query)
-        case .getPosts(let query): encodeQuery(query)
+        case .uploadPosts(let query): encodeQuery(query)
         case .updatePosts(let id, let query): encodeQuery(query)
         case .uploadComments(let id, let query), .updateComments(let id, let query): encodeQuery(query)
         case .likePosts(let id, let query), .cancleLikedPosts(let id, let query), .likePostsSub(let id, let query), .cancleLikedPostsSub(let id, let query): encodeQuery(query)
@@ -147,8 +137,44 @@ extension APIRouter: TargetType {
         }
     }
     
+    var parameters: Encodable? {
+        switch self {
+        case .getPosts(let query): query
+        default: nil
+        }
+    }
+    
     var encoder: ParameterEncoder {
         return URLEncodedFormParameterEncoder.default
+    }
+    
+    var description: String {
+        switch self {
+        case .signin: "signin"
+        case .emailValidation: "emailValidation"
+        case .login: "login"
+        case .refreshAccessToken: "refreshAccessToken"
+        case .withdraw: "withdraw"
+        case .uploadFiles: "uploadFiles"
+        case .uploadPosts: "uploadPosts"
+        case .getPosts: "getPosts"
+        case .getPostsImage: "getPostsImage"
+        case .queryOnePosts: "queryOnePosts"
+        case .updatePosts: "updatePosts"
+        case .deletePosts: "deletePosts"
+        case .uploadComments: "uploadComments"
+        case .updateComments: "updateComments"
+        case .deleteComments: "deleteComments"
+        case .likePosts: "likePosts"
+        case .cancleLikedPosts: "cancleLikedPosts"
+        case .getLikedPosts: "getLikedPosts"
+        case .likePostsSub: "likePostsSub"
+        case .cancleLikedPostsSub: "cancleLikedPostsSub"
+        case .getLikedPostsSub: "getLikedPostsSub"
+        case .getMyProfile: "getMyProfile"
+        case .updateMyProfile: "updateMyProfile"
+        case .searchHashTags: "searchHashTags"
+        }
     }
     
     private func encodeQuery(_ query: Encodable) -> Data? {

@@ -19,4 +19,9 @@ struct PostsQuery: Encodable {
     let content5: String?
     let files: [String]?
     
+    enum CodingKeys: String, CodingKey {
+        case productId = "product_id"
+        case title, content, content1, content2, content3, content4, content5, files
+    }
+    
 }

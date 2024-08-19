@@ -20,7 +20,7 @@ final class DummyDataViewController: UIViewController {
     let phoneNum = "01012345678"
     let birthDay = "19930101"
     let coverName = "dummyImage_5"
-    let episodeName = "novel_f5"
+    let episodeName = "novel_f1"
     
     lazy var files = [
         UIImage(named: coverName)?.jpegData(compressionQuality: 1.0) ?? Data(),
@@ -29,8 +29,8 @@ final class DummyDataViewController: UIViewController {
     lazy var signinQuery = SigninQuery(email: self.email, password: self.password, nick: self.nick, phoneNum: self.phoneNum, birthDay: self.birthDay)
     lazy var emailValidationQuery = EmailValidationQuery(email: self.email)
     lazy var loginQuery = LoginQuery(email: self.email, password: self.password)
-    // 요청양식
     lazy var myProfileQuery = MyProfileQuery(nick: "secondTester", phoneNum: "01087654321", birthDay: "19951231", profile: Data())
+    lazy var getPostsQuery = GetPostsQuery(next: nil, limit: "10", productId: APIConstants.ProductId.novelEpisode)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,54 +40,57 @@ final class DummyDataViewController: UIViewController {
 //        withDraw()
 //        getMyProfile()
 //        updateMyProfile()
-        uploadPostImage()
+//        uploadPostImage()
+//        uploadPosts()
+//        getPosts()
+        queryOnePost(postId: "66c353dfd22f9bf132291e8e")
     }
     
-    private func testSubscribe(observable: Single<APIManager.APIResult>) {
-        observable.subscribe(with: self) { owner, result in
+    private func testSubscribe(single: Single<APIManager.APIResult>) {
+        single.subscribe(with: self) { owner, result in
             switch result {
             case .success(let model):
+                print(#function, "model: ")
                 dump(model)
-//                switch model {
-//                case is LoginModel:
-////                    owner.refreshToken()
-//                    owner.updateMyProfile()
-//                default: break
-//                }
-            case .failure(let error): print(error)
+                
+                if model is UploadFilesModel {
+                    let uploadFilesModel = model as! UploadFilesModel
+                    owner.uploadPosts(files: uploadFilesModel.files)
+                }
+            case .failure(let error): print(#function, "error: ", error)
             }
         }
         .disposed(by: disposeBag)
     }
     
     private func validateEmail() {
-        let result = APIManager.shared.callRequestEmailValidation(emailValidationQuery)
-        testSubscribe(observable: result)
+        let result = APIManager.shared.callRequestEmailValidation(.emailValidation(emailValidationQuery))
+        testSubscribe(single: result)
     }
     
     private func signin() {
-        let result = APIManager.shared.callRequestSignin(signinQuery)
-        testSubscribe(observable: result)
+        let result = APIManager.shared.callRequestSignin(.signin(signinQuery))
+        testSubscribe(single: result)
     }
     
     private func login() {
-        let result = APIManager.shared.callRequestLogin(loginQuery)
-        testSubscribe(observable: result)
+        let result = APIManager.shared.callRequestLogin(.login(loginQuery))
+        testSubscribe(single: result)
     }
     
     private func withDraw() {
         let result = APIManager.shared.callRequestWithDraw()
-        testSubscribe(observable: result)
+        testSubscribe(single: result)
     }
     
     private func getMyProfile() {
         let result = APIManager.shared.callRequestMyProfile()
-        testSubscribe(observable: result)
+        testSubscribe(single: result)
     }
     
     private func updateMyProfile() {
-        let result = APIManager.shared.callRequestUpdateMyProfile(myProfileQuery)
-        testSubscribe(observable: result)
+        let result = APIManager.shared.callRequestUpdateMyProfile(.updateMyProfile(myProfileQuery))
+        testSubscribe(single: result)
     }
     
     private func uploadPostImage() {
@@ -96,13 +99,28 @@ final class DummyDataViewController: UIViewController {
             return
         }
         self.files.append(data)
-//        print(#function, "files: ", self.files)
         let query = UploadFilesQuery(names: [coverName, episodeName], files: self.files)
         let result = APIManager.shared.callRequestUploadPostImage(query)
-        testSubscribe(observable: result)
+        testSubscribe(single: result)
+    }
+    
+    private func uploadPosts(files: [String]? = nil) {
+        var query = PostsQuery(productId: APIConstants.ProductId.novelEpisode, title: "원작에 없는 인물로 태어났습니다 1화", content: "#원작에_없는_인물로_태어났습니다 #로맨스 #판타지 #빙의", content1: "무료", content2: nil, content3: nil, content4: nil, content5: nil, files: files)
+        let result = APIManager.shared.callRequestUploadPosts(.uploadPosts(query))
+        testSubscribe(single: result)
+    }
+    
+    private func getPosts() {
+        let result = APIManager.shared.callRequestGetPosts(.getPosts(getPostsQuery))
+        testSubscribe(single: result)
+    }
+    
+    private func queryOnePost(postId: String) {
+        let result = APIManager.shared.callRequestQueryOnePost(.queryOnePosts(id: postId))
+        testSubscribe(single: result)
     }
     
     
-
+    
 }
 

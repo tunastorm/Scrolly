@@ -19,13 +19,9 @@ final class APIManager {
     
     static let shared = APIManager()
     
-    typealias CallResult = Single<APIResult>
     typealias APIResult = Result<Decodable, APIError>
+    typealias CallResult = Single<APIResult>
     typealias TokenHandler = (Decodable) -> Void
-    typealias RefreshHandler = (APIError) -> Observable<APIResult>?
-    typealias RetryHandler = () -> Observable<APIResult>?
-    
-    private let disposeBag = DisposeBag()
     
     private func callRequestAPI<T: Decodable>(model: T.Type, router: APIRouter, tokenHandler: TokenHandler? = nil) -> CallResult {
         return Single.create { single in
@@ -38,7 +34,6 @@ final class APIManager {
             return Disposables.create()
        }
     }
-
     
     func callRequestRefreshToken(completion: @escaping (APIResult) -> Void) {
         let router = APIRouter.refreshAccessToken
@@ -51,44 +46,7 @@ final class APIManager {
         }
     }
     
-    
-    func callRequestSignin(_ query: SigninQuery) -> CallResult {
-        let router = APIRouter.signin(query)
-        return callRequestAPI(model: SigninModel.self, router: router).debug(#function.description)
-    }
-    
-    func callRequestEmailValidation(_ query: EmailValidationQuery) -> CallResult {
-        let router = APIRouter.emailValidation(query)
-        return callRequestAPI(model: EmailValidationModel.self, router: router).debug(#function.description)
-    }
-
-    func callRequestLogin(_ query: LoginQuery) -> CallResult {
-        let router = APIRouter.login(query)
-        return callRequestAPI(model: LoginModel.self, router: router, tokenHandler: { model in
-            let loginModel = model as! LoginModel
-            UserDefaultsManager.token = loginModel.accessToken
-            UserDefaultsManager.refresh = loginModel.refreshToken
-            KingfisherManager.shared.setHeaders()
-        })
-        .debug(#function.description)
-    }
-
-    func callRequestWithDraw() -> CallResult {
-        let router = APIRouter.withdraw
-        return callRequestAPI(model: WithDrawModel.self, router: router).debug(#function.description)
-    }
-    
-    func callRequestMyProfile() -> CallResult {
-        let router = APIRouter.getMyProfile
-        return callRequestAPI(model: MyProfileModel.self, router: router).debug(#function.description)
-    }
-    
-    func callRequestUpdateMyProfile(_ query: MyProfileQuery) -> CallResult {
-        let router = APIRouter.updateMyProfile(query)
-        return callRequestAPI(model: MyProfileModel.self, router: router).debug(#function.description)
-    }
-    
-    func callRequestUploadPostImage(_ query: UploadFilesQuery) -> Single<APIResult> {
+    func callRequestUploadPostImage(_ query: UploadFilesQuery) -> CallResult {
         print(#function, "업로드 이미지")
         let router = APIRouter.uploadFiles(query)
         return Single.create { single in
@@ -99,6 +57,50 @@ final class APIManager {
             }
             return Disposables.create()
         }.debug(#function.description)
+    }
+    
+    func callRequestLogin(_ router: APIRouter) -> CallResult {
+        return callRequestAPI(model: LoginModel.self, router: router, tokenHandler: { model in
+            let loginModel = model as! LoginModel
+            UserDefaultsManager.token = loginModel.accessToken
+            UserDefaultsManager.refresh = loginModel.refreshToken
+            KingfisherManager.shared.setHeaders()
+        })
+        .debug(#function.description)
+    }
+
+    func callRequestSignin(_ router: APIRouter) -> CallResult {
+        return callRequestAPI(model: SigninModel.self, router: router).debug(router.description)
+    }
+    
+    func callRequestEmailValidation(_ router: APIRouter) -> CallResult {
+        return callRequestAPI(model: EmailValidationModel.self, router: router).debug(router.description)
+    }
+
+    func callRequestWithDraw() -> CallResult {
+        let router = APIRouter.withdraw
+        return callRequestAPI(model: WithDrawModel.self, router: router).debug(router.description)
+    }
+    
+    func callRequestMyProfile() -> CallResult {
+        let router = APIRouter.getMyProfile
+        return callRequestAPI(model: MyProfileModel.self, router: router).debug(router.description)
+    }
+    
+    func callRequestUpdateMyProfile(_ router: APIRouter) -> CallResult {
+        return callRequestAPI(model: MyProfileModel.self, router: router).debug(router.description)
+    }
+    
+    func callRequestUploadPosts(_ router: APIRouter) -> CallResult {
+        return callRequestAPI(model: PostsModel.self, router: router)
+    }
+    
+    func callRequestGetPosts(_ router: APIRouter) -> CallResult {
+        return callRequestAPI(model: GetPostsModel.self, router: router)
+    }
+    
+    func callRequestQueryOnePost(_ router: APIRouter) -> CallResult {
+        return callRequestAPI(model: PostsModel.self, router: router)
     }
     
 }

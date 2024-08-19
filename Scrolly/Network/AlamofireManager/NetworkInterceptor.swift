@@ -27,7 +27,7 @@ final class RetryInterceptor: RetryPolicy {
                 return
             }
             if let error { print(error) }
-            // NotificationCentor를 이용해 login 화면으로 이동
+            // NotificationCentor를 이용해 login 화면으로 이동구현 필요
             completion(.doNotRetry)
         }
     }

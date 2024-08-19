@@ -23,12 +23,7 @@ final class APIClient {
                            router: APIRouter,
                            success: @escaping onSuccess<T>,
                            failure: @escaping onFailure) where T:Decodable {
-//        AF.request(router)
-//            .responseString { response in
-//                print(#function)
-//                dump(response.result)
-//            }
-//        
+        
         session.request(router)
             .validate(statusCode: 200...445)
             .responseDecodable(of: object) { response in

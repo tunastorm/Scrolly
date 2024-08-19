@@ -13,4 +13,9 @@ struct GetPostsQuery: Encodable {
     let limit: String?
     let productId: String?
     
+    enum CodingKeys: String, CodingKey {
+        case next, limit
+        case productId = "product_id"
+    }
+    
 }

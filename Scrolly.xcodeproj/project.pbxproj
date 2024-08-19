@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		BC097C622C7330120038A21C /* NetworkInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC097C612C7330120038A21C /* NetworkInterceptor.swift */; };
+		BC097C642C73583A0038A21C /* UploadPostsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC097C632C73583A0038A21C /* UploadPostsModel.swift */; };
+		BC097C682C737F170038A21C /* QueryBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC097C672C737F170038A21C /* QueryBuilder.swift */; };
+		BC097C6A2C739C3A0038A21C /* GetPostsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC097C692C739C3A0038A21C /* GetPostsModel.swift */; };
 		BC8F1CD62C6CAE4B005D63CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1CD52C6CAE4B005D63CB /* AppDelegate.swift */; };
 		BC8F1CD82C6CAE4B005D63CB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1CD72C6CAE4B005D63CB /* SceneDelegate.swift */; };
 		BC8F1CDA2C6CAE4B005D63CB /* DummyDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1CD92C6CAE4B005D63CB /* DummyDataViewController.swift */; };
@@ -54,6 +57,9 @@
 
 /* Begin PBXFileReference section */
 		BC097C612C7330120038A21C /* NetworkInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkInterceptor.swift; sourceTree = "<group>"; };
+		BC097C632C73583A0038A21C /* UploadPostsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostsModel.swift; sourceTree = "<group>"; };
+		BC097C672C737F170038A21C /* QueryBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryBuilder.swift; sourceTree = "<group>"; };
+		BC097C692C739C3A0038A21C /* GetPostsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPostsModel.swift; sourceTree = "<group>"; };
 		BC8F1CD22C6CAE4B005D63CB /* Scrolly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Scrolly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC8F1CD52C6CAE4B005D63CB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BC8F1CD72C6CAE4B005D63CB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -111,6 +117,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BC097C652C737F000038A21C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				BC8F1D1D2C6CF609005D63CB /* EmailValidationQuery.swift */,
+				BC8F1D1F2C6CF65D005D63CB /* LoginQuery.swift */,
+				BC8F1D232C6CF711005D63CB /* UploadFilesQuery.swift */,
+				BC8F1D1B2C6CF289005D63CB /* SigninQuery.swift */,
+				BC8F1D272C6D17CB005D63CB /* PostsQuery.swift */,
+				BC8F1D292C6D187E005D63CB /* GetPostsQuery.swift */,
+				BC8F1D2B2C6D1CD2005D63CB /* CommentsQuery.swift */,
+				BC8F1D2D2C6D1DE1005D63CB /* LikeQuery.swift */,
+				BC8F1D2F2C6D1F45005D63CB /* LikedPostsQuery.swift */,
+				BC8F1D312C6D1FD3005D63CB /* MyProfileQuery.swift */,
+				BC8F1D332C6D2026005D63CB /* HashTagsQuery.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		BC097C662C737F0B0038A21C /* Builder */ = {
+			isa = PBXGroup;
+			children = (
+				BC097C672C737F170038A21C /* QueryBuilder.swift */,
+			);
+			path = Builder;
+			sourceTree = "<group>";
+		};
 		BC8F1CC92C6CAE4B005D63CB = {
 			isa = PBXGroup;
 			children = (
@@ -147,7 +179,7 @@
 			isa = PBXGroup;
 			children = (
 				BC8F1CF82C6CB322005D63CB /* Resource */,
-				BC8F1CF72C6CB30A005D63CB /* QueryModel */,
+				BC8F1CF72C6CB30A005D63CB /* Query */,
 				BC8F1CF62C6CB2CE005D63CB /* ResponseModel */,
 				BC8F1CF92C6CB331005D63CB /* AlamofireManager */,
 			);
@@ -164,26 +196,19 @@
 				BC8F1D3D2C70B999005D63CB /* WithDrawModel.swift */,
 				BC8F1D3F2C70BC50005D63CB /* MyProfileModel.swift */,
 				BC8F1D412C70C406005D63CB /* UploadFilesModel.swift */,
+				BC097C632C73583A0038A21C /* UploadPostsModel.swift */,
+				BC097C692C739C3A0038A21C /* GetPostsModel.swift */,
 			);
 			path = ResponseModel;
 			sourceTree = "<group>";
 		};
-		BC8F1CF72C6CB30A005D63CB /* QueryModel */ = {
+		BC8F1CF72C6CB30A005D63CB /* Query */ = {
 			isa = PBXGroup;
 			children = (
-				BC8F1D1D2C6CF609005D63CB /* EmailValidationQuery.swift */,
-				BC8F1D1F2C6CF65D005D63CB /* LoginQuery.swift */,
-				BC8F1D232C6CF711005D63CB /* UploadFilesQuery.swift */,
-				BC8F1D1B2C6CF289005D63CB /* SigninQuery.swift */,
-				BC8F1D272C6D17CB005D63CB /* PostsQuery.swift */,
-				BC8F1D292C6D187E005D63CB /* GetPostsQuery.swift */,
-				BC8F1D2B2C6D1CD2005D63CB /* CommentsQuery.swift */,
-				BC8F1D2D2C6D1DE1005D63CB /* LikeQuery.swift */,
-				BC8F1D2F2C6D1F45005D63CB /* LikedPostsQuery.swift */,
-				BC8F1D312C6D1FD3005D63CB /* MyProfileQuery.swift */,
-				BC8F1D332C6D2026005D63CB /* HashTagsQuery.swift */,
+				BC097C662C737F0B0038A21C /* Builder */,
+				BC097C652C737F000038A21C /* Model */,
 			);
-			path = QueryModel;
+			path = Query;
 			sourceTree = "<group>";
 		};
 		BC8F1CF82C6CB322005D63CB /* Resource */ = {
@@ -316,6 +341,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC097C682C737F170038A21C /* QueryBuilder.swift in Sources */,
 				BC8F1CDA2C6CAE4B005D63CB /* DummyDataViewController.swift in Sources */,
 				BC8F1D2A2C6D187E005D63CB /* GetPostsQuery.swift in Sources */,
 				BC8F1D422C70C406005D63CB /* UploadFilesModel.swift in Sources */,
@@ -323,10 +349,12 @@
 				BC8F1CEF2C6CB08F005D63CB /* APIConstants.swift in Sources */,
 				BC8F1CD62C6CAE4B005D63CB /* AppDelegate.swift in Sources */,
 				BC8F1CF52C6CB26F005D63CB /* TargetType.swift in Sources */,
+				BC097C642C73583A0038A21C /* UploadPostsModel.swift in Sources */,
 				BC8F1D282C6D17CB005D63CB /* PostsQuery.swift in Sources */,
 				BC8F1D3E2C70B999005D63CB /* WithDrawModel.swift in Sources */,
 				BC8F1D3C2C70B14C005D63CB /* RefreshTokenModel.swift in Sources */,
 				BC8F1D342C6D2026005D63CB /* HashTagsQuery.swift in Sources */,
+				BC097C6A2C739C3A0038A21C /* GetPostsModel.swift in Sources */,
 				BC8F1CED2C6CB083005D63CB /* APIKey.swift in Sources */,
 				BC097C622C7330120038A21C /* NetworkInterceptor.swift in Sources */,
 				BC8F1D202C6CF65D005D63CB /* LoginQuery.swift in Sources */,
