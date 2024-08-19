@@ -44,8 +44,6 @@ final class APIClient {
                 }
             }
         
-        
-        
     }
     
     static func upload<T>(_ object: T.Type,
