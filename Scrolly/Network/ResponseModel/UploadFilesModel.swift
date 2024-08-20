@@ -9,4 +9,5 @@ import Foundation
 
 struct UploadFilesModel: Decodable {
     let files: [String]
+    let message: String?
 }

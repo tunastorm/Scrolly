@@ -15,9 +15,13 @@ enum APIError: Error {
     case invalidSession
     case invalidRequest
     case invalidToken
+    case invalidNick
     case accessForbidden
     case expiredRefreshToken
     case expiredToken
+    case invalidKey
+    case tooManyRequest
+    case invalidURL
     case validationFaild
     case taskFailed
     case unAuthorizedRequest
@@ -66,7 +70,7 @@ enum APIError: Error {
         case .expiredRefreshToken: "리프레시 토큰이 만료되었습니다. 다시 로그인 해주세요."
         case .expiredToken: "엑세스 토큰이 만료되었습니다."
         case .validationFaild: "사용이 불가한 이메일입니다."
-        case .taskFailed: " 찾을 수 없습니다" // 댓글 생성 실패시 분기처리 필요
+        case .taskFailed: "을 찾을 수 없습니다" // 댓글 생성 실패시 분기처리 필요
         case .unAuthorizedRequest: " 권한이 없습니다" // 요청 API종류에 따른 분기처리 필요
         case .networkError: "네트워크 연결상태를 확인하세요."
         case .redirectError: "요청한 리소스의 주소가 변경되었습니다.\n  올바른 주소로 다시 요청해주세요."
@@ -75,6 +79,7 @@ enum APIError: Error {
         case .invalidData: "응답 데이터가 유효하지 않습니다."
         case .noResultError: "검색어에 해당하는 결과가 없습니다."
         case .unExpectedError: "알 수 없는 에러가 발생하였습니다.\n 고객센터로 문의하세요."
+        default: ""
         }
     }
     

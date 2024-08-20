@@ -14,5 +14,6 @@ struct SigninModel: Decodable {
     let nick: String
     let phoneNum: String?
     let birthDay: String?
+    let message: String?
 }
 

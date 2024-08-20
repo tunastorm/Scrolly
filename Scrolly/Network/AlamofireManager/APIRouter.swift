@@ -17,18 +17,16 @@ enum APIRouter {
     case uploadFiles(_ query: UploadFilesQuery)
     case uploadPosts(_ query: PostsQuery)
     case getPosts(_ query: GetPostsQuery)
-    case getPostsImage(file: String)
-    case queryOnePosts(id: String)
-    case updatePosts(id: String, _ query: PostsQuery)
-    case deletePosts(id: String)
-    case uploadComments(id: String, _ query: CommentsQuery)
-    case updateComments(id: String, _ query: CommentsQuery)
-    case deleteComments(id: String)
-    case likePosts(id: String, _ query: LikeQuery)
-    case cancleLikedPosts(id: String, _ query: LikeQuery)
+    case getPostsImage(_ file: String)
+    case queryOnePosts(_ id: String)
+    case updatePosts(_ id: String, _ query: PostsQuery)
+    case deletePosts(_ id: String)
+    case uploadComments(_ id: String, _ query: CommentsQuery)
+    case updateComments(_ id: String, _ commentId: String, _ query: CommentsQuery)
+    case deleteComments(_ id: String, _ commentId: String)
+    case likePostsToggle(_ id: String, _ query: LikeQuery)
     case getLikedPosts(_ query: LikedPostsQuery)
-    case likePostsSub(id: String, _ query: LikeQuery)
-    case cancleLikedPostsSub(id: String, _ query: LikeQuery)
+    case likePostsToggleSub(_ id: String, _ query: LikeQuery)
     case getLikedPostsSub(_ query: LikedPostsQuery)
     case getMyProfile
     case updateMyProfile(_ query: MyProfileQuery)
@@ -59,13 +57,6 @@ extension APIRouter: TargetType {
             case .tokenAndJson:
                 [ APIConstants.authorization : UserDefaultsManager.token,
                   APIConstants.contentType : APIConstants.json ]
-//            case .tokenAndProductId:
-//                [ APIConstants.authorization : UserDefaultsManager.token,
-//                  APIConstants.productId : "" ]
-//            case .tokenJsonProductId:
-//                [ APIConstants.authorization : UserDefaultsManager.token,
-//                  APIConstants.contentType : APIConstants.json,
-//                  APIConstants.productId : "" ]
             }
         }
         
@@ -87,11 +78,11 @@ extension APIRouter: TargetType {
     
     var method: HTTPMethod {
         switch self {
-        case .signin, .emailValidation, .login, .uploadFiles, .uploadPosts, .uploadComments, .likePosts, .cancleLikedPosts, .likePostsSub, .cancleLikedPostsSub:
+        case .signin, .emailValidation, .login, .uploadFiles, .uploadPosts, .uploadComments, .likePostsToggle, .likePostsToggleSub:
             return .post
-        case .refreshAccessToken, .withdraw, .getPosts, .getPostsImage, .queryOnePosts, .getLikedPosts, .getLikedPostsSub, .getMyProfile:
+        case .refreshAccessToken, .withdraw, .getPosts, .getPostsImage, .queryOnePosts, .getLikedPosts, .getLikedPostsSub, .getMyProfile, .searchHashTags:
             return .get
-        case .updatePosts, .updateComments, .updateMyProfile, .searchHashTags:
+        case .updatePosts, .updateComments, .updateMyProfile:
             return .put
         case .deletePosts, .deleteComments:
             return .delete
@@ -106,13 +97,13 @@ extension APIRouter: TargetType {
         switch self {
         case .refreshAccessToken:
             return HeadersOption.tokenAndRefresh.combineHeaders
-        case .withdraw, .getPosts, .getPostsImage, .queryOnePosts, .deletePosts, .deleteComments, .likePosts, .cancleLikedPosts, .getLikedPosts, .likePostsSub, .cancleLikedPostsSub, .getLikedPostsSub, .getMyProfile, .searchHashTags:
+        case .withdraw, .getPosts, .getPostsImage, .queryOnePosts, .deletePosts, .deleteComments, .getLikedPosts, .getLikedPostsSub, .getMyProfile, .searchHashTags:
             return HeadersOption.token.combineHeaders
         case .signin, .emailValidation, .login:
             return HeadersOption.json.combineHeaders
         case .uploadFiles, .updateMyProfile:
             return HeadersOption.tokenAndMulipart.combineHeaders
-        case .uploadPosts, .updatePosts, .uploadComments, .updateComments:
+        case .uploadPosts, .updatePosts, .uploadComments, .updateComments, .likePostsToggle, .likePostsToggleSub:
             return HeadersOption.tokenAndJson.combineHeaders
         }
     }
@@ -123,16 +114,22 @@ extension APIRouter: TargetType {
     
     var body: Data? {
         return switch self {
-        case .signin(let query): encodeQuery(query)
-        case .emailValidation(let query): encodeQuery(query)
-        case .login(let query): encodeQuery(query)
-        case .uploadPosts(let query): encodeQuery(query)
-        case .updatePosts(let id, let query): encodeQuery(query)
-        case .uploadComments(let id, let query), .updateComments(let id, let query): encodeQuery(query)
-        case .likePosts(let id, let query), .cancleLikedPosts(let id, let query), .likePostsSub(let id, let query), .cancleLikedPostsSub(let id, let query): encodeQuery(query)
-        case .getLikedPosts(let query), .getLikedPostsSub(let query): encodeQuery(query)
-        case .updateMyProfile(let query): encodeQuery(query)
-        case .searchHashTags(let query): encodeQuery(query)
+        case .signin(let query): 
+            encodeQuery(query)
+        case .emailValidation(let query): 
+            encodeQuery(query)
+        case .login(let query): 
+            encodeQuery(query)
+        case .uploadPosts(let query): 
+            encodeQuery(query)
+        case .updatePosts(let id, let query): 
+            encodeQuery(query)
+        case .uploadComments(let id, let query):
+            encodeQuery(query)
+        case .updateComments(let id, let commentId, let query):
+            encodeQuery(query)
+        case .likePostsToggle(let id, let query), .likePostsToggleSub(let id, let query):
+            encodeQuery(query)
         default: nil
         }
     }
@@ -140,6 +137,8 @@ extension APIRouter: TargetType {
     var parameters: Encodable? {
         switch self {
         case .getPosts(let query): query
+        case .getLikedPosts(let query), .getLikedPostsSub(let query): query
+        case .searchHashTags(let query): query
         default: nil
         }
     }
@@ -165,11 +164,9 @@ extension APIRouter: TargetType {
         case .uploadComments: "uploadComments"
         case .updateComments: "updateComments"
         case .deleteComments: "deleteComments"
-        case .likePosts: "likePosts"
-        case .cancleLikedPosts: "cancleLikedPosts"
+        case .likePostsToggle: "likePostsToggle"
         case .getLikedPosts: "getLikedPosts"
-        case .likePostsSub: "likePostsSub"
-        case .cancleLikedPostsSub: "cancleLikedPostsSub"
+        case .likePostsToggleSub: "likePostsToggleSub"
         case .getLikedPostsSub: "getLikedPostsSub"
         case .getMyProfile: "getMyProfile"
         case .updateMyProfile: "updateMyProfile"

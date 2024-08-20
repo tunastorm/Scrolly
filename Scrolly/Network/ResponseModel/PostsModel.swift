@@ -24,12 +24,14 @@ struct PostsModel: Decodable {
     let likes2: [String]
     let hashTags: [String]
     let comments: [Comment]
+    let message: String?
     
     enum CodingKeys: String, CodingKey {
         case postId = "post_id"
         case productId = "product_id"
         case title, content, content1, content2, content3, content4, content5,
              createdAt, creator, files, likes, likes2, hashTags, comments
+        case message
     }
 }
 

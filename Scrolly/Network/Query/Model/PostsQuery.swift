@@ -9,7 +9,7 @@ import Foundation
 
 struct PostsQuery: Encodable {
     
-    let productId: String
+    let productId: String?
     let title: String?
     let content: String?
     let content1: String?
@@ -18,6 +18,7 @@ struct PostsQuery: Encodable {
     let content4: String?
     let content5: String?
     let files: [String]?
+    // let price: String? 서버측 구현 예정
     
     enum CodingKeys: String, CodingKey {
         case productId = "product_id"

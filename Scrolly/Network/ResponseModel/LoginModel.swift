@@ -14,9 +14,11 @@ struct LoginModel: Decodable {
     let profileImage: String?
     let accessToken: String
     let refreshToken: String
+    let message: String?
     
     enum CodingKeys: String, CodingKey {
         case userId = "user_id"
         case email, nick, profileImage, accessToken, refreshToken
+        case message
     }
 }

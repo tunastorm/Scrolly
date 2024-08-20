@@ -21,6 +21,7 @@ final class DummyDataViewController: UIViewController {
     let birthDay = "19930101"
     let coverName = "dummyImage_5"
     let episodeName = "novel_f1"
+    lazy var dummyProfileData = UIImage(named: coverName)?.jpegData(compressionQuality: 1.0)
     
     lazy var files = [
         UIImage(named: coverName)?.jpegData(compressionQuality: 1.0) ?? Data(),
@@ -29,8 +30,13 @@ final class DummyDataViewController: UIViewController {
     lazy var signinQuery = SigninQuery(email: self.email, password: self.password, nick: self.nick, phoneNum: self.phoneNum, birthDay: self.birthDay)
     lazy var emailValidationQuery = EmailValidationQuery(email: self.email)
     lazy var loginQuery = LoginQuery(email: self.email, password: self.password)
-    lazy var myProfileQuery = MyProfileQuery(nick: "secondTester", phoneNum: "01087654321", birthDay: "19951231", profile: Data())
-    lazy var getPostsQuery = GetPostsQuery(next: nil, limit: "10", productId: APIConstants.ProductId.novelEpisode)
+    lazy var myProfileQuery = MyProfileQuery(nick: "thirdTester", phoneNum: "01087654321", birthDay: "19951231", profile: dummyProfileData )
+    lazy var getPostsQuery = GetPostsQuery(next: nil, limit: "50", productId: APIConstants.ProductId.novelEpisode)
+//    lazy var getPostsQuery = GetPostsQuery(next: nil, limit: "50", productId: nil)
+    lazy var commentsQuery = CommentsQuery(content: "테스트 댓글3")
+    lazy var likeQuery = LikeQuery(likeStatus: true)
+    lazy var likedPostsQuery = LikedPostsQuery(next: nil, limit: "10")
+    lazy var hashTagsQuery = HashTagsQuery(next: nil, limit: "10", productId: APIConstants.ProductId.novelEpisode, hashTag: "로맨스")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,10 +49,20 @@ final class DummyDataViewController: UIViewController {
 //        uploadPostImage()
 //        uploadPosts()
 //        getPosts()
-        queryOnePost(postId: "66c353dfd22f9bf132291e8e")
+//        queryOnePost(postId: "66c42b6a97d02bf91e201935")
+//        deletePosts(postId: "66c353dfd22f9bf132291e8e")
+//        uploadComments(postId: "66c42b6a97d02bf91e201935")
+//        updateComments(postId: "66c42b6a97d02bf91e201935", commentId: "66c4cb052701b5f91d1a670d")
+//        deleteComments(postId: "66c42b6a97d02bf91e201935", commentId: "66c4cb052701b5f91d1a670d")
+//        likePostsToggle(postId: "66c42b6a97d02bf91e201935")
+//        likePostsToggleSub(postId: "66c42b6a97d02bf91e201935")
+//        likedPosts()
+//        likedPostsSub()
+//        updateMyProfile()
+        searchHashTag()
     }
     
-    private func testSubscribe(single: Single<APIManager.APIResult>) {
+    private func testSubscribe(single: Single<APIManager.ModelResult>) {
         single.subscribe(with: self) { owner, result in
             switch result {
             case .success(let model):
@@ -64,12 +80,12 @@ final class DummyDataViewController: UIViewController {
     }
     
     private func validateEmail() {
-        let result = APIManager.shared.callRequestEmailValidation(.emailValidation(emailValidationQuery))
+        let result = APIManager.shared.callRequestAPI(model: BaseModel.self, router: .emailValidation(emailValidationQuery))
         testSubscribe(single: result)
     }
     
     private func signin() {
-        let result = APIManager.shared.callRequestSignin(.signin(signinQuery))
+        let result = APIManager.shared.callRequestAPI(model: SigninModel.self, router:.signin(signinQuery))
         testSubscribe(single: result)
     }
     
@@ -79,17 +95,17 @@ final class DummyDataViewController: UIViewController {
     }
     
     private func withDraw() {
-        let result = APIManager.shared.callRequestWithDraw()
+        let result = APIManager.shared.callRequestAPI(model: WithDrawModel.self, router: .withdraw)
         testSubscribe(single: result)
     }
     
     private func getMyProfile() {
-        let result = APIManager.shared.callRequestMyProfile()
+        let result = APIManager.shared.callRequestAPI(model: MyProfileModel.self, router: .getMyProfile)
         testSubscribe(single: result)
     }
     
     private func updateMyProfile() {
-        let result = APIManager.shared.callRequestUpdateMyProfile(.updateMyProfile(myProfileQuery))
+        let result = APIManager.shared.callRequestUploadFiles(model: MyProfileModel.self, .updateMyProfile(myProfileQuery), myProfileQuery)
         testSubscribe(single: result)
     }
     
@@ -100,26 +116,70 @@ final class DummyDataViewController: UIViewController {
         }
         self.files.append(data)
         let query = UploadFilesQuery(names: [coverName, episodeName], files: self.files)
-        let result = APIManager.shared.callRequestUploadPostImage(query)
+        let result = APIManager.shared.callRequestUploadFiles(model: UploadFilesModel.self, .uploadFiles(query), query)
         testSubscribe(single: result)
     }
     
     private func uploadPosts(files: [String]? = nil) {
         var query = PostsQuery(productId: APIConstants.ProductId.novelEpisode, title: "원작에 없는 인물로 태어났습니다 1화", content: "#원작에_없는_인물로_태어났습니다 #로맨스 #판타지 #빙의", content1: "무료", content2: nil, content3: nil, content4: nil, content5: nil, files: files)
-        let result = APIManager.shared.callRequestUploadPosts(.uploadPosts(query))
+        let result = APIManager.shared.callRequestAPI(model: PostsModel.self, router:.uploadPosts(query))
         testSubscribe(single: result)
     }
     
     private func getPosts() {
-        let result = APIManager.shared.callRequestGetPosts(.getPosts(getPostsQuery))
+        let result = APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts(getPostsQuery))
         testSubscribe(single: result)
     }
     
     private func queryOnePost(postId: String) {
-        let result = APIManager.shared.callRequestQueryOnePost(.queryOnePosts(id: postId))
+        let result = APIManager.shared.callRequestAPI(model: PostsModel.self, router: .queryOnePosts(postId))
         testSubscribe(single: result)
     }
     
+    private func deletePosts(postId: String) {
+        let result = APIManager.shared.callRequestAPI(model: BaseModel.self, router: .deletePosts(postId))
+        testSubscribe(single: result)
+    }
+    
+    private func uploadComments(postId: String) {
+        let result = APIManager.shared.callRequestAPI(model: CommentsModel.self, router: .uploadComments(postId, commentsQuery))
+        testSubscribe(single: result)
+    }
+    
+    private func updateComments(postId: String, commentId: String) {
+        let result = APIManager.shared.callRequestAPI(model: CommentsModel.self, router: .updateComments(postId, commentId, commentsQuery))
+        testSubscribe(single: result)
+    }
+    
+    private func deleteComments(postId: String, commentId: String) {
+        let result = APIManager.shared.callRequestAPI(model: BaseModel.self, router: .deleteComments(postId, commentId))
+        testSubscribe(single: result)
+    }
+    
+    private func likePostsToggle(postId: String) {
+        let result = APIManager.shared.callRequestAPI(model: LikeModel.self, router: .likePostsToggle(postId, likeQuery))
+        testSubscribe(single: result)
+    }
+    
+    private func likePostsToggleSub(postId: String) {
+        let result = APIManager.shared.callRequestAPI(model: LikeModel.self, router: .likePostsToggleSub(postId, likeQuery))
+        testSubscribe(single: result)
+    }
+    
+    private func likedPosts() {
+        let result = APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getLikedPosts(likedPostsQuery))
+        testSubscribe(single: result)
+    }
+    
+    private func likedPostsSub() {
+        let result = APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getLikedPostsSub(likedPostsQuery))
+        testSubscribe(single: result)
+    }
+    
+    private func searchHashTag() {
+        let result = APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags(hashTagsQuery))
+        testSubscribe(single: result)
+    }
     
     
 }

@@ -12,9 +12,11 @@ struct WithDrawModel: Decodable {
     let userId: String
     let email: String
     let nick: String
+    let message: String?
     
     enum CodingKeys: String, CodingKey {
         case userId = "user_id"
         case email, nick
+        case message
     }
 }
