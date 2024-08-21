@@ -16,14 +16,13 @@ final class EpisodeViewerViewController: UIViewController {
     
     lazy var pdfView = {
         let view = PDFView()
-        view.autoScales = true
         view.backgroundColor = .white
         view.displayMode = .singlePage
         view.displayDirection = .horizontal
         view.pageShadowsEnabled = false
         view.usePageViewController(true, withViewOptions: nil)
-        view.maxScaleFactor = 1.0
-        view.minScaleFactor = 2.0
+        view.maxScaleFactor = 0.5
+        view.minScaleFactor = 1.0
         return view
     }()
     
@@ -49,11 +48,6 @@ final class EpisodeViewerViewController: UIViewController {
      
         navigationItem.backButtonTitle = ""
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        pdfView.frame = view.bounds
-    }
 
     private func configureHierarchy() {
         view.addSubview(pdfView)
@@ -61,15 +55,17 @@ final class EpisodeViewerViewController: UIViewController {
     
     private func configureLayout() {
         pdfView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.verticalEdges.equalToSuperview()
+            make.left.equalToSuperview().offset(-120)
+            make.right.equalToSuperview().offset(120)
         }
     }
     
     private func configureView() {
-//        navigationController?.hidesBarsOnTap = true
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pdfViewTapped)))
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewTapped)))
         pdfView.delegate = self
-        queryOnePost(postId: "66c35fc6d22f9bf13229215d")
+        pdfView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        queryOnePost(postId: "66c5ccfd97d02bf91e206604")
     }
 
     
@@ -80,12 +76,10 @@ final class EpisodeViewerViewController: UIViewController {
                 print(#function, "model: ")
                 dump(model)
                 let postModel = model as! PostsModel
-                
                 guard let pdf = postModel.files.last else {
                     print("PDF 없음 ")
                     return
                 }
-                
                 owner.navigationItem.title = postModel.title
                 owner.getPostFile(file: pdf)
             case .failure(let error):
@@ -101,6 +95,7 @@ final class EpisodeViewerViewController: UIViewController {
             case .success(let data):
                 guard let document = PDFDocument(data: data) else { return }
                 document.delegate = self
+                print("pageCount: ", document.pageCount)
                 owner.pdfView.document = document
             case .failure(let error):
                 print(#function, "error: ", error)
@@ -119,12 +114,13 @@ final class EpisodeViewerViewController: UIViewController {
         pdfViewSubscribe(single: result)
     }
     
-    @objc private func pdfViewTapped(_ sender: UITapGestureRecognizer) {
+    @objc private func viewTapped(_ sender: UITapGestureRecognizer) {
         guard let isHidden = navigationController?.navigationBar.isHidden else {
             return
         }
         navigationController?.navigationBar.setHidden(!isHidden, animated: true)
     }
+    
     
     
 }
@@ -137,6 +133,5 @@ extension EpisodeViewerViewController: PDFDocumentDelegate {
 
 extension EpisodeViewerViewController: PDFViewDelegate {
     
-    
-    
+
 }

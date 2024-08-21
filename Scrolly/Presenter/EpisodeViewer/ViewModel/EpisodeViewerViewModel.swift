@@ -7,6 +7,19 @@
 
 import Foundation
 
-final class EpisodeViewerViewModel: BaseViewModel {
+final class EpisodeViewerViewModel: BaseViewModel, InputOutput {
+   
+    struct Input {
+        
+    }
+    
+    struct Output {
+        
+    }
+    
+    override func transform() {
+        
+    }
+
     
 }
