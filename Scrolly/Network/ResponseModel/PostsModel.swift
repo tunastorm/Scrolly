@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PostsModel: Decodable {
+struct PostsModel: Decodable, Hashable {
     let postId: String
     let productId: String
     let title: String?
@@ -33,9 +33,31 @@ struct PostsModel: Decodable {
              createdAt, creator, files, likes, likes2, hashTags, comments
         case message
     }
+    
+    init() {
+        self.postId = "blanck"
+        self.productId = "blacnkProduct"
+        self.title = nil
+        self.content = nil
+        self.content1 = nil
+        self.content2 = nil
+        self.content3 = nil
+        self.content4 = nil
+        self.content5 = nil
+        self.createdAt = ""
+        self.creator = Creator()
+        self.files = []
+        self.likes = []
+        self.likes2 = []
+        self.hashTags = []
+        self.comments = []
+        self.message = nil
+        
+    }
+    
 }
 
-struct Creator: Decodable {
+struct Creator: Decodable, Hashable {
     let userId: String
     let nick: String
     let profileImage: String?
@@ -44,9 +66,15 @@ struct Creator: Decodable {
         case userId = "user_id"
         case nick, profileImage
     }
+    
+    init() {
+        self.userId = ""
+        self.nick = ""
+        self.profileImage = nil
+    }
 }
 
-struct Comment: Decodable {
+struct Comment: Decodable, Hashable {
     let commentId: String
     let content: String
     let createdAt: String

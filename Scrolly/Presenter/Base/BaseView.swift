@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import Toast
 
 class BaseView: UIView {
         
@@ -21,15 +21,15 @@ class BaseView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configHierarchy() {
+    func configHierarchy() {
         
     }
     
-    private func configLayout() {
+    func configLayout() {
         
     }
     
-    private func configView() {
+    func configView() {
         self.backgroundColor = Resource.Asset.CIColor.white
     }
     

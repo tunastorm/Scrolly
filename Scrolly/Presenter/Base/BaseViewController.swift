@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Toast
 
 protocol UIViewControllerProvider {
     func bindData()
@@ -13,13 +14,12 @@ protocol UIViewControllerProvider {
     func configNavigationbar(navigationColor: UIColor, shadowImage: Bool)
 }
 
-
 class BaseViewController<View: BaseView>: UIViewController, UIViewControllerProvider {
     
     var rootView: View?
-    var viewModel: ViewModelProvider?
+    var viewModel: (any ViewModelProvider)?
     
-    init(view: View, viewModel: ViewModelProvider? = nil) {
+    init(view: View, viewModel: (any ViewModelProvider)? = nil) {
         self.rootView = view
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)

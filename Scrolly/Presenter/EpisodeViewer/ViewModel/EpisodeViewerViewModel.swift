@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class EpisodeViewerViewModel: BaseViewModel, InputOutput {
+final class EpisodeViewerViewModel: BaseViewModel, ViewModelProvider {
    
     struct Input {
         
@@ -17,8 +17,9 @@ final class EpisodeViewerViewModel: BaseViewModel, InputOutput {
         
     }
     
-    override func transform() {
+    func transform(input: Input) -> Output {
         
+        return Output()
     }
 
     

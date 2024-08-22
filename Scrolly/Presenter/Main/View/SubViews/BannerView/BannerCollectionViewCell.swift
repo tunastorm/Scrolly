@@ -1,0 +1,154 @@
+//
+//  BannerCollectionViewCell.swift
+//  Scrolly
+//
+//  Created by 유철원 on 8/22/24.
+//
+
+import UIKit
+import Kingfisher
+import SnapKit
+import Then
+
+final class BannerCollectionViewCell: BaseCollectionViewCell {
+    
+    private let imageView = UIImageView().then {
+        $0.contentMode = .top
+        $0.layer.cornerRadius = 10
+        $0.layer.masksToBounds = true
+    }
+    
+    private let coverView = UIView().then {
+        $0.backgroundColor = Resource.Asset.CIColor.black
+        $0.alpha = Resource.UIConstants.Alpha.half
+        $0.layer.cornerRadius = 10
+        $0.layer.masksToBounds = true
+    }
+    
+    private let titleLabel = UILabel().then {
+        $0.text = "아카데미의 마피아가 되었다"
+        $0.textColor = Resource.Asset.CIColor.white
+        $0.font = Resource.Asset.Font.boldSystem20
+        $0.textAlignment = .left
+        $0.numberOfLines = .zero
+    }
+
+    private let descriptionLabel = UILabel().then {
+        $0.text = "이게 뒷세계 방식이야"
+        $0.textColor = Resource.Asset.CIColor.white
+        $0.font = Resource.Asset.Font.system13
+    }
+    
+    private let detailView = UIView()
+    
+    private let waitingFreeImageBox = UIView().then {
+        $0.backgroundColor = Resource.Asset.CIColor.yellow
+        $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+        $0.layer.masksToBounds = true
+        $0.layer.cornerRadius = 2
+    }
+    
+    private let waitingFreeImageView = UIImageView().then {
+        $0.image = Resource.Asset.SystemImage.stopwatch
+        $0.contentMode = .scaleAspectFit
+        $0.tintColor = Resource.Asset.CIColor.black
+    }
+    
+    private let waitingFreeLabel = UILabel().then {
+        $0.text = Resource.UIConstants.Text.waitingFree
+        $0.font = Resource.Asset.Font.boldSystem10
+        $0.textAlignment = .center
+        $0.backgroundColor = Resource.Asset.CIColor.white
+        $0.layer.maskedCorners = [.layerMaxXMinYCorner,.layerMaxXMaxYCorner]
+        $0.layer.masksToBounds = true
+        $0.layer.cornerRadius = 2
+    }
+    
+    private let tagLabel = UILabel().then {
+        $0.textColor = Resource.Asset.CIColor.white
+        $0.textAlignment = .left
+        $0.font = Resource.Asset.Font.system10
+    }
+    
+    override func configHierarchy() {
+        contentView.addSubview(imageView)
+        contentView.addSubview(coverView)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(detailView)
+        contentView.addSubview(descriptionLabel)
+        detailView.addSubview(waitingFreeImageBox)
+        waitingFreeImageBox.addSubview(waitingFreeImageView)
+        detailView.addSubview(waitingFreeLabel)
+        detailView.addSubview(tagLabel)
+    }
+    
+    override func configLayout() {
+        imageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        coverView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        detailView.snp.makeConstraints { make in
+            make.height.equalTo(16)
+            make.horizontalEdges.bottom.equalToSuperview().inset(20)
+        }
+        descriptionLabel.snp.makeConstraints { make in
+            make.height.equalTo(20)
+            make.horizontalEdges.equalToSuperview().inset(20)
+            make.bottom.equalTo(detailView.snp.top).offset(-20)
+        }
+        titleLabel.snp.makeConstraints { make in
+            make.width.equalToSuperview().multipliedBy(0.3)
+            make.leading.equalToSuperview().inset(20)
+            make.bottom.equalTo(descriptionLabel.snp.top).offset(-20)
+        }
+        waitingFreeImageBox.snp.makeConstraints { make in
+            make.size.equalTo(detailView.snp.height)
+            make.verticalEdges.equalToSuperview()
+            make.leading.equalToSuperview()
+        }
+        waitingFreeImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        waitingFreeLabel.snp.makeConstraints { make in
+            make.height.equalTo(detailView)
+            make.width.equalTo(32)
+            make.leading.equalTo(waitingFreeImageView.snp.trailing)
+            make.verticalEdges.equalToSuperview()
+        }
+        tagLabel.snp.makeConstraints { make in
+            make.height.equalTo(detailView)
+            make.width.equalTo(100)
+            make.leading.equalTo(waitingFreeLabel.snp.trailing).offset(4)
+            make.verticalEdges.equalToSuperview()
+        }
+    }
+    
+    override func configView() {
+        backgroundColor = Resource.Asset.CIColor.lightGray
+    
+    }
+    
+    override func configInteractionWithViewController<T>(viewController: T) where T : UIViewController {
+        
+    }
+    
+    func configCell(_ identifier: PostsModel) {
+        guard let file = identifier.files.first, let url = URL(string: APIConstants.URI + "/\(file)") else {
+            return
+        }
+        imageView.kf.setImage(with: url) { [weak self] result in
+            switch result {
+            case .success(let data):
+                self?.imageView.image = data.image.resize(length: self?.contentView.frame.width ?? 350)
+            case .failure(let error):
+                return
+            }
+        }
+        titleLabel.text = identifier.title
+        let hashTags = identifier.hashTags
+        let tagString = hashTags.count == 2 ? hashTags[1] : hashTags[1...2].joined(separator: "﹒")
+        tagLabel.text = tagString
+    }
+}

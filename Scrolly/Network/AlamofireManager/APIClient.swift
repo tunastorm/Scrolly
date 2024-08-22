@@ -24,10 +24,10 @@ final class APIClient {
                            success: @escaping onSuccess<T>,
                            failure: @escaping onFailure) where T:Decodable {
         
-        session.request(router)
-            .responseString { response in
-              dump(response)
-            }
+//        session.request(router)
+//            .responseString { response in
+//              dump(response)
+//            }
 
         session.request(router)
             .validate(statusCode: 200...445)

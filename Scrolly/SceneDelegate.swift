@@ -22,6 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let mainViewController = DummyDataViewController()
 //        let mainViewController = EpisodeViewerViewController()
+//        let mainViewController = MainViewController(view: MainView(), viewModel: MainViewModel())
         let navigationController = UINavigationController(rootViewController: mainViewController)
         window?.rootViewController = navigationController// sb entrypoint
         window?.makeKeyAndVisible() // show the rootViewController to display

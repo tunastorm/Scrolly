@@ -19,8 +19,8 @@ final class DummyDataViewController: UIViewController {
     let nick = "tester"
     let phoneNum = "01012345678"
     let birthDay = "19930101"
-    let coverName = "dummyImage_5"
-    let episodeName = "novel_f1"
+    let coverName = "dummyImage_11"
+    let episodeName = "novel_m1"
     lazy var dummyProfileData = UIImage(named: coverName)?.jpegData(compressionQuality: 1.0)
     
     lazy var files = [
@@ -42,7 +42,7 @@ final class DummyDataViewController: UIViewController {
         super.viewDidLoad()
 //        validateEmail()
 //        signin()
-//        login()
+        login()
 //        withDraw()
 //        getMyProfile()
 //        updateMyProfile()
@@ -59,7 +59,9 @@ final class DummyDataViewController: UIViewController {
 //        likedPosts()
 //        likedPostsSub()
 //        updateMyProfile()
-        searchHashTag()
+//        searchHashTag()
+        let vc = MainViewController(view: MainView(), viewModel: MainViewModel())
+        navigationController?.pushViewController(vc, animated: false)
     }
     
     private func testSubscribe(single: Single<APIManager.ModelResult>) {

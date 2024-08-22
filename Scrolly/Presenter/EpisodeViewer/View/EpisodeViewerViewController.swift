@@ -67,7 +67,6 @@ final class EpisodeViewerViewController: UIViewController {
         pdfView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         queryOnePost(postId: "66c5ccfd97d02bf91e206604")
     }
-
     
     private func testSubscribe(single: Single<APIManager.ModelResult>) {
         single.subscribe(with: self) { owner, result in

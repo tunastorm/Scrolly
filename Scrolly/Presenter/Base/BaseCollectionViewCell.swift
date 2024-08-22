@@ -16,6 +16,7 @@ protocol CollectionViewCellProvider {
 
 
 class BaseCollectionViewCell: UICollectionViewCell, CollectionViewCellProvider {
+   
     override init(frame: CGRect) {
         super.init(frame: frame)
         configHierarchy()
@@ -27,19 +28,12 @@ class BaseCollectionViewCell: UICollectionViewCell, CollectionViewCellProvider {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configHierarchy() {
-        
-    }
+    func configHierarchy() { }
     
-    func configLayout() {
-        
-    }
+    func configLayout() { }
     
-    func configView() {
-        
-    }
+    func configView() { }
     
-    func configInteractionWithViewController<T: UIViewController>(viewController: T) {
-        
-    }
+    func configInteractionWithViewController<T: UIViewController>(viewController: T) { }
+    
 }

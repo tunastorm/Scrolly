@@ -7,30 +7,25 @@
 
 import Foundation
 
+
 protocol ViewModelProvider {
-    func transform()
+    associatedtype Input
+    associatedtype Output
+    
+    func transform(input: Input) -> Output
 }
 
-
-class BaseViewModel: ViewModelProvider {
-    
-    private var networkProvider: APIManagerProvider
+class BaseViewModel {
     
     deinit {
         print("deinit: ", self.self)
     }
     
-    init(networkProvider: APIManagerProvider) {
-        self.networkProvider = networkProvider
-        transform()
-    }
+    init() { }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func transform() {
-        
-    }
 }
 
