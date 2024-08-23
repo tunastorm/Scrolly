@@ -17,9 +17,10 @@ final class EpisodeViewerViewModel: BaseViewModel, ViewModelProvider {
         
     }
     
-    func transform(input: Input) -> Output {
+    func transform(input: Input) -> Output? {
+        var output: Output?
         
-        return Output()
+        return output
     }
 
     

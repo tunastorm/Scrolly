@@ -41,28 +41,9 @@ final class BannerCollectionViewCell: BaseCollectionViewCell {
     
     private let detailView = UIView()
     
-    private let waitingFreeImageBox = UIView().then {
-        $0.backgroundColor = Resource.Asset.CIColor.yellow
-        $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
-        $0.layer.masksToBounds = true
-        $0.layer.cornerRadius = 2
-    }
-    
-    private let waitingFreeImageView = UIImageView().then {
-        $0.image = Resource.Asset.SystemImage.stopwatch
-        $0.contentMode = .scaleAspectFit
-        $0.tintColor = Resource.Asset.CIColor.black
-    }
-    
-    private let waitingFreeLabel = UILabel().then {
-        $0.text = Resource.UIConstants.Text.waitingFree
-        $0.font = Resource.Asset.Font.boldSystem10
-        $0.textAlignment = .center
-        $0.backgroundColor = Resource.Asset.CIColor.white
-        $0.layer.maskedCorners = [.layerMaxXMinYCorner,.layerMaxXMaxYCorner]
-        $0.layer.masksToBounds = true
-        $0.layer.cornerRadius = 2
-    }
+    private let waitingFreeImageView = WaitingFreeImageView()
+
+    private let waitingFreeLabel = WaitingFreeLabel()
     
     private let tagLabel = UILabel().then {
         $0.textColor = Resource.Asset.CIColor.white
@@ -76,8 +57,7 @@ final class BannerCollectionViewCell: BaseCollectionViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(detailView)
         contentView.addSubview(descriptionLabel)
-        detailView.addSubview(waitingFreeImageBox)
-        waitingFreeImageBox.addSubview(waitingFreeImageView)
+        detailView.addSubview(waitingFreeImageView)
         detailView.addSubview(waitingFreeLabel)
         detailView.addSubview(tagLabel)
     }
@@ -103,13 +83,10 @@ final class BannerCollectionViewCell: BaseCollectionViewCell {
             make.leading.equalToSuperview().inset(20)
             make.bottom.equalTo(descriptionLabel.snp.top).offset(-20)
         }
-        waitingFreeImageBox.snp.makeConstraints { make in
+        waitingFreeImageView.snp.makeConstraints { make in
             make.size.equalTo(detailView.snp.height)
             make.verticalEdges.equalToSuperview()
             make.leading.equalToSuperview()
-        }
-        waitingFreeImageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
         }
         waitingFreeLabel.snp.makeConstraints { make in
             make.height.equalTo(detailView)
@@ -127,7 +104,6 @@ final class BannerCollectionViewCell: BaseCollectionViewCell {
     
     override func configView() {
         backgroundColor = Resource.Asset.CIColor.lightGray
-    
     }
     
     override func configInteractionWithViewController<T>(viewController: T) where T : UIViewController {
@@ -150,5 +126,6 @@ final class BannerCollectionViewCell: BaseCollectionViewCell {
         let hashTags = identifier.hashTags
         let tagString = hashTags.count == 2 ? hashTags[1] : hashTags[1...2].joined(separator: "﹒")
         tagLabel.text = tagString
+        
     }
 }

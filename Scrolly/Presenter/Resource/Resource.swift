@@ -74,6 +74,7 @@ enum Resource {
         }
         
         enum NamedImage {
+            static let gradationCover = UIImage(named: "background")
 //            static let empty = UIImage(named: "empty")
 //            static let launch = UIImage(named: "launchImage")
 //            static let loadingApple = UIImage (named: "loading_apple")
@@ -135,11 +136,11 @@ enum Resource {
             static let blue = UIColor(hexCode: "186FF2", alpha: Resource.UIConstants.Alpha.full)
             static let white = UIColor(hexCode: "FFFFFF", alpha: Resource.UIConstants.Alpha.full)
             static let lightGray = UIColor(hexCode: "F2F2F2", alpha: Resource.UIConstants.Alpha.full)
-            static let gray = UIColor(hexCode: "8C8C8C", alpha: Resource.UIConstants.Alpha.full)
+            static let gray = UIColor(hexCode: "8C8C8C", alpha: Resource.UIConstants.Alpha.half)
             static let darkGray = UIColor(hexCode: "4D5652", alpha: Resource.UIConstants.Alpha.full)
             static let black = UIColor(hexCode: "000000", alpha: Resource.UIConstants.Alpha.full)
             static let red = UIColor(hexCode: "F04452", alpha: Resource.UIConstants.Alpha.full)
-            static let yellow = UIColor.systemYellow
+//            static let yellow = UIColor.systemYellow
         }
     }
 }

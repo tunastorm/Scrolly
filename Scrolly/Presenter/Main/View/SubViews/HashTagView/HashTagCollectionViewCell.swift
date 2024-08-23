@@ -10,13 +10,10 @@ import SnapKit
 import Then
 
 final class HashTagCollectionViewCell: BaseCollectionViewCell {
-    
-//    private var isSelected = false
-    
+        
     private let hashTag = UILabel().then {
         $0.textAlignment = .center
-        $0.font = UIFont.preferredFont(forTextStyle: .body)
-        $0.adjustsFontForContentSizeCategory = true
+        $0.font = Resource.Asset.Font.system14
     }
     
     override func configHierarchy() {
@@ -27,7 +24,6 @@ final class HashTagCollectionViewCell: BaseCollectionViewCell {
         hashTag.snp.makeConstraints { make in
             make.verticalEdges.equalToSuperview().inset(7)
             make.horizontalEdges.equalToSuperview().inset(10)
-            make.firstBaseline.equalTo(contentView.layoutMargins.top).multipliedBy(1)
         }
     }
     
@@ -46,14 +42,17 @@ final class HashTagCollectionViewCell: BaseCollectionViewCell {
     }
     
     @objc private func cellTapped(_ sender: UITapGestureRecognizer) {
-//        isSelected.toggle()
+        print(#function, "셀 클릭됨", "isSelected:", isSelected)
+        isSelected.toggle()
         cellTappedToggle()
+        
     }
     
     private func cellTappedToggle() {
         layer.borderWidth = isSelected ? 0 : 1
         backgroundColor = isSelected ? Resource.Asset.CIColor.blue : Resource.Asset.CIColor.white
         hashTag.textColor = isSelected ? Resource.Asset.CIColor.white : Resource.Asset.CIColor.darkGray
+        
     }
     
     func configCell(_ identifier: HashTagSection.HashTag) {

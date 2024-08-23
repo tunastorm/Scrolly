@@ -8,6 +8,7 @@
 import Foundation
 
 struct PostsModel: Decodable, Hashable {
+    let uuid = UUID()
     let postId: String
     let productId: String
     let title: String?

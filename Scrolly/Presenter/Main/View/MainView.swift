@@ -9,21 +9,25 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import Then
 
 final class MainView: BaseView {
     
-    // MARK: - DataSources
-    private var filterDataSource: UICollectionViewDiffableDataSource<HashTagSection, HashTagSection.HashTag>?
-    private var bannerDataSource: UICollectionViewDiffableDataSource<BannerSection, PostsModel>?
-    
     // MARK: - CollectionViews
-    private let hashTagView = HashTagCollectionView(frame: .zero, collectionViewLayout: HashTagCollectionView.createLayout())
-    private let bannerView = BannerCollectionView(frame: .zero, collectionViewLayout: BannerCollectionView.createLayout())
-    private let popularView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
+    let hashTagView = HashTagCollectionView(frame: .zero, collectionViewLayout: HashTagCollectionView.createLayout())
+    let bannerView = BannerCollectionView(frame: .zero, collectionViewLayout: BannerCollectionView.createLayout())
+    let recommandView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
+    let recentlyViewedView = RecentlyViewedCollectionView(frame: .zero, collectionViewLayout: RecentlyViewedCollectionView.createLayout())
+//    let newWaitingFreeView = oldRecommandCollectionView(frame: .zero, collectionViewLayout: oldRecommandCollectionView.createLayout())
+//    
+//    lazy var recommandViews = [popularView, newWaitingFreeView]
     
-    private let recentlyViewedView = RecentlyViewedCollectionView(frame: .zero, collectionViewLayout: RecentlyViewedCollectionView.createLayout())
-    
-    private let newWaitingFreeView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
+    private let bannerPageLabel = UILabel().then {
+        $0.font = Resource.Asset.Font.boldSystem13
+        $0.textColor = Resource.Asset.CIColor.white
+        $0.textAlignment = .right
+        $0.text = "1/"
+    }
     
     private let scrollView = UIScrollView()
     private let contentView = UIView()
@@ -32,7 +36,7 @@ final class MainView: BaseView {
         addSubview(hashTagView)
         addSubview(scrollView)
         scrollView.addSubview(contentView)
-        [ bannerView, popularView , recentlyViewedView, newWaitingFreeView ].forEach {
+        [ bannerView, bannerPageLabel, recommandView, recentlyViewedView ].forEach {
             contentView.addSubview($0)
         }
     }
@@ -44,116 +48,82 @@ final class MainView: BaseView {
             make.horizontalEdges.equalTo(safeAreaLayoutGuide)
         }
         scrollView.snp.makeConstraints { make in
-            make.top.equalTo(hashTagView.snp.bottom).offset(20)
+            make.top.equalTo(hashTagView.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide)
             make.bottom.equalTo(safeAreaLayoutGuide)
         }
         contentView.snp.makeConstraints { make in
             make.edges.equalTo(scrollView.contentLayoutGuide)
             make.width.equalTo(scrollView.frameLayoutGuide)
-            make.height.equalTo(1404)
+            make.height.equalTo(1500)
         }
         bannerView.snp.makeConstraints { make in
             make.height.equalTo(350)
             make.top.equalToSuperview()
             make.horizontalEdges.equalToSuperview().inset(12)
         }
-        popularView.snp.makeConstraints { make in
-            make.height.equalTo(404)
-            make.top.equalTo(bannerView.snp.bottom).offset(6)
+        bannerPageLabel.snp.makeConstraints { make in
+            make.height.equalTo(20)
+            make.width.equalTo(80)
+            make.bottom.equalTo(bannerView.snp.bottom).offset(-20)
+            make.trailing.equalTo(bannerView.snp.trailing).offset(-20)
+        }
+        recommandView.snp.makeConstraints { make in
+            make.height.equalTo(1000)
+            make.top.equalTo(bannerView.snp.bottom).offset(10)
             make.horizontalEdges.equalToSuperview().inset(12)
         }
         recentlyViewedView.snp.makeConstraints { make in
             make.height.equalTo(140)
-            make.top.equalTo(popularView.snp.bottom).offset(20)
+            make.top.equalTo(recommandView.snp.bottom).offset(20)
             make.leading.equalToSuperview().inset(12)
             make.trailing.equalToSuperview()
-        }
-        newWaitingFreeView.snp.makeConstraints { make in
-            make.height.equalTo(404)
-            make.width.equalTo(350)
-            make.top.equalTo(recentlyViewedView.snp.bottom).offset(20)
-            make.horizontalEdges.equalToSuperview().inset(12)
             make.bottom.equalToSuperview().inset(10)
         }
+        
+//        popularView.snp.makeConstraints { make in
+//            make.height.equalTo(430)
+//            make.top.equalTo(bannerView.snp.bottom).offset(6)
+//            make.horizontalEdges.equalToSuperview().inset(12)
+//        }
+
+//        newWaitingFreeView.snp.makeConstraints { make in
+//            make.height.equalTo(430)
+//            make.top.equalTo(recentlyViewedView.snp.bottom).offset(20)
+//            make.horizontalEdges.equalToSuperview().inset(12)
+//            make.bottom.equalToSuperview().inset(10)
+//        }
         
     }
     
     override func configView() {
         backgroundColor = .white
         hashTagView.showsHorizontalScrollIndicator = false
-        bannerView.showsHorizontalScrollIndicator = false
-        popularView.backgroundColor = .systemBlue
-        recentlyViewedView.backgroundColor = .systemBlue
-        newWaitingFreeView.backgroundColor = .systemBlue
+        recommandView.showsVerticalScrollIndicator = false
+        recommandView.isScrollEnabled = false
+        recentlyViewedView.backgroundColor = Resource.Asset.CIColor.lightGray
+//        bannerView.showsHorizontalScrollIndicator = false
+//        popularView.showsVerticalScrollIndicator = false
+//        popularView.isScrollEnabled = false
+//        recentlyViewedView.backgroundColor = .systemBlue
+//        newWaitingFreeView.backgroundColor = .systemBlue
+//        newWaitingFreeView.showsVerticalScrollIndicator = false
+//        newWaitingFreeView.isScrollEnabled = false
     }
     
     override func configInteractionWithViewController<T: UIViewController >(viewController: T) {
         guard let mainVC = viewController as? MainViewController else {
             return
         }
-        bannerView.delegate = mainVC
+//        popularView.delegate = mainVC
+//        newWaitingFreeView.delegate = mainVC
+//        bannerView.delegate = mainVC
     }
     
-    func configHashTagView(_ hashTags: [HashTagSection.HashTag]) {
-        configFilterDataSource()
-        updateFilterSnapShot(hashTags)
-    }
-    
-    func configBannerView(_ model: [PostsModel]) {
-        configBannerDataSource()
-        updateBannerSnapShot(model)
-        
-    }
-
-}
-
-extension MainView {
-    
-    //MARK: - 해시태그 필터 콜렉션뷰 구현부
-    private func filterCellRegistration() -> UICollectionView.CellRegistration<HashTagCollectionViewCell, HashTagSection.HashTag> {
-        UICollectionView.CellRegistration<HashTagCollectionViewCell, HashTagSection.HashTag> { cell, indexPath, itemIdentifier in
-            cell.configCell(itemIdentifier)
+    func configBannerLabel(_ length: Int) {
+        if let bannerPage = bannerPageLabel.text {
+            bannerPageLabel.text = bannerPage + "\(length)"
         }
-    }
-    
-    private func configFilterDataSource() {
-         let collectionView = hashTagView
-         let cellRegistration = filterCellRegistration()
-         filterDataSource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
-             let cell = collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: itemIdentifier)
-             return cell
-         })
-     }
-    
-    private func updateFilterSnapShot(_ hashTags: [HashTagSection.HashTag]) {
-        var snapShot = NSDiffableDataSourceSnapshot<HashTagSection, HashTagSection.HashTag>()
-        snapShot.appendSections(HashTagSection.allCases)
-        snapShot.appendItems(hashTags, toSection: .main)
-        filterDataSource?.apply(snapShot)
-    }
-    
-    //MARK: - 배너 콜렉션뷰 구현부
-    private func bannerCellRegistration() -> UICollectionView.CellRegistration<BannerCollectionViewCell, PostsModel> {
-        UICollectionView.CellRegistration<BannerCollectionViewCell, PostsModel> { cell, indexPath, itemIdentifier in
-            cell.configCell(itemIdentifier)
-        }
-    }
-    
-    private func configBannerDataSource() {
-         let collectionView = bannerView
-         let cellRegistration = bannerCellRegistration()
-         bannerDataSource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
-             let cell = collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: itemIdentifier)
-             return cell
-         })
-    }
-    
-    private func updateBannerSnapShot(_ model: [PostsModel]) {
-        var snapShot = NSDiffableDataSourceSnapshot<BannerSection, PostsModel>()
-        snapShot.appendSections(BannerSection.allCases)
-        snapShot.appendItems(model, toSection: .main)
-        bannerDataSource?.apply(snapShot)
     }
     
 }
