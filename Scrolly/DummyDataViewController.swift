@@ -60,7 +60,7 @@ final class DummyDataViewController: UIViewController {
 //        updateMyProfile()
 //        uploadPostImage(isUpdate: true)
 //        uploadPosts()
-//        getPosts()
+        getPosts()
 //        queryOnePost(postId: "66c42b6a97d02bf91e201935")
 //        updatePosts(postId: "66c8ca8c5056517017a45b9b", query:  PostsQuery(productId: nil, title: nil, content: "소설 속 악역으로 빙의했다.\n재능도 없고, 노력도 하지 않는\n찌질한 망나니 빌런으로.\n\n하지만\n\n[검술: F] [창술: S]\n\n…이 정도면 할만한데? #백작가_도련님은_창술천재 #연량 #웹소설 #판타지 #남성향", content1: nil, content2: nil, content3: nil, content4: nil, content5: nil, files: nil))
 //        deletePosts(postId: "66c353dfd22f9bf132291e8e")
@@ -76,6 +76,14 @@ final class DummyDataViewController: UIViewController {
 //        let vc = MainViewController(view: MainView(), viewModel: MainViewModel())
 //        navigationController?.pushViewController(vc, animated: false)
     }
+    
+    let waitingFree = [
+        "true","true", "false", "true", "false",
+        "false", "false", "false", "true", "true",
+        "true", "true", "true", "false", "true",
+        "true", "false", "false", "false", "true"
+    ]
+    
     
     let banner = [
         "남주가 다 해먹는 무협지 속, 남주의 먼 조상님으로 빙의했다",
@@ -105,7 +113,7 @@ final class DummyDataViewController: UIViewController {
             switch result {
             case .success(let model):
                 print(#function, "model: ")
-                dump(model)
+//                dump(model)
                
                 if model is GetPostsModel {
                     let getPostsModel = model as! GetPostsModel
@@ -117,8 +125,14 @@ final class DummyDataViewController: UIViewController {
                         print("content: ",model.content)
                         print("tags: ", model.hashTags)
                         print("files: ", model.files)
+                        print("기다무: ", model.content1)
+                        print("연재주기: ", model.content2)
+                        print("조회수: ", model.content3)
+                        print("평균별점, 입력수: ", model.content4)
+                        print("waiting: ", model.content5)
                         
-//                        let query = PostsQuery(productId: nil, title: nil, content: nil, content1: nil, content2: nil, content3: nil, content4: nil, content5: owner.banner[idx], files: nil)
+                        
+//                        let query = PostsQuery(productId: nil, title: nil, content: nil, content1: owner.waitingFree[idx], content2: nil, content3: nil, content4: nil, content5: nil, files: nil)
 //                        owner.updatePosts(postId: model.postId, query: query)
                         
 //                        if let content = model.content {

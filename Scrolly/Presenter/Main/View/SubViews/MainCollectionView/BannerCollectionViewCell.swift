@@ -83,7 +83,7 @@ final class BannerCollectionViewCell: BaseCollectionViewCell {
             make.bottom.equalTo(descriptionLabel.snp.top).offset(-20)
         }
         waitingFreeImageView.snp.makeConstraints { make in
-            make.size.equalTo(detailView.snp.height)
+            make.size.equalTo(16)
             make.verticalEdges.equalToSuperview()
             make.leading.equalToSuperview()
         }
@@ -99,6 +99,7 @@ final class BannerCollectionViewCell: BaseCollectionViewCell {
             make.leading.equalTo(waitingFreeLabel.snp.trailing).offset(4)
             make.verticalEdges.equalToSuperview()
         }
+        
     }
     
     override func configView() {
@@ -131,6 +132,35 @@ final class BannerCollectionViewCell: BaseCollectionViewCell {
         let hashTags = identifier.hashTags
         let tagString = hashTags[2...3].joined(separator: "﹒")
         tagLabel.text = tagString
-        
+        // 기다무 여부 토글
+        let isHidden = identifier.content1 == "true"
+        waitingFreeToggle(isHidden)
     }
+    
+    private func waitingFreeToggle(_ isHidden: Bool) {
+        waitingFreeImageView.isHidden = isHidden
+        waitingFreeLabel.isHidden = isHidden
+        if isHidden {
+            waitingFreeImageView.snp.updateConstraints { make in
+                make.size.equalTo(0)
+            }
+            waitingFreeLabel.snp.updateConstraints { make in
+                make.width.equalTo(0)
+            }
+            tagLabel.snp.updateConstraints { make in
+                make.leading.equalTo(waitingFreeLabel.snp.trailing)
+            }
+        } else {
+            waitingFreeImageView.snp.updateConstraints { make in
+                make.size.equalTo(16)
+            }
+            waitingFreeLabel.snp.updateConstraints { make in
+                make.width.equalTo(32)
+            }
+            tagLabel.snp.updateConstraints { make in
+                make.leading.equalTo(waitingFreeLabel.snp.trailing).offset(4)
+            }
+        }
+    }
+    
 }

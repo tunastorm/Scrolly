@@ -23,7 +23,7 @@ final class WaitingFreeImageView: BaseView {
     
     override func configLayout() {
         waitingFreeImageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.edges.equalToSuperview().inset(2)
         }
     }
     
@@ -31,7 +31,7 @@ final class WaitingFreeImageView: BaseView {
         backgroundColor = Resource.Asset.CIColor.blue
         layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
         layer.masksToBounds = true
-        layer.cornerRadius = 2
+        layer.cornerRadius = 4
     }
 
 }

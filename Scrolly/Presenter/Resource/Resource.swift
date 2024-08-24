@@ -59,13 +59,16 @@ enum Resource {
     enum Asset {
 
         enum SystemImage {
+            static let stopwatch = UIImage(systemName: "stopwatch")
+            static let lineThreeHorizontal = UIImage(systemName: "line.3.horizontal")
             static let magnifyingGlass = UIImage(systemName: "magnifyingglass")
+//            static let chevronRight = UIImage(systemName: "chevron.right")
+//            static let starFill = UIImage(systemName: "star.fill")?.withTintColor(.systemYellow, renderingMode: .alwaysTemplate)
 //            static let heart = UIImage(systemName: "heart")
 //            static let cameraFill = UIImage(systemName: "camera.fill")
-            static let chevronRight = UIImage(systemName: "chevron.right")
-            static let starFill = UIImage(systemName: "star.fill")?.withTintColor(.systemYellow, renderingMode: .alwaysTemplate)
+           
 //            static let timerSquare = UIImage(systemName: "timer.square")
-              static let stopwatch = UIImage(systemName: "stopwatch")
+           
 //            static let clock = UIImage(systemName: "clock")
 //            static let xmark = UIImage(systemName: "xmark")
 //            static let person = UIImage(systemName: "person")

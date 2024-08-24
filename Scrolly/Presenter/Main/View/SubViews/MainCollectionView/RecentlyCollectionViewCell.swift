@@ -16,7 +16,6 @@ final class RecentlyCollectionViewCell: BaseCollectionViewCell {
         $0.backgroundColor = Resource.Asset.CIColor.lightGray
         $0.contentMode = .scaleAspectFill
         $0.layer.masksToBounds = true
-        $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         $0.layer.cornerRadius = 10
     }
     
@@ -71,8 +70,9 @@ final class RecentlyCollectionViewCell: BaseCollectionViewCell {
     
     override func configView() {
         backgroundColor = Resource.Asset.CIColor.white
-        layer.cornerRadius = 10
-        layer.masksToBounds = true
+//        layer.masksToBounds = true
+//        layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+//        layer.cornerRadius = 10
         waitingFreeLabel.setFont(font: Resource.Asset.Font.boldSystem10)
     }
     
@@ -91,7 +91,29 @@ final class RecentlyCollectionViewCell: BaseCollectionViewCell {
         }
         imageView.kf.setImage(with: url)
         titleLabel.text = identifier.hashTags.first?.replacing("_", with: " ")
-        categoryLabel.text = identifier.hashTags[1]
+        categoryLabel.text = identifier.hashTags[1] ?? ""
+        let isHidden = identifier.content1 == "true"
+        waitingFreeToggle(isHidden)
+        
     }
     
+    private func waitingFreeToggle(_ isHidden: Bool) {
+        waitingFreeImageView.isHidden = isHidden
+        waitingFreeLabel.isHidden = isHidden
+        if isHidden {
+            waitingFreeImageView.snp.updateConstraints { make in
+                make.size.equalTo(0)
+            }
+            waitingFreeLabel.snp.updateConstraints { make in
+                make.width.equalTo(0)
+            }
+        } else {
+            waitingFreeImageView.snp.updateConstraints { make in
+                make.size.equalTo(12)
+            }
+            waitingFreeLabel.snp.updateConstraints { make in
+                make.width.equalTo(30)
+            }
+        }
+    }
 }

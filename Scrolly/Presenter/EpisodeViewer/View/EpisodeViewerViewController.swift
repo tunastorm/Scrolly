@@ -117,6 +117,7 @@ final class EpisodeViewerViewController: UIViewController {
             return
         }
         navigationController?.navigationBar.setHidden(!isHidden, animated: true)
+        UINavigationBar.appearance().isTranslucent = !isHidden
     }
     
     

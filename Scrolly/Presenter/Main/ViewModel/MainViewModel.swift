@@ -16,9 +16,7 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
     private let filterList = HashTagSection.HashTag.allCases
 
     private var output = Output(filterList: PublishSubject<[HashTagSection.HashTag]>(),
-                                bannerList: PublishSubject<APIManager.ModelResult<GetPostsModel>>(),
-                                recomandDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
-                                recentlyList: PublishSubject<APIManager.ModelResult<GetPostsModel>>())
+                                recommandDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>())
     
     struct Input {
         
@@ -26,60 +24,31 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
     
     struct Output {
         let filterList: PublishSubject<[HashTagSection.HashTag]>
-        let bannerList: PublishSubject<APIManager.ModelResult<GetPostsModel>>
-        let recomandDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>
-        let recentlyList: PublishSubject<APIManager.ModelResult<GetPostsModel>>
+        let recommandDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>
     }
 
     func transform(input: Input) -> Output? {
         let filterList = BehaviorSubject(value: filterList)
-//            .debug("filterList")
-//        
+          
         let bannerList = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "20", productId: APIConstants.ProductId.novelInfo))
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
-//            .debug("bannerList")
         
         let popularList = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "6", productId: APIConstants.ProductId.novelInfo))
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
-//            .debug("popularList")
         
         let newWaitingFreeList = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "6", productId: APIConstants.ProductId.novelInfo))
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
-//            .debug("popularList")
-        
-        BehaviorSubject.zip(filterList, bannerList)
-            .bind(with: self) { owner, results in
-                owner.output.filterList.onNext(results.0)
-                owner.output.bannerList.onNext(results.1)
-            }
-            .disposed(by: disposeBag)
-        
-        BehaviorSubject.zip(popularList,newWaitingFreeList)
-            .bind(with: self) { owner, results in
-                owner.output.recomandDatas.onNext([results.0, results.1])
-            }
-            .disposed(by: disposeBag)
-        
-        BehaviorSubject(value: GetPostsQuery(next: nil, limit: "20", productId: APIConstants.ProductId.novelEpisode))
+
+        let recentlyList = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "20", productId: APIConstants.ProductId.novelEpisode))
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
-            .bind(with: self) { owner, result in
-                owner.output.recentlyList.onNext(result)
+    
+        BehaviorSubject.zip(filterList, bannerList, popularList, newWaitingFreeList, recentlyList)
+            .bind(with: self) { owner, results in
+                var resultList = [results.1, results.2, results.3, results.4]
+                owner.output.recommandDatas.onNext(resultList)
+                owner.output.filterList.onNext(results.0)
             }
             .disposed(by: disposeBag)
-            // 중복제거 로직 구현 필요
-//            .map{ result in
-//                switch result {
-//                case .success(let model):
-//                    var viewed: [String : (String,String?)] = [:]
-//                    let rawViewed = model.data.map { ($0.title, $0.hashTags[2], $0.files.first) }
-//                    rawViewed.forEach { values in
-//                        
-//                    }
-//                case .failure(let error):
-//                    return
-//                }
-//            }
-        
         
         print(#function, "output 2: ", output)
         return output

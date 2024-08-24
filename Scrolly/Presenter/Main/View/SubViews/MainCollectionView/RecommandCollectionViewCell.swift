@@ -74,7 +74,7 @@ final class RecommandCollectionViewCell: BaseCollectionViewCell {
         
     }
     
-    func configRecommandCell(_ identifier: PostsModel) {
+    func configCell(_ identifier: PostsModel) {
         KingfisherManager.shared.setHeaders()
         guard let file = identifier.files.first, let url = URL(string: APIConstants.URI + "/\(file)") else {
             return
@@ -88,11 +88,29 @@ final class RecommandCollectionViewCell: BaseCollectionViewCell {
                 print(#function, "error: ", error)
             }
         }
-//        creatorLabelView.setLabelText(text: identifier.creator.nick)
+        let isHidden = identifier.content1 == "true"
+        waitingFreeToggle(isHidden)
     }
     
-    func configRecentlyCell(_ identifier: PostsModel) {
-        
+    private func waitingFreeToggle(_ isHidden: Bool) {
+        waitingFreeImageView.isHidden = isHidden
+        waitingFreeLabel.isHidden = isHidden
+        if isHidden {
+            waitingFreeImageView.snp.updateConstraints { make in
+                make.size.equalTo(0)
+            }
+            waitingFreeLabel.snp.updateConstraints { make in
+                make.width.equalTo(0)
+            }
+        } else {
+            waitingFreeImageView.snp.updateConstraints { make in
+                make.size.equalTo(14)
+            }
+            waitingFreeLabel.snp.updateConstraints { make in
+                make.width.equalTo(32)
+            }
+        }
     }
+
     
 }

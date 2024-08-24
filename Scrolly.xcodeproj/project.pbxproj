@@ -90,6 +90,7 @@
 		BCCBDA842C78BE3A00073E31 /* CreatorLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCBDA832C78BE3A00073E31 /* CreatorLabelView.swift */; };
 		BCCBDA862C79BC6C00073E31 /* RecentlySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCBDA852C79BC6C00073E31 /* RecentlySection.swift */; };
 		BCCBDA882C79BCB000073E31 /* RecentlyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCBDA872C79BCB000073E31 /* RecentlyCollectionViewCell.swift */; };
+		BCCBDA8A2C7A1BC400073E31 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCBDA892C7A1BC400073E31 /* UIViewController+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -170,6 +171,7 @@
 		BCCBDA832C78BE3A00073E31 /* CreatorLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatorLabelView.swift; sourceTree = "<group>"; };
 		BCCBDA852C79BC6C00073E31 /* RecentlySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlySection.swift; sourceTree = "<group>"; };
 		BCCBDA872C79BCB000073E31 /* RecentlyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyCollectionViewCell.swift; sourceTree = "<group>"; };
+		BCCBDA892C7A1BC400073E31 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -269,6 +271,7 @@
 		BC097C762C74C3720038A21C /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				BCCBDA892C7A1BC400073E31 /* UIViewController+Extension.swift */,
 				BC097C772C74C37E0038A21C /* UIView+Extension.swift */,
 				BC097C942C74E3C80038A21C /* UIColor+Extension.swift */,
 				BCCBDA662C7739AD00073E31 /* UIImage+Extension.swift */,
@@ -397,8 +400,8 @@
 		BC097CC62C7620580038A21C /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
-				BCCBDA7E2C78886400073E31 /* MainCollectionView */,
 				BC097CD62C7636F70038A21C /* HashTagView */,
+				BCCBDA7E2C78886400073E31 /* MainCollectionView */,
 				BC097CD52C7636F10038A21C /* BannerView */,
 				BC097CD42C7636D90038A21C /* RecommandView */,
 				BC097CD32C7636D30038A21C /* RecentlyView */,
@@ -411,7 +414,6 @@
 			children = (
 				BC097CD12C7625B70038A21C /* RecentlyViewedCollectionView.swift */,
 				BCCBDA852C79BC6C00073E31 /* RecentlySection.swift */,
-				BCCBDA872C79BCB000073E31 /* RecentlyCollectionViewCell.swift */,
 			);
 			path = RecentlyView;
 			sourceTree = "<group>";
@@ -421,8 +423,6 @@
 			children = (
 				BCCBDA7A2C78856E00073E31 /* Section */,
 				BC097CCD2C7624790038A21C /* oldRecommandCollectionView.swift */,
-				BCCBDA6B2C7837EE00073E31 /* RecommandCollectionViewCell.swift */,
-				BCCBDA6D2C784B2C00073E31 /* collectionViewHeaderView.swift */,
 			);
 			path = RecommandView;
 			sourceTree = "<group>";
@@ -431,7 +431,6 @@
 			isa = PBXGroup;
 			children = (
 				BC097CC72C7620990038A21C /* BannerCollectionView.swift */,
-				BCCBDA622C77250E00073E31 /* BannerCollectionViewCell.swift */,
 				BCCBDA642C7730AC00073E31 /* BannerSection.swift */,
 			);
 			path = BannerView;
@@ -590,6 +589,10 @@
 			children = (
 				BCCBDA7F2C78887900073E31 /* RecommandCollectionView.swift */,
 				BCCBDA812C7888E900073E31 /* RecommandSection.swift */,
+				BCCBDA622C77250E00073E31 /* BannerCollectionViewCell.swift */,
+				BCCBDA6B2C7837EE00073E31 /* RecommandCollectionViewCell.swift */,
+				BCCBDA872C79BCB000073E31 /* RecentlyCollectionViewCell.swift */,
+				BCCBDA6D2C784B2C00073E31 /* collectionViewHeaderView.swift */,
 			);
 			path = MainCollectionView;
 			sourceTree = "<group>";
@@ -715,6 +718,7 @@
 				BC097CD22C7625B70038A21C /* RecentlyViewedCollectionView.swift in Sources */,
 				BC097C9B2C7500F80038A21C /* CommentsModel.swift in Sources */,
 				BCCBDA672C7739AD00073E31 /* UIImage+Extension.swift in Sources */,
+				BCCBDA8A2C7A1BC400073E31 /* UIViewController+Extension.swift in Sources */,
 				BC097CD82C76370D0038A21C /* HashTagCollectionViewCell.swift in Sources */,
 				BC8F1CED2C6CB083005D63CB /* APIKey.swift in Sources */,
 				BCCBDA772C78651400073E31 /* WaitingFreeImageView.swift in Sources */,
