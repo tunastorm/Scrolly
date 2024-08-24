@@ -53,13 +53,13 @@ final class RecommandCollectionViewCell: BaseCollectionViewCell {
 //        }
         waitingFreeImageView.snp.makeConstraints { make in
             make.size.equalTo(14)
-            make.top.equalToSuperview().inset(10)
-            make.leading.equalToSuperview().inset(10)
+            make.top.equalToSuperview().inset(6)
+            make.leading.equalToSuperview().inset(6)
         }
         waitingFreeLabel.snp.makeConstraints { make in
             make.height.equalTo(waitingFreeImageView)
             make.width.equalTo(32)
-            make.top.equalToSuperview().inset(10)
+            make.top.equalToSuperview().inset(6)
             make.leading.equalTo(waitingFreeImageView.snp.trailing)
         }
     }
@@ -95,21 +95,6 @@ final class RecommandCollectionViewCell: BaseCollectionViewCell {
     private func waitingFreeToggle(_ isHidden: Bool) {
         waitingFreeImageView.isHidden = isHidden
         waitingFreeLabel.isHidden = isHidden
-        if isHidden {
-            waitingFreeImageView.snp.updateConstraints { make in
-                make.size.equalTo(0)
-            }
-            waitingFreeLabel.snp.updateConstraints { make in
-                make.width.equalTo(0)
-            }
-        } else {
-            waitingFreeImageView.snp.updateConstraints { make in
-                make.size.equalTo(14)
-            }
-            waitingFreeLabel.snp.updateConstraints { make in
-                make.width.equalTo(32)
-            }
-        }
     }
 
     

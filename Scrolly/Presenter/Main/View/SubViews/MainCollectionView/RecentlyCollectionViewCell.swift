@@ -100,20 +100,5 @@ final class RecentlyCollectionViewCell: BaseCollectionViewCell {
     private func waitingFreeToggle(_ isHidden: Bool) {
         waitingFreeImageView.isHidden = isHidden
         waitingFreeLabel.isHidden = isHidden
-        if isHidden {
-            waitingFreeImageView.snp.updateConstraints { make in
-                make.size.equalTo(0)
-            }
-            waitingFreeLabel.snp.updateConstraints { make in
-                make.width.equalTo(0)
-            }
-        } else {
-            waitingFreeImageView.snp.updateConstraints { make in
-                make.size.equalTo(12)
-            }
-            waitingFreeLabel.snp.updateConstraints { make in
-                make.width.equalTo(30)
-            }
-        }
     }
 }
