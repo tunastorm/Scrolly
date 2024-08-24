@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 import SnapKit
 import Then
 
@@ -15,11 +16,11 @@ final class RecommandCollectionViewCell: BaseCollectionViewCell {
         $0.contentMode = .scaleAspectFill
     }
     
-    private let coverView = UIImageView().then {
-        $0.contentMode = .scaleAspectFill
-        $0.alpha = 0.25
-    }
-    
+//    private let coverView = UIImageView().then {
+//        $0.contentMode = .scaleAspectFill
+//        $0.alpha = 0.25
+//    }
+//    
     private let waitingFreeImageView = WaitingFreeImageView()
     
     private let waitingFreeLabel = WaitingFreeLabel()
@@ -28,7 +29,7 @@ final class RecommandCollectionViewCell: BaseCollectionViewCell {
     
     override func configHierarchy() {
         contentView.addSubview(imageView)
-        contentView.addSubview(coverView)
+//        contentView.addSubview(coverView)
 //        contentView.addSubview(creatorLabelView)
         contentView.addSubview(waitingFreeImageView)
         contentView.addSubview(waitingFreeLabel)
@@ -45,11 +46,11 @@ final class RecommandCollectionViewCell: BaseCollectionViewCell {
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-        coverView.snp.makeConstraints { make in
-            make.horizontalEdges.equalToSuperview()
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
+//        coverView.snp.makeConstraints { make in
+//            make.horizontalEdges.equalToSuperview()
+//            make.top.equalToSuperview()
+//            make.bottom.equalToSuperview()
+//        }
         waitingFreeImageView.snp.makeConstraints { make in
             make.size.equalTo(14)
             make.top.equalToSuperview().inset(10)
@@ -73,7 +74,8 @@ final class RecommandCollectionViewCell: BaseCollectionViewCell {
         
     }
     
-    func configCell(_ identifier: PostsModel) {
+    func configRecommandCell(_ identifier: PostsModel) {
+        KingfisherManager.shared.setHeaders()
         guard let file = identifier.files.first, let url = URL(string: APIConstants.URI + "/\(file)") else {
             return
         }
@@ -81,12 +83,16 @@ final class RecommandCollectionViewCell: BaseCollectionViewCell {
             switch result {
             case .success(let data):
                 self?.imageView.image = data.image.resize(length: self?.contentView.frame.width ?? 100)
-                self?.coverView.image = Resource.Asset.NamedImage.gradationCover?.resize(length: self?.contentView.frame.width ?? 100)
+//                self?.coverView.image = Resource.Asset.NamedImage.gradationCover?.resize(length: self?.contentView.frame.width ?? 100)
             case .failure(let error):
                 print(#function, "error: ", error)
             }
         }
 //        creatorLabelView.setLabelText(text: identifier.creator.nick)
+    }
+    
+    func configRecentlyCell(_ identifier: PostsModel) {
+        
     }
     
 }

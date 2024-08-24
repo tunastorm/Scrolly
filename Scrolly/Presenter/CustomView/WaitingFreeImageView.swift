@@ -33,5 +33,5 @@ final class WaitingFreeImageView: BaseView {
         layer.masksToBounds = true
         layer.cornerRadius = 2
     }
-    
+
 }

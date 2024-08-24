@@ -19,8 +19,7 @@ final class MainViewController: BaseViewController<MainView> {
     private var filterDataSource: UICollectionViewDiffableDataSource<HashTagSection, HashTagSection.HashTag>?
     private var bannerDataSource: UICollectionViewDiffableDataSource<BannerSection, PostsModel>?
     private var recommandDataSource: UICollectionViewDiffableDataSource<RecommandSection, PostsModel>?
-//    private var popularDataSource: UICollectionViewDiffableDataSource<PopularSection, PostsModel>?
-//    private var newWaitingFreeDataSource: UICollectionViewDiffableDataSource<NewWaitingFreeSection, PostsModel>?
+    private var recentlyDataSource: UICollectionViewDiffableDataSource<RecentlySection, PostsModel>?
 
     override func configNavigationbar(navigationColor: UIColor, shadowImage: Bool) {
         super.configNavigationbar(navigationColor: navigationColor, shadowImage: shadowImage)
@@ -49,10 +48,9 @@ final class MainViewController: BaseViewController<MainView> {
             .bind(with: self) { owner, result in
                 switch result {
                 case .success(let model):
-                    let getPostsModel = model as! GetPostsModel
                     owner.configBannerDataSource()
-                    owner.updateBannerSnapShot(getPostsModel.data)
-                    owner.rootView?.configBannerLabel(getPostsModel.data.count)
+                    owner.updateBannerSnapShot(model.data)
+                    owner.rootView?.configBannerLabel(model.data.count)
                 case .failure(let error):
                     owner.showToastToView(error)
                 }
@@ -65,69 +63,41 @@ final class MainViewController: BaseViewController<MainView> {
                 results.forEach { result in
                     switch result {
                     case .success(let model):
-                        let getPostsModel = model as! GetPostsModel
-                        list.append(getPostsModel.data)
+                        list.append(model.data)
                     case .failure(let error):
                         owner.showToastToView(error)
                     }
                 }
-//                print(#function, "list: ", list)
                 owner.configRecommandDataSource(sections: RecommandSection.allCases)
                 owner.updateRecommandSnapShot(list, for: RecommandSection.allCases)
             }
             .disposed(by: disposeBag)
         
-//        output.bannerList
-//            .bind(with: self) { owner, result in
-//                switch result {
-//                case .success(let model):
-//                    guard let postsModel = model as? GetPostsModel else {
-//                        return
-//                    }
-//                    owner.configRecommandDataSource(section: .banner)
-//                    owner.updateRecommandSnapShot(postsModel.data, for: .banner)
-//                case .failure(let error):
-//                    owner.showToastToView(error)
-//                }
-//            }
-//            .disposed(by: disposeBag)
-        
-//        output.popularList
-//            .bind(with: self) { owner, result in
-//                switch result {
-//                case .success(let model):
-//                    guard let postsModel = model as? GetPostsModel else {
-//                        return
-//                    }
-//                    owner.configRecommandDataSource(section: .popular)
-//                    owner.updateRecommandSnapShot(postsModel.data, for: .popular)
-//                case .failure(let error):
-//                    owner.showToastToView(error)
-//                }
-//            }
-//            .disposed(by: disposeBag)
-//        
-//        output.newWaitingFreeList
-//            .bind(with: self) { owner, result in
-//                switch result {
-//                case .success(let model):
-//                    guard let postsModel = model as? GetPostsModel else {
-//                        return
-//                    }
-//                    owner.configRecommandDataSource(section: .newWaitingFree)
-//                    owner.updateRecommandSnapShot(postsModel.data, for: .newWaitingFree)
-//                case .failure(let error):
-//                    owner.showToastToView(error)
-//                }
-//            }
-//            .disposed(by: disposeBag)
+        output.recentlyList
+            .bind(with: self) { owner, result in
+                switch result {
+                case .success(let model):
+                    print("최근 본 작품 리스트")
+                    var viewed: [PostsModel] = []
+                    model.data.forEach { posts in
+                        if viewed.last?.hashTags.first == posts.hashTags.first {
+                            return
+                        }
+                        viewed.append(posts)
+                    }
+                    owner.configRecentlyDataSource(section: .recently)
+                    owner.updateRecentlySnapShot(viewed, for: .recently)
+                case .failure(let error):
+                    owner.showToastToView(error)
+                }
+            }.disposed(by: disposeBag)
     }
     
     private func showToastToView(_ error: APIError) {
         rootView?.makeToast(error.message, duration: 3.0, position: .bottom)
     }
     
-    //MARK: - 해시태그 필터 콜렉션뷰 구현부
+    //MARK: - 해시태그 필터 콜렉션뷰
     private func filterCellRegistration() -> UICollectionView.CellRegistration<HashTagCollectionViewCell, HashTagSection.HashTag> {
         UICollectionView.CellRegistration<HashTagCollectionViewCell, HashTagSection.HashTag> { cell, indexPath, itemIdentifier in
             cell.configCell(itemIdentifier)
@@ -152,7 +122,7 @@ final class MainViewController: BaseViewController<MainView> {
         filterDataSource?.apply(snapShot)
     }
     
-    //MARK: - 배너 콜렉션뷰 구현부
+    //MARK: - 배너 콜렉션뷰
     private func bannerCellRegistration() -> UICollectionView.CellRegistration<BannerCollectionViewCell, PostsModel> {
         UICollectionView.CellRegistration<BannerCollectionViewCell, PostsModel> { cell, indexPath, itemIdentifier in
             cell.configCell(itemIdentifier)
@@ -177,14 +147,15 @@ final class MainViewController: BaseViewController<MainView> {
         bannerDataSource?.apply(snapShot)
     }
     
+    //MARK: - 추천 콜렉션뷰
     private func recommandCellRegistration() -> UICollectionView.CellRegistration<RecommandCollectionViewCell, PostsModel> {
         UICollectionView.CellRegistration<RecommandCollectionViewCell, PostsModel> { cell, indexPath, itemIdentifier in
-            cell.configCell(itemIdentifier)
+            cell.configRecommandCell(itemIdentifier)
         }
     }
     
-    private func newWaitingFreeViewHeaderRegestration(_ sections: [RecommandSection]) -> UICollectionView.SupplementaryRegistration<RecommandHeaderView> {
-        UICollectionView.SupplementaryRegistration<RecommandHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) {
+    private func newWaitingFreeViewHeaderRegestration(_ sections: [RecommandSection]) -> UICollectionView.SupplementaryRegistration<collectionViewHeaderView> {
+        UICollectionView.SupplementaryRegistration<collectionViewHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) {
             (supplementaryView, string, indexPath) in
             supplementaryView.titleLabel.text = sections[indexPath.section].header
         }
@@ -215,39 +186,42 @@ final class MainViewController: BaseViewController<MainView> {
         recommandDataSource?.apply(snapShot)
     }
     
-
+    //MARK: - 최근 본 작품 콜렉션 뷰
+    private func recentlyCellRegistration() -> UICollectionView.CellRegistration<RecentlyCollectionViewCell, PostsModel> {
+        UICollectionView.CellRegistration<RecentlyCollectionViewCell, PostsModel> { cell, indexPath, itemIdentifier in
+            cell.configCell(itemIdentifier)
+        }
+    }
     
-//    //MARK: - 테마별 추천작품 뷰 구현부 (인기작품 뷰, 기다무 신작 뷰)
-//    private func recommandCellRegistration() -> UICollectionView.CellRegistration<RecommandCollectionViewCell, PostsModel> {
-//        UICollectionView.CellRegistration<RecommandCollectionViewCell, PostsModel> { cell, indexPath, itemIdentifier in
-//            cell.configCell(itemIdentifier)
-//        }
-//    }
-//    
-//    private func NewWaitingFreeViewHeaderRegestration(_ section: NewWaitingFreeSection) -> UICollectionView.SupplementaryRegistration<RecommandHeaderView> {
-//        UICollectionView.SupplementaryRegistration<RecommandHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) {
-//            (supplementaryView, string, indexPath) in
-//            supplementaryView.titleLabel.text = section.header
-//        }
-//    }
-//    
-//    private func configPopularDataSource(section: PopularSection) {
-//        guard let collectionView = rootView?.recommandViews[section.rawValue] else {
-//            return
-//        }
-//        let cellRegistration = recommandCellRegistration()
-//        popularDataSource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
-//            let cell = collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: itemIdentifier)
-//            return cell
-//        })
-//    }
-//
-//    private func updateRecommandSnapShot(_ model: [PostsModel]) {
-//        var snapShot = NSDiffableDataSourceSnapshot<PopularSection, PostsModel>()
-//        snapShot.appendSections([section])
-//        snapShot.appendItems(model, toSection: section)
-//        recommandDataSource?.apply(snapShot)
-//    }
+    private func recentlyViewHeaderRegestration(_ section: RecentlySection) -> UICollectionView.SupplementaryRegistration<collectionViewHeaderView> {
+        UICollectionView.SupplementaryRegistration<collectionViewHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) {
+            (supplementaryView, string, indexPath) in
+            supplementaryView.titleLabel.text = section.header
+        }
+    }
+    
+    private func configRecentlyDataSource(section: RecentlySection) {
+        guard let collectionView = rootView?.recentlyViewedView else {
+            return
+        }
+        print(#function,"collectionView: ",collectionView)
+        let headerRegistration = recentlyViewHeaderRegestration(section)
+        let cellRegistration = recentlyCellRegistration()
+        recentlyDataSource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+            let cell = collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: itemIdentifier)
+            return cell
+        })
+        recentlyDataSource?.supplementaryViewProvider = {(view, kind, index) in
+            return self.rootView?.recentlyViewedView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
+        }
+    }
+    
+    private func updateRecentlySnapShot(_ models: [PostsModel], for section: RecentlySection) {
+        var snapShot = NSDiffableDataSourceSnapshot<RecentlySection, PostsModel>()
+        snapShot.appendSections(RecentlySection.allCases)
+        snapShot.appendItems(models, toSection: section)
+        recentlyDataSource?.apply(snapShot)
+    }
     
 }
 

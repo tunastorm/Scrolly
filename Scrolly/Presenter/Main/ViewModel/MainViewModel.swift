@@ -16,11 +16,9 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
     private let filterList = HashTagSection.HashTag.allCases
 
     private var output = Output(filterList: PublishSubject<[HashTagSection.HashTag]>(),
-                                bannerList: PublishSubject<APIManager.ModelResult>(),
-                                recomandDatas: PublishSubject<[APIManager.ModelResult]>())
-
-//                                popularList: PublishSubject<APIManager.ModelResult>(),
-//                                newWaitingFreeList: PublishSubject<APIManager.ModelResult>())
+                                bannerList: PublishSubject<APIManager.ModelResult<GetPostsModel>>(),
+                                recomandDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
+                                recentlyList: PublishSubject<APIManager.ModelResult<GetPostsModel>>())
     
     struct Input {
         
@@ -28,27 +26,25 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
     
     struct Output {
         let filterList: PublishSubject<[HashTagSection.HashTag]>
-        let bannerList: PublishSubject<APIManager.ModelResult>
-        let recomandDatas: PublishSubject<[APIManager.ModelResult]>
-//        let bannerList: PublishSubject<APIManager.ModelResult>
-//        let popularList: PublishSubject<APIManager.ModelResult>
-//        let newWaitingFreeList : PublishSubject<APIManager.ModelResult>
+        let bannerList: PublishSubject<APIManager.ModelResult<GetPostsModel>>
+        let recomandDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>
+        let recentlyList: PublishSubject<APIManager.ModelResult<GetPostsModel>>
     }
 
     func transform(input: Input) -> Output? {
         let filterList = BehaviorSubject(value: filterList)
 //            .debug("filterList")
 //        
-        let bannerList = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "10", productId: APIConstants.ProductId.novelEpisode))
-            .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0), tokenHandler: nil) }
+        let bannerList = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "20", productId: APIConstants.ProductId.novelInfo))
+            .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
 //            .debug("bannerList")
         
-        let popularList = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "6", productId: APIConstants.ProductId.novelEpisode))
-            .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0), tokenHandler: nil) }
+        let popularList = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "6", productId: APIConstants.ProductId.novelInfo))
+            .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
 //            .debug("popularList")
         
-        let newWaitingFreeList = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "6", productId: APIConstants.ProductId.novelEpisode))
-            .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0), tokenHandler: nil) }
+        let newWaitingFreeList = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "6", productId: APIConstants.ProductId.novelInfo))
+            .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
 //            .debug("popularList")
         
         BehaviorSubject.zip(filterList, bannerList)
@@ -61,11 +57,29 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
         BehaviorSubject.zip(popularList,newWaitingFreeList)
             .bind(with: self) { owner, results in
                 owner.output.recomandDatas.onNext([results.0, results.1])
-//                owner.output.bannerList.onNext(results.1)
-//                owner.output.popularList.onNext(results.2)
-//                owner.output.newWaitingFreeList.onNext(results.3)
             }
             .disposed(by: disposeBag)
+        
+        BehaviorSubject(value: GetPostsQuery(next: nil, limit: "20", productId: APIConstants.ProductId.novelEpisode))
+            .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
+            .bind(with: self) { owner, result in
+                owner.output.recentlyList.onNext(result)
+            }
+            .disposed(by: disposeBag)
+            // 중복제거 로직 구현 필요
+//            .map{ result in
+//                switch result {
+//                case .success(let model):
+//                    var viewed: [String : (String,String?)] = [:]
+//                    let rawViewed = model.data.map { ($0.title, $0.hashTags[2], $0.files.first) }
+//                    rawViewed.forEach { values in
+//                        
+//                    }
+//                case .failure(let error):
+//                    return
+//                }
+//            }
+        
         
         print(#function, "output 2: ", output)
         return output

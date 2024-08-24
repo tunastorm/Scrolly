@@ -68,18 +68,17 @@ final class EpisodeViewerViewController: UIViewController {
         queryOnePost(postId: "66c5ccfd97d02bf91e206604")
     }
     
-    private func testSubscribe(single: Single<APIManager.ModelResult>) {
+    private func testSubscribe(single: Single<APIManager.ModelResult<PostsModel>>) {
         single.subscribe(with: self) { owner, result in
             switch result {
             case .success(let model):
                 print(#function, "model: ")
                 dump(model)
-                let postModel = model as! PostsModel
-                guard let pdf = postModel.files.last else {
+                guard let pdf = model.files.last else {
                     print("PDF 없음 ")
                     return
                 }
-                owner.navigationItem.title = postModel.title
+                owner.navigationItem.title = model.title
                 owner.getPostFile(file: pdf)
             case .failure(let error):
                 print(#function, "error: ", error)

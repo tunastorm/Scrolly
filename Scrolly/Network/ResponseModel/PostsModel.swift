@@ -12,6 +12,7 @@ struct PostsModel: Decodable, Hashable {
     let postId: String
     let productId: String
     let title: String?
+    let price: String?
     let content: String?
     let content1: String?
     let content2: String?
@@ -30,7 +31,7 @@ struct PostsModel: Decodable, Hashable {
     enum CodingKeys: String, CodingKey {
         case postId = "post_id"
         case productId = "product_id"
-        case title, content, content1, content2, content3, content4, content5,
+        case title, price, content, content1, content2, content3, content4, content5,
              createdAt, creator, files, likes, likes2, hashTags, comments
         case message
     }
@@ -39,6 +40,7 @@ struct PostsModel: Decodable, Hashable {
         self.postId = "blanck"
         self.productId = "blacnkProduct"
         self.title = nil
+        self.price = nil
         self.content = nil
         self.content1 = nil
         self.content2 = nil

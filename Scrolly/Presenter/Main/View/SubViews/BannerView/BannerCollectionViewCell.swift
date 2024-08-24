@@ -26,7 +26,6 @@ final class BannerCollectionViewCell: BaseCollectionViewCell {
     }
     
     private let titleLabel = UILabel().then {
-        $0.text = "아카데미의 마피아가 되었다"
         $0.textColor = Resource.Asset.CIColor.white
         $0.font = Resource.Asset.Font.boldSystem20
         $0.textAlignment = .left
@@ -34,9 +33,9 @@ final class BannerCollectionViewCell: BaseCollectionViewCell {
     }
 
     private let descriptionLabel = UILabel().then {
-        $0.text = "이게 뒷세계 방식이야"
         $0.textColor = Resource.Asset.CIColor.white
         $0.font = Resource.Asset.Font.system13
+        $0.numberOfLines = 0
     }
     
     private let detailView = UIView()
@@ -104,6 +103,8 @@ final class BannerCollectionViewCell: BaseCollectionViewCell {
     
     override func configView() {
         backgroundColor = Resource.Asset.CIColor.lightGray
+        layer.cornerRadius = 10
+        layer.masksToBounds = true
     }
     
     override func configInteractionWithViewController<T>(viewController: T) where T : UIViewController {
@@ -111,20 +112,24 @@ final class BannerCollectionViewCell: BaseCollectionViewCell {
     }
     
     func configCell(_ identifier: PostsModel) {
+        KingfisherManager.shared.setHeaders()
         guard let file = identifier.files.first, let url = URL(string: APIConstants.URI + "/\(file)") else {
             return
         }
+        print(#function, identifier.title, "url: ", url)
         imageView.kf.setImage(with: url) { [weak self] result in
             switch result {
             case .success(let data):
                 self?.imageView.image = data.image.resize(length: self?.contentView.frame.width ?? 350)
             case .failure(let error):
+                print("error:", error)
                 return
             }
         }
         titleLabel.text = identifier.title
+        descriptionLabel.text = identifier.content5
         let hashTags = identifier.hashTags
-        let tagString = hashTags.count == 2 ? hashTags[1] : hashTags[1...2].joined(separator: "﹒")
+        let tagString = hashTags[2...3].joined(separator: "﹒")
         tagLabel.text = tagString
         
     }

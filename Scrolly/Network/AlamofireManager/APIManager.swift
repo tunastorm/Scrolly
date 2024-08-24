@@ -13,13 +13,13 @@ import RxSwift
 
 protocol APIManagerProvider {
     
-    typealias ModelResult = Result<Decodable, APIError>
+    typealias ModelResult<T> = Result<T, APIError>
     typealias DataResult = Result<Data, APIError>
     typealias TokenHandler = (Decodable) -> Void
     
-    func callRequestAPI<T: Decodable>(model: T.Type, router: APIRouter, tokenHandler: TokenHandler?) -> Single<ModelResult>
-    func callRequestRefreshToken(completion: @escaping (ModelResult) -> Void)
-    func callRequestUploadFiles<T: Decodable>(model: T.Type, _ router: APIRouter, _ query: Encodable) -> Single<ModelResult>
+    func callRequestAPI<T: Decodable>(model: T.Type, router: APIRouter, tokenHandler: TokenHandler?) -> Single<ModelResult<T>>
+    func callRequestRefreshToken(completion: @escaping (ModelResult<RefreshTokenModel>) -> Void)
+    func callRequestUploadFiles<T: Decodable>(model: T.Type, _ router: APIRouter, _ query: Encodable) -> Single<ModelResult<T>>
     func callRequestData(_ router: APIRouter) -> Single<DataResult>
     
 }
@@ -31,11 +31,11 @@ final class APIManager: APIManagerProvider {
     
     static let shared = APIManager()
     
-    typealias ModelResult = Result<Decodable, APIError>
+    typealias ModelResult<T:Decodable> = Result<T, APIError>
     typealias DataResult = Result<Data, APIError>
     typealias TokenHandler = (Decodable) -> Void
     
-    func callRequestAPI<T: Decodable>(model: T.Type, router: APIRouter, tokenHandler: TokenHandler? = nil) -> Single<ModelResult> {
+    func callRequestAPI<T: Decodable>(model: T.Type, router: APIRouter, tokenHandler: TokenHandler? = nil) -> Single<ModelResult<T>> {
         return Single.create { single in
             APIClient.request(T.self, router: router) { model in
                 if let tokenHandler { tokenHandler(model) }
@@ -47,7 +47,7 @@ final class APIManager: APIManagerProvider {
        }
     }
     
-    func callRequestRefreshToken(completion: @escaping (ModelResult) -> Void) {
+    func callRequestRefreshToken(completion: @escaping (ModelResult<RefreshTokenModel>) -> Void) {
         let router = APIRouter.refreshAccessToken
         APIClient.request(RefreshTokenModel.self, router: router) { model in
             UserDefaultsManager.token = model.accessToken
@@ -58,7 +58,7 @@ final class APIManager: APIManagerProvider {
         }
     }
     
-    func callRequestUploadFiles<T: Decodable>(model: T.Type, _ router: APIRouter, _ query: Encodable) -> Single<ModelResult> {
+    func callRequestUploadFiles<T: Decodable>(model: T.Type, _ router: APIRouter, _ query: Encodable) -> Single<ModelResult<T>> {
         return Single.create { single in
             APIClient.upload(T.self, query: query, router: router) { model in
                 single(.success(.success(model)))
@@ -81,7 +81,7 @@ final class APIManager: APIManagerProvider {
 
     }
     
-    func callRequestLogin(_ router: APIRouter) -> Single<ModelResult> {
+    func callRequestLogin(_ router: APIRouter) -> Single<ModelResult<LoginModel>> {
         return callRequestAPI(model: LoginModel.self, router: router, tokenHandler: { model in
             let loginModel = model as! LoginModel
             UserDefaultsManager.token = loginModel.accessToken

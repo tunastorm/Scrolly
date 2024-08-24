@@ -15,7 +15,7 @@ final class BannerCollectionView: BaseCollectionViewController {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        group.contentInsets = .init(top: 0, leading: 0.0, bottom: 0, trailing: 0.0)
+        group.contentInsets = .init(top: 0, leading: 12.0, bottom: 0, trailing: 12.0)
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .groupPagingCentered
         

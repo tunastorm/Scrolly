@@ -28,7 +28,7 @@ final class OldRecommandCollectionView: BaseCollectionViewController {
     }
     
     override func registerHeaderView() {
-        self.register(RecommandHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: RecommandHeaderView.identifier)
+        self.register(collectionViewHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: collectionViewHeaderView.identifier)
     }
     
 }

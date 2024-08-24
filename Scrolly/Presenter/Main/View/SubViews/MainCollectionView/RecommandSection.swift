@@ -8,9 +8,10 @@
 import Foundation
 
 enum RecommandSection: Int, CaseIterable {
+//    case banner
     case popular = 0
-//    case recently
     case newWaitingFree
+//    case recently
     
     var header: String? {
         return switch self {
