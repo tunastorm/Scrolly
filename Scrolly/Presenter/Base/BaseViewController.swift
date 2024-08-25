@@ -51,7 +51,7 @@ class BaseViewController<View: BaseView>: UIViewController, UIViewControllerProv
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configNavigationbar(navigationColor: Resource.Asset.CIColor.white, shadowImage: true)
+        configNavigationbar(navigationColor: .clear, shadowImage: false)
     }
     
     func bindData() {

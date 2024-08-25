@@ -59,7 +59,6 @@ final class RecommandCollectionView: BaseCollectionViewController {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(230))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-//        group.contentInsets = .init(top: 0, leading: 10.0, bottom: 0, trailing: 10.0)
         group.interItemSpacing = .fixed(4)
         
         let section = NSCollectionLayoutSection(group: group)

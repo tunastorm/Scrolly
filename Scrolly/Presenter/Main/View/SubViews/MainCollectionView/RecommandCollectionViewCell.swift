@@ -83,7 +83,6 @@ final class RecommandCollectionViewCell: BaseCollectionViewCell {
             switch result {
             case .success(let data):
                 self?.imageView.image = data.image.resize(length: self?.contentView.frame.width ?? 100)
-//                self?.coverView.image = Resource.Asset.NamedImage.gradationCover?.resize(length: self?.contentView.frame.width ?? 100)
             case .failure(let error):
                 print(#function, "error: ", error)
             }

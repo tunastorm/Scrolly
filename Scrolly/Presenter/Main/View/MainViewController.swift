@@ -142,8 +142,9 @@ final class MainViewController: BaseViewController<MainView> {
     
     //MARK: - 해시태그 필터 콜렉션뷰
     private func filterCellRegistration() -> UICollectionView.CellRegistration<HashTagCollectionViewCell, HashTagSection.HashTag> {
-        UICollectionView.CellRegistration<HashTagCollectionViewCell, HashTagSection.HashTag> { cell, indexPath, itemIdentifier in
-            cell.configCell(itemIdentifier)
+        UICollectionView.CellRegistration<HashTagCollectionViewCell, HashTagSection.HashTag> { [weak self] cell, indexPath, itemIdentifier in
+            cell.delegate = self?.rootView
+            cell.configCell(indexPath,itemIdentifier)
         }
     }
     

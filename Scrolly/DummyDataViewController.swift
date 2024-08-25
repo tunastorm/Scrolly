@@ -60,7 +60,7 @@ final class DummyDataViewController: UIViewController {
 //        updateMyProfile()
 //        uploadPostImage(isUpdate: true)
 //        uploadPosts()
-        getPosts()
+//        getPosts()
 //        queryOnePost(postId: "66c42b6a97d02bf91e201935")
 //        updatePosts(postId: "66c8ca8c5056517017a45b9b", query:  PostsQuery(productId: nil, title: nil, content: "소설 속 악역으로 빙의했다.\n재능도 없고, 노력도 하지 않는\n찌질한 망나니 빌런으로.\n\n하지만\n\n[검술: F] [창술: S]\n\n…이 정도면 할만한데? #백작가_도련님은_창술천재 #연량 #웹소설 #판타지 #남성향", content1: nil, content2: nil, content3: nil, content4: nil, content5: nil, files: nil))
 //        deletePosts(postId: "66c353dfd22f9bf132291e8e")

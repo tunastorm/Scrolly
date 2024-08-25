@@ -11,6 +11,10 @@ import RxSwift
 import RxCocoa
 import Then
 
+protocol HashTagCellDelegate {
+    func changeRecentCell(_ indexPath: IndexPath)
+}
+
 final class MainView: BaseView {
     
     // MARK: - CollectionViews
@@ -27,6 +31,8 @@ final class MainView: BaseView {
         $0.textAlignment = .right
         $0.text = "1/"
     }
+    
+    private var lastCell: IndexPath?
     
 //    private let scrollView = UIScrollView()
 //    private let contentView = UIView()
@@ -93,9 +99,10 @@ final class MainView: BaseView {
     }
     
     override func configView() {
-        backgroundColor = .white
+        super.configView()
         hashTagView.showsHorizontalScrollIndicator = false
-//        recommandView.backgroundColor = .black
+        hashTagView.backgroundColor = .clear
+        recommandView.backgroundColor = .clear
 //        recommandView.showsVerticalScrollIndicator = false
 //        recentlyViewedView.showsHorizontalScrollIndicator = false
 //        recommandView.isScrollEnabled = false
@@ -114,6 +121,25 @@ final class MainView: BaseView {
         if let bannerPage = bannerPageLabel.text {
             bannerPageLabel.text = bannerPage + "\(length)"
         }
+    }
+    
+}
+
+extension MainView: HashTagCellDelegate {
+    
+    func changeRecentCell(_ indexPath: IndexPath) {
+        let collectionView = hashTagView
+        if let lastCell,let oldCell = collectionView.cellForItem(at: lastCell) as? HashTagCollectionViewCell {
+            oldCell.isSelected.toggle()
+            oldCell.cellTappedToggle()
+        }
+        guard let cell = collectionView.cellForItem(at: indexPath) as? HashTagCollectionViewCell else {
+            return
+        }
+        print(#function, "왜???")
+        
+        cell.cellTappedToggle()
+        lastCell = indexPath
     }
     
 }

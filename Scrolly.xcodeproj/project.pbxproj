@@ -282,8 +282,8 @@
 		BC097C792C74E0500038A21C /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				BC097C7E2C74E0A60038A21C /* Model */,
 				BC097C7D2C74E0A20038A21C /* View */,
+				BC097C7E2C74E0A60038A21C /* Model */,
 				BC097C7C2C74E09A0038A21C /* ViewModel */,
 			);
 			path = Main;

@@ -69,7 +69,6 @@ final class RecentlyCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func configView() {
-        backgroundColor = Resource.Asset.CIColor.white
 //        layer.masksToBounds = true
 //        layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
 //        layer.cornerRadius = 10

@@ -10,7 +10,11 @@ import SnapKit
 import Then
 
 final class HashTagCollectionViewCell: BaseCollectionViewCell {
-        
+    
+    var delegate: HashTagCellDelegate?
+
+    private var indexPath: IndexPath?
+    
     private let hashTag = UILabel().then {
         $0.textAlignment = .center
         $0.font = Resource.Asset.Font.system14
@@ -42,20 +46,23 @@ final class HashTagCollectionViewCell: BaseCollectionViewCell {
     }
     
     @objc private func cellTapped(_ sender: UITapGestureRecognizer) {
-        print(#function, "셀 클릭됨", "isSelected:", isSelected)
-        isSelected.toggle()
-        cellTappedToggle()
-        
+        print(#function, "\(indexPath)셀 클릭됨", "isSelected:", isSelected)
+        if let indexPath {
+            isSelected.toggle()
+            print(#function, "isSelected:", isSelected)
+            delegate?.changeRecentCell(indexPath)
+        }
     }
     
-    private func cellTappedToggle() {
+    func cellTappedToggle() {
+        print(#function, "isSelected: ", isSelected)
         layer.borderWidth = isSelected ? 0 : 1
         backgroundColor = isSelected ? Resource.Asset.CIColor.blue : Resource.Asset.CIColor.white
         hashTag.textColor = isSelected ? Resource.Asset.CIColor.white : Resource.Asset.CIColor.darkGray
-        
     }
     
-    func configCell(_ identifier: HashTagSection.HashTag) {
+    func configCell(_ indexPath: IndexPath, _ identifier: HashTagSection.HashTag) {
+        self.indexPath = indexPath
         hashTag.text = identifier.krValue
     }
 }
