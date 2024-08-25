@@ -309,8 +309,6 @@
 			isa = PBXGroup;
 			children = (
 				BC097CC62C7620580038A21C /* SubViews */,
-				BC097CC42C761E0E0038A21C /* MainView.swift */,
-				BC097CC22C761E020038A21C /* MainViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -398,6 +396,8 @@
 		BC097CC62C7620580038A21C /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
+				BC097CC42C761E0E0038A21C /* MainView.swift */,
+				BC097CC22C761E020038A21C /* MainViewController.swift */,
 				BC097CD62C7636F70038A21C /* HashTagView */,
 				BCCBDA7E2C78886400073E31 /* RecommandCollectionView */,
 			);

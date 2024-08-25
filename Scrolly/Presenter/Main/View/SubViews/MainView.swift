@@ -205,5 +205,6 @@ extension MainView: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let indexPath = IndexPath(item: pageControl.currentPage, section: 0)
         changeRecentCell(indexPath, isSelected: true)
+        hashTagView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
     }
 }

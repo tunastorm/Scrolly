@@ -27,7 +27,7 @@ final class HashTagCollectionViewCell: BaseCollectionViewCell {
     override func configLayout() {
         hashTag.snp.makeConstraints { make in
             make.verticalEdges.equalToSuperview().inset(7)
-            make.horizontalEdges.equalToSuperview().inset(10)
+            make.horizontalEdges.equalToSuperview().inset(15)
         }
     }
     
