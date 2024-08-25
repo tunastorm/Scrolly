@@ -1,18 +1,21 @@
 //
-//  MainCollectionViewSection.swift
+//  FemaleSection.swift
 //  Scrolly
 //
-//  Created by 유철원 on 8/23/24.
+//  Created by 유철원 on 8/25/24.
 //
 
 import Foundation
 
-enum RecommandSection: String, CaseIterable {
+enum FemaleSection: String, MainSection {
     case banner
-//    case ad
     case popular
     case newWaitingFree
     case recently
+    
+    var value: String {
+        return self.rawValue
+    }
     
     var header: String? {
         return switch self {

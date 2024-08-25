@@ -12,7 +12,7 @@ enum HashTagSection: Int, CaseIterable {
     case main = 0
     
     enum HashTag: CaseIterable {
-        case latest
+        case recommand
         case male
         case female
         case fantasy
@@ -21,7 +21,7 @@ enum HashTagSection: Int, CaseIterable {
         
         var krValue: String {
             return switch self {
-            case .latest: "신작"
+            case .recommand: "추천"
             case .male: "남성인기"
             case .female: "여성인기"
             case .fantasy: "판타지"

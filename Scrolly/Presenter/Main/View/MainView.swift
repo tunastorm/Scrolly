@@ -22,6 +22,14 @@ final class MainView: BaseView {
 //    let bannerView = BannerCollectionView(frame: .zero, collectionViewLayout: BannerCollectionView.createLayout())
     let recommandView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
     
+    let maleView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
+    let femaleView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
+    let fantasyView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
+    let romanceView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
+    let dateView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
+    
+    lazy var collectionViewList = [ recommandView, maleView, femaleView, fantasyView, romanceView, dateView ]
+//    lazy var pageLabelList = []
 //    private let collectionViewArea = UIView()
 //    let recentlyViewedView = RecentlyViewedCollectionView(frame: .zero, collectionViewLayout: RecentlyViewedCollectionView.createLayout())
     
@@ -33,18 +41,17 @@ final class MainView: BaseView {
     }
     
     private var lastCell: IndexPath?
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
+    private let pageControl = UIPageControl()
     
-//    private let scrollView = UIScrollView()
-//    private let contentView = UIView()
-//    
     override func configHierarchy() {
         addSubview(hashTagView)
-        addSubview(recommandView)
-//        addSubview(scrollView)
-////        scrollView.addSubview(contentView)
-////        [ bannerView, bannerPageLabel, recommandView, recentlyViewedView ].forEach {
-////            contentView.addSubview($0)
-////        }
+        addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        collectionViewList.forEach {
+            contentView.addSubview($0)
+        }
     }
     
     override func configLayout() {
@@ -58,54 +65,79 @@ final class MainView: BaseView {
             make.top.equalTo(safeAreaLayoutGuide).inset(10)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide)
         }
-        recommandView.snp.makeConstraints { make in
+        scrollView.snp.makeConstraints { make in
             make.top.equalTo(hashTagView.snp.bottom).offset(10)
-            make.bottom.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            make.bottom.equalTo(safeAreaLayoutGuide)
         }
-//        scrollView.snp.makeConstraints { make in
-//            make.top.equalTo(hashTagView.snp.bottom).offset(10)
-//            make.horizontalEdges.equalTo(safeAreaLayoutGuide)
-//            make.bottom.equalTo(safeAreaLayoutGuide)
-//        }
-//        contentView.snp.makeConstraints { make in
-//            make.edges.equalTo(scrollView.contentLayoutGuide)
-//            make.width.equalTo(scrollView.frameLayoutGuide)
-//            make.height.equalTo(1600)
-//        }
-//        bannerView.snp.makeConstraints { make in
-//            make.height.equalTo(350)
-//            make.top.equalToSuperview()
-//            make.horizontalEdges.equalToSuperview()
-//        }
+        contentView.snp.makeConstraints { make in
+            make.edges.equalTo(scrollView.contentLayoutGuide)
+            make.width.equalTo(scrollView.frameLayoutGuide).multipliedBy(collectionViewList.count)
+            make.height.equalTo(scrollView.frameLayoutGuide)
+        }
+        recommandView.snp.makeConstraints { make in
+            make.width.equalTo(screenSize.width)
+            make.verticalEdges.equalToSuperview()
+            make.leading.equalToSuperview()
+        }
 //        bannerPageLabel.snp.makeConstraints { make in
 //            make.height.equalTo(20)
 //            make.width.equalTo(80)
 //            make.bottom.equalTo(bannerView.snp.bottom).offset(-20)
 //            make.trailing.equalTo(bannerView.snp.trailing).offset(-32)
 //        }
-//        recommandView.snp.makeConstraints { make in
-//            make.height.equalTo(1000)
-//            make.top.equalTo(bannerView.snp.bottom).offset(10)
-//            make.horizontalEdges.equalToSuperview().inset(12)
-//        }
-//        recentlyViewedView.snp.makeConstraints { make in
-//            make.height.equalTo(210)
-//            make.top.equalTo(recommandView.snp.bottom).offset(20)
-//            make.leading.equalToSuperview().inset(12)
-//            make.trailing.equalToSuperview()
-//            make.bottom.equalToSuperview().inset(10)
-//        }
+        maleView.snp.makeConstraints { make in
+            make.width.equalTo(screenSize.width)
+            make.verticalEdges.equalToSuperview()
+            make.leading.equalTo(recommandView.snp.trailing)
+        }
+        femaleView.snp.makeConstraints { make in
+            make.width.equalTo(screenSize.width)
+            make.verticalEdges.equalToSuperview()
+            make.leading.equalTo(maleView.snp.trailing)
+        }
+        fantasyView.snp.makeConstraints { make in
+            make.width.equalTo(screenSize.width)
+            make.verticalEdges.equalToSuperview()
+            make.leading.equalTo(femaleView.snp.trailing)
+        }
+        romanceView.snp.makeConstraints { make in
+            make.width.equalTo(screenSize.width)
+            make.verticalEdges.equalToSuperview()
+            make.leading.equalTo(fantasyView.snp.trailing)
+        }
+        dateView.snp.makeConstraints { make in
+            make.width.equalTo(screenSize.width)
+            make.verticalEdges.equalToSuperview()
+            make.leading.equalTo(romanceView.snp.trailing)
+            make.trailing.equalToSuperview()
+        }
         
     }
     
     override func configView() {
         super.configView()
+        setPageControl()
+        scrollView.isPagingEnabled = true
+        scrollView.showsHorizontalScrollIndicator = false
+//              scrollView.delegate = self
         hashTagView.showsHorizontalScrollIndicator = false
         hashTagView.backgroundColor = .clear
         recommandView.backgroundColor = .clear
+//        maleView.backgroundColor = .blue
+//        femaleView.backgroundColor = .red
 //        recommandView.showsVerticalScrollIndicator = false
 //        recentlyViewedView.showsHorizontalScrollIndicator = false
 //        recommandView.isScrollEnabled = false
+    }
+    
+    
+    final private func setPageControl() {
+        pageControl.numberOfPages = collectionViewList.count
+        pageControl.currentPage = 0
+//        pageControl.page
+//        pageControl.currentPageIndicatorTintColor = .darkGray
+//        pageControl.pageIndicatorTintColor = .lightGray
     }
     
     override func configInteractionWithViewController<T: UIViewController >(viewController: T) {
@@ -140,6 +172,16 @@ extension MainView: HashTagCellDelegate {
         
         cell.cellTappedToggle()
         lastCell = indexPath
+    }
+    
+}
+
+extension MainView: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentPage = Int(scrollView.contentOffset.x/scrollView.frame.size.width)
+        pageControl.currentPage = currentPage
+
     }
     
 }
