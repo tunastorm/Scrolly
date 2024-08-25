@@ -38,7 +38,6 @@ final class HashTagCollectionViewCell: BaseCollectionViewCell {
         layer.borderColor = Resource.Asset.CIColor.gray.cgColor
         let gesture = UITapGestureRecognizer(target: self, action: #selector(cellTapped))
         addGestureRecognizer(gesture)
-        cellTappedToggle()
     }
     
     override func configInteractionWithViewController<T>(viewController: T) where T : UIViewController {
@@ -48,14 +47,14 @@ final class HashTagCollectionViewCell: BaseCollectionViewCell {
     @objc private func cellTapped(_ sender: UITapGestureRecognizer) {
         print(#function, "\(indexPath)셀 클릭됨", "isSelected:", isSelected)
         if let indexPath {
-            isSelected.toggle()
+            isSelected = true
             print(#function, "isSelected:", isSelected)
-            delegate?.changeRecentCell(indexPath)
+            delegate?.changeRecentCell(indexPath, isSelected: isSelected, isClicked: true)
         }
     }
     
     func cellTappedToggle() {
-        print(#function, "isSelected: ", isSelected)
+        print(#function, "\(self.indexPath) isSelected: ", isSelected)
         layer.borderWidth = isSelected ? 0 : 1
         backgroundColor = isSelected ? Resource.Asset.CIColor.blue : Resource.Asset.CIColor.white
         hashTag.textColor = isSelected ? Resource.Asset.CIColor.white : Resource.Asset.CIColor.darkGray
@@ -64,5 +63,9 @@ final class HashTagCollectionViewCell: BaseCollectionViewCell {
     func configCell(_ indexPath: IndexPath, _ identifier: HashTagSection.HashTag) {
         self.indexPath = indexPath
         hashTag.text = identifier.krValue
+        if let indexPath = self.indexPath, indexPath.item == 0 {
+            isSelected = true
+        }
+        cellTappedToggle()
     }
 }

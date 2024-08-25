@@ -12,11 +12,12 @@ import RxCocoa
 import Then
 
 protocol HashTagCellDelegate {
-    func changeRecentCell(_ indexPath: IndexPath)
+    func changeRecentCell(_ indexPath: IndexPath, isSelected: Bool, isClicked: Bool)
 }
 
 final class MainView: BaseView {
     
+    private var screenSize: CGRect?
     // MARK: - CollectionViews
     let hashTagView = HashTagCollectionView(frame: .zero, collectionViewLayout: HashTagCollectionView.createLayout())
 //    let bannerView = BannerCollectionView(frame: .zero, collectionViewLayout: BannerCollectionView.createLayout())
@@ -40,7 +41,7 @@ final class MainView: BaseView {
         $0.text = "1/"
     }
     
-    private var lastCell: IndexPath?
+    private var lastCell = IndexPath(item: 0, section: 0)
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let pageControl = UIPageControl()
@@ -58,8 +59,10 @@ final class MainView: BaseView {
         guard let window = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
             return
         }
-        let screenSize = window.screen.bounds
-        print(#function, "screenWidth: ", screenSize.width)
+        screenSize = window.screen.bounds
+        guard let screenSize else {
+            return
+        }
         hashTagView.snp.makeConstraints { make in
             make.height.equalTo(44)
             make.top.equalTo(safeAreaLayoutGuide).inset(10)
@@ -120,7 +123,7 @@ final class MainView: BaseView {
         setPageControl()
         scrollView.isPagingEnabled = true
         scrollView.showsHorizontalScrollIndicator = false
-//              scrollView.delegate = self
+        scrollView.delegate = self
         hashTagView.showsHorizontalScrollIndicator = false
         hashTagView.backgroundColor = .clear
         recommandView.backgroundColor = .clear
@@ -159,19 +162,35 @@ final class MainView: BaseView {
 
 extension MainView: HashTagCellDelegate {
     
-    func changeRecentCell(_ indexPath: IndexPath) {
+    func changeRecentCell(_ indexPath: IndexPath, isSelected: Bool, isClicked: Bool = false) {
         let collectionView = hashTagView
-        if let lastCell,let oldCell = collectionView.cellForItem(at: lastCell) as? HashTagCollectionViewCell {
-            oldCell.isSelected.toggle()
+        print(#function, "lastCell:", lastCell)
+        if let oldCell = collectionView.cellForItem(at: lastCell) as? HashTagCollectionViewCell {
+            print(#function, "oldCell.isSelected: ", oldCell.isSelected)
+            oldCell.isSelected = !isSelected
+            print(#function, "oldCell.isSelected: ", oldCell.isSelected)
             oldCell.cellTappedToggle()
         }
         guard let cell = collectionView.cellForItem(at: indexPath) as? HashTagCollectionViewCell else {
             return
         }
-        print(#function, "왜???")
-        
+    
+        if isClicked {
+            scrollToClickedFilter(item: Double(indexPath.item))
+        } else {
+            cell.isSelected = true
+        }
         cell.cellTappedToggle()
         lastCell = indexPath
+    }
+    
+    private func scrollToClickedFilter(item: Double) {
+        guard let screenSize else {
+            return
+        }
+        let startOffset = Double(screenSize.size.width) * item
+        let view = CGRect(origin: .init(x: startOffset, y: 0), size: .init(width: screenSize.width, height: scrollView.frame.height))
+        scrollView.scrollRectToVisible(view, animated: true)
     }
     
 }
@@ -181,7 +200,10 @@ extension MainView: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentPage = Int(scrollView.contentOffset.x/scrollView.frame.size.width)
         pageControl.currentPage = currentPage
-
     }
     
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let indexPath = IndexPath(item: pageControl.currentPage, section: 0)
+        changeRecentCell(indexPath, isSelected: true)
+    }
 }
