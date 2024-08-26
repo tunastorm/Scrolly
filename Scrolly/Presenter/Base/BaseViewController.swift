@@ -13,12 +13,6 @@ enum TitlePosition {
     case left
 }
 
-protocol UIViewControllerProvider {
-    func bindData()
-    func configInteraction()
-    func configNavigationbar(backgroundColor: UIColor, shadowImage: Bool, foregroundColor: UIColor, titlePosition: TitlePosition)
-}
-
 class BaseViewController<View: BaseView>: UIViewController, UIViewControllerProvider {
     
     var rootView: View?
