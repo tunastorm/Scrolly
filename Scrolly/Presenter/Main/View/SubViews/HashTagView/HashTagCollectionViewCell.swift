@@ -51,13 +51,7 @@ final class HashTagCollectionViewCell: BaseCollectionViewCell {
         super.prepareForReuse()
         disposeBag = DisposeBag()
     }
-    
-//    @objc private func cellTapped(_ sender: UITapGestureRecognizer) {
-//        if let indexPath {
-//         
-//        }
-//    }
-    
+
     func cellTappedToggle() {
         isUserInteractionEnabled = !isSelected
         layer.borderWidth = isSelected ? 0 : 1
