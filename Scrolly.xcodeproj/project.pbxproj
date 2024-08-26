@@ -281,7 +281,6 @@
 			isa = PBXGroup;
 			children = (
 				BC097C7D2C74E0A20038A21C /* View */,
-				BC097C7E2C74E0A60038A21C /* Model */,
 				BC097C7C2C74E09A0038A21C /* ViewModel */,
 			);
 			path = Main;
@@ -311,13 +310,6 @@
 				BC097CC62C7620580038A21C /* SubViews */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		BC097C7E2C74E0A60038A21C /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		BC097C7F2C74E0AB0038A21C /* ViewModel */ = {
@@ -398,7 +390,6 @@
 			children = (
 				BC097CC42C761E0E0038A21C /* MainView.swift */,
 				BC097CC22C761E020038A21C /* MainViewController.swift */,
-				BCCBDA7F2C78887900073E31 /* RecommandCollectionView.swift */,
 				BC097CD62C7636F70038A21C /* HashTagView */,
 				BCCBDA7E2C78886400073E31 /* RecommandCollectionView */,
 			);
@@ -579,6 +570,7 @@
 		BCCBDA7E2C78886400073E31 /* RecommandCollectionView */ = {
 			isa = PBXGroup;
 			children = (
+				BCCBDA7F2C78887900073E31 /* RecommandCollectionView.swift */,
 				BC670A962C7B09D2006FB171 /* HeaderView */,
 				BC670A982C7B0A1F006FB171 /* Sections */,
 				BC670A972C7B09E6006FB171 /* Cell */,

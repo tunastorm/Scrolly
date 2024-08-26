@@ -17,7 +17,6 @@ struct UserDefaultsManager {
 
 }
 
-
 @propertyWrapper
 struct UserDefaultWrapper {
   

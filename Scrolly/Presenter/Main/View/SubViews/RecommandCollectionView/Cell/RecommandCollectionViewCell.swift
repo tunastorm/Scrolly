@@ -15,42 +15,23 @@ final class RecommandCollectionViewCell: BaseCollectionViewCell {
     private let imageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
     }
-    
-//    private let coverView = UIImageView().then {
-//        $0.contentMode = .scaleAspectFill
-//        $0.alpha = 0.25
-//    }
-//    
+     
     private let waitingFreeImageView = WaitingFreeImageView()
     
     private let waitingFreeLabel = WaitingFreeLabel()
     
-//    private let creatorLabelView = CreatorLabelView()
-    
     override func configHierarchy() {
         contentView.addSubview(imageView)
-//        contentView.addSubview(coverView)
-//        contentView.addSubview(creatorLabelView)
         contentView.addSubview(waitingFreeImageView)
         contentView.addSubview(waitingFreeLabel)
     }
     
     override func configLayout() {
-//        creatorLabelView.snp.makeConstraints { make in
-//            make.height.equalTo(20)
-//            make.horizontalEdges.equalToSuperview()
-//            make.bottom.equalToSuperview()
-//        }
         imageView.snp.makeConstraints { make in
             make.horizontalEdges.equalToSuperview()
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-//        coverView.snp.makeConstraints { make in
-//            make.horizontalEdges.equalToSuperview()
-//            make.top.equalToSuperview()
-//            make.bottom.equalToSuperview()
-//        }
         waitingFreeImageView.snp.makeConstraints { make in
             make.size.equalTo(14)
             make.top.equalToSuperview().inset(6)
@@ -87,7 +68,7 @@ final class RecommandCollectionViewCell: BaseCollectionViewCell {
                 print(#function, "error: ", error)
             }
         }
-        let isHidden = identifier.content1 == "true"
+        let isHidden = identifier.content1 == APIConstants.isWaitingFree
         waitingFreeToggle(!isHidden)
     }
     

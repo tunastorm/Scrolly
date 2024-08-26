@@ -16,7 +16,7 @@ enum TitlePosition {
 protocol UIViewControllerProvider {
     func bindData()
     func configInteraction()
-    func configNavigationbar(navigationColor: UIColor, shadowImage: Bool, titlePosition: TitlePosition)
+    func configNavigationbar(backgroundColor: UIColor, shadowImage: Bool, foregroundColor: UIColor, titlePosition: TitlePosition)
 }
 
 class BaseViewController<View: BaseView>: UIViewController, UIViewControllerProvider {
@@ -51,7 +51,7 @@ class BaseViewController<View: BaseView>: UIViewController, UIViewControllerProv
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configNavigationbar(navigationColor: .clear, shadowImage: false)
+        configNavigationbar(backgroundColor: .clear, shadowImage: false)
     }
     
     func bindData() {
@@ -62,15 +62,18 @@ class BaseViewController<View: BaseView>: UIViewController, UIViewControllerProv
         
     }
     
-    func configNavigationbar(navigationColor: UIColor, shadowImage: Bool, titlePosition: TitlePosition = .center) {
+    func configNavigationbar(backgroundColor: UIColor, shadowImage: Bool, foregroundColor: UIColor = .black, titlePosition: TitlePosition = .center) {
         let searchButton = UIBarButtonItem(image: Resource.Asset.SystemImage.magnifyingGlass, style: .plain, target: self, action: #selector(searchButtonClicked))
         let profileButton = UIBarButtonItem(image: Resource.Asset.SystemImage.lineThreeHorizontal, style: .plain, target: self, action: #selector(profileButtonClicked))
+        searchButton.tintColor = Resource.Asset.CIColor.black
+        profileButton.tintColor = Resource.Asset.CIColor.black
         
         let textAttributes = [
-            NSAttributedString.Key.foregroundColor: Resource.Asset.CIColor.black
+            NSAttributedString.Key.foregroundColor : foregroundColor,
+            NSAttributedString.Key.font : Resource.Asset.Font.boldSystem25
         ]
         let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = navigationColor
+        appearance.backgroundColor = backgroundColor
         appearance.shadowImage = shadowImage ? nil : UIImage()
         appearance.shadowColor = shadowImage ? Resource.Asset.CIColor.lightGray : .clear
         appearance.titleTextAttributes = textAttributes

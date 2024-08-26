@@ -133,6 +133,7 @@ enum Resource {
             static let boldSystem18 = UIFont.boldSystemFont(ofSize: 18)
             static let boldSystem19 = UIFont.boldSystemFont(ofSize: 19)
             static let boldSystem20 = UIFont.boldSystemFont(ofSize: 20)
+            static let boldSystem25 = UIFont.boldSystemFont(ofSize: 25)
             static let boldSystem30 = UIFont.boldSystemFont(ofSize: 30)
         }
         

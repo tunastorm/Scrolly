@@ -54,6 +54,7 @@ final class APIManager: APIManagerProvider {
             KingfisherManager.shared.setHeaders()
             completion(.success(model))
         } failure: { error in
+            print(#function, "refreshTokenError: ", error)
             completion(.failure(error))
         }
     }

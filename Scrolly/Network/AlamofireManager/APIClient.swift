@@ -84,7 +84,6 @@ final class APIClient {
             multipartFormData.append(birthDay.data(using: .utf8)!, withName: "birthDay", mimeType: "text/plain")
         }
         if let image = query.profile {
-            print(#function, "image: ", image)
             multipartFormData.append(image, withName: "profile", fileName: "\(query.nick ?? "profile").jpg", mimeType: "image/jpg")
         }
         

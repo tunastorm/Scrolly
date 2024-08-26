@@ -63,7 +63,6 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
         input.hashTagCellTap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .distinctUntilChanged()
-            .debug("해시태그 셀 클릭")
             .bind(with: self) { owner, indexPath in
                 owner.callDataRouter(indexPath)
             }
@@ -72,7 +71,6 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
         input.srollViewPaging
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .distinctUntilChanged()
-            .debug("스크롤뷰 페이징")
             .bind(with: self) { owner, indexPath in
                 owner.callDataRouter(indexPath)
             }
@@ -90,7 +88,7 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
             }
             novelInfoResults[section.rawValue] = results.sorted { $0.key < $1.key }.map{ $0.value }.map { results in
                 results.flatMap{ APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags($0)) }
-                .debug("\(section.rawValue) 네크워킹")
+//                .debug("\(section.rawValue) 네크워킹")
             }
         }
      
@@ -143,22 +141,21 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
         }
     }
     
-    
     private func callRecommandDatas() {
         guard recommandResults.values.isEmpty else {
             return
         }
-        recommandResults[0] = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "\(Int.random(in: 10...20))", productId: APIConstants.ProductId.novelInfo))
+        recommandResults[RecommandSection.banner.index] = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "\(Int.random(in: 10...20))", productId: APIConstants.ProductId.novelInfo))
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
         
-        recommandResults[1] = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "20", productId: APIConstants.ProductId.novelInfo))
+        recommandResults[RecommandSection.popular.index] = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "20", productId: APIConstants.ProductId.novelInfo))
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
       
-        recommandResults[2] = BehaviorSubject(value:  HashTagsQuery(next: nil, limit: "6", productId:  APIConstants.ProductId.novelInfo, hashTag: APIConstants.SearchKeyword.waitingFree))
+        recommandResults[RecommandSection.recently.index] = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "20", productId: APIConstants.ProductId.novelEpisode) )
+            .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
+       
+        recommandResults[RecommandSection.newWaitingFree.index] = BehaviorSubject(value: HashTagsQuery(next: nil, limit: "6", productId:  APIConstants.ProductId.novelInfo, hashTag: APIConstants.SearchKeyword.waitingFree) )
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags($0)) }
-      
-        recommandResults[3] = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "20", productId: APIConstants.ProductId.novelEpisode) )
-            .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
     }
     
     private func callMaleDatas() {
@@ -167,7 +164,6 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
             if let result = maleResults[key] {
                 result.onNext(query)
                 result.onCompleted()
-                print(#function, "남성인기 쿼리 방출")
             }
         }
     }
@@ -203,17 +199,7 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
     }
     
     private func callDateDatas() {
-//        romanceResults[0] = BehaviorSubject(value: HashTagsQuery(next: nil, limit: "10", productId: APIConstants.ProductId.novelInfo, hashTag: APIConstants.SearchKeyword.romance) )
-//            .flatMap{ APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags($0)) }
-//        
-//        romanceResults[1] = BehaviorSubject(value: HashTagsQuery(next: nil, limit: "10", productId: APIConstants.ProductId.novelInfo, hashTag: APIConstants.SearchKeyword.romance) )
-//            .flatMap{ APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags($0)) }
-//        
-//        romanceResults[2] = BehaviorSubject(value: HashTagsQuery(next: nil, limit: "10", productId: APIConstants.ProductId.novelInfo, hashTag: APIConstants.SearchKeyword.romance) )
-//            .flatMap{ APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags($0)) }
-//        
-//        romanceResults[3] = BehaviorSubject(value: HashTagsQuery(next: nil, limit: "10", productId: APIConstants.ProductId.novelInfo, hashTag: APIConstants.SearchKeyword.romance) )
-//            .flatMap{ APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags($0)) }
+
     }
     
 }

@@ -10,11 +10,21 @@ import Foundation
 enum MaleSection: String, MainSection {
     case banner
     case popular
-    case newWaitingFree
     case recently
+    case newWaitingFree
+    
     
     var value: String {
         return self.rawValue
+    }
+    
+    var index: Int {
+        return switch self {
+        case .banner: 0
+        case .popular: 1
+        case .recently: 2
+        case .newWaitingFree: 3
+        }
     }
     
     var header: String? {
@@ -31,10 +41,8 @@ enum MaleSection: String, MainSection {
     
     var query: HashTagsQuery {
         return switch self {
-        case .banner, .popular:
+        case .banner, .popular, .newWaitingFree:
             HashTagsQuery(next: nil, limit: "10", productId: APIConstants.ProductId.novelInfo, hashTag: APIConstants.SearchKeyword.male)
-        case .newWaitingFree:
-            HashTagsQuery(next: nil, limit: "6", productId: APIConstants.ProductId.novelInfo, hashTag: APIConstants.SearchKeyword.male)
         case .recently:
             HashTagsQuery(next: nil, limit: "10", productId: APIConstants.ProductId.novelEpisode, hashTag: APIConstants.SearchKeyword.male)
         }

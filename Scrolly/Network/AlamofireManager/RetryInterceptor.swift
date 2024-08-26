@@ -16,10 +16,12 @@ final class RetryInterceptor: RetryPolicy {
     override func retry(_ request: Request, for session: Session, dueTo error: any Error, completion: @escaping (RetryResult) -> Void) {
         guard let statusCode = request.response?.statusCode, statusCode == 419 else {
             completion(.doNotRetry)
+            print(#function, "리트라이 안함")
             return
         }
         
         getToken { isSuccess, error in
+            print(#function, "리트라이 isSuccess: \(isSuccess)")
             if isSuccess {
                 if request.retryCount < self.retryLimit {
                     completion(.retryWithDelay(self.retryDelay))
@@ -35,8 +37,12 @@ final class RetryInterceptor: RetryPolicy {
     private func getToken(completion: @escaping(Bool,APIError?) -> Void) {
         APIManager.shared.callRequestRefreshToken() { result in
             switch result {
-            case .success(let model): completion(true, nil)
-            case .failure(let error): completion(false, error)
+            case .success(let model): 
+                print(#function, "갱신성공")
+                return completion(true, nil)
+            case .failure(let error):
+                print(#function, "갱신실패")
+                return completion(false, error)
             }
         }
     }

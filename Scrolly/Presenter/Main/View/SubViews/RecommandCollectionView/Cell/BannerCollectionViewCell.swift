@@ -117,13 +117,12 @@ final class BannerCollectionViewCell: BaseCollectionViewCell {
         guard let file = identifier.files.first, let url = URL(string: APIConstants.URI + "/\(file)") else {
             return
         }
-        print(#function, identifier.title, "url: ", url)
         imageView.kf.setImage(with: url) { [weak self] result in
             switch result {
             case .success(let data):
                 self?.imageView.image = data.image.resize(length: self?.contentView.frame.width ?? 350)
             case .failure(let error):
-                print("error:", error)
+                self?.makeToast(error.errorDescription,duration: 3.0, position: .bottom)
                 return
             }
         }
@@ -134,9 +133,8 @@ final class BannerCollectionViewCell: BaseCollectionViewCell {
             let tagString = hashTags[2...3].joined(separator: "﹒")
             tagLabel.text = tagString
         }
-        // 기다무 여부 토글
-        let isHidden = identifier.content1 == "true"
-        waitingFreeToggle(isHidden)
+        let isHidden = identifier.content1 == APIConstants.isWaitingFree
+        waitingFreeToggle(!isHidden)
     }
     
     private func waitingFreeToggle(_ isHidden: Bool) {

@@ -20,7 +20,7 @@ final class DummyDataViewController: UIViewController {
     let phoneNum = "01012345678"
     let birthDay = "19930101"
     let coverName = "dummyImage_17"
-    let episodeName = "novel_m1"
+    let episodeName = "novel_m2"
     
     let dummyTitle = "언니 그놈이랑 결혼하지 마요"
     let content = "남주가 다 해먹는 무협지 속, 남주의 먼 조상님으로 빙의했다.\n\n남주를 든든히 뒷받침해 주는 역할에 충실하기 위해 뼈가 으스러져라 일해서 최고의 가문을 세웠다.\n\n 그 후, 마음 편히 눈을 감았었는데.\n\n”뭐? 내 가문이 망했다고?!”\n\n다시 눈을 떠 보니 300년 후. #무협지_남주의_어린_아내가_되어_버렸다 #Rana #여성향 #로판 "
@@ -30,7 +30,7 @@ final class DummyDataViewController: UIViewController {
     let averageRate = "9.6,3500"
     let waiting = "true"
     
-    let productId = APIConstants.ProductId.novelInfo
+    let productId = APIConstants.ProductId.novelEpisode
     let postId = "66c8ca8c5056517017a45b9b"
     
     lazy var dummyProfileData = UIImage(named: coverName)?.jpegData(compressionQuality: 1.0)
@@ -58,7 +58,7 @@ final class DummyDataViewController: UIViewController {
 //        withDraw()
 //        getMyProfile()
 //        updateMyProfile()
-//        uploadPostImage(isUpdate: true)
+        uploadPostImage(isUpdate: false)
 //        uploadPosts()
 //        getPosts()
 //        queryOnePost(postId: "66c42b6a97d02bf91e201935")
@@ -123,14 +123,15 @@ final class DummyDataViewController: UIViewController {
                         print("-[\(idx)]-----------------------------------------------------")
                         print("postId: ", model.postId)
                         print("title: ", model.title)
-                        print("content: ",model.content)
-                        print("tags: ", model.hashTags)
-                        print("files: ", model.files)
+//                        print("content: ",model.content)
+//                        print("tags: ", model.hashTags)
+//                        print("files: ", model.files)
                         print("기다무: ", model.content1)
-                        print("연재주기: ", model.content2)
-                        print("조회수: ", model.content3)
-                        print("평균별점, 입력수: ", model.content4)
-                        print("waiting: ", model.content5)
+//                        print("연재주기: ", model.content2)
+//                        print("조회수: ", model.content3)
+//                        print("평균별점, 입력수: ", model.content4)
+//                        print("waiting: ", model.content5)
+                        print("해시태그: ", model.hashTags)
 //                        if var dates = model.content2 , let oldContent = model.content {
 //                            var dateString = ""
 //                            let dateList = String(dates.replacing("[", with: "").replacing("]", with: "")).split(separator: ",")
@@ -200,13 +201,13 @@ final class DummyDataViewController: UIViewController {
     }
     
     private func uploadPostImage(isUpdate: Bool = false) {
-//        guard let data = LocalFileManager.shared.loadPDFFromAsset(filename: self.episodeName) else {
-//            print(#function, "data 없음")
-//            return
-//        }
-//        self.files.append(data)
-        let query = UploadFilesQuery(names: [coverName], files: self.files)
-//        let query = UploadFilesQuery(names: [coverName, episodeName], files: self.files)
+        guard let data = LocalFileManager.shared.loadPDFFromAsset(filename: self.episodeName) else {
+            print(#function, "data 없음")
+            return
+        }
+        self.files.append(data)
+//        let query = UploadFilesQuery(names: [coverName], files: self.files)
+        let query = UploadFilesQuery(names: [coverName, episodeName], files: self.files)
         let result = APIManager.shared.callRequestUploadFiles(model: UploadFilesModel.self, .uploadFiles(query), query)
         testSubscribe(single: result, isUpdate)
     }

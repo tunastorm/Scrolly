@@ -139,7 +139,6 @@ extension MainView: HashTagCellDelegate {
         let collectionView = hashTagView
         if let oldCell = collectionView.cellForItem(at: lastCell) as? HashTagCollectionViewCell {
             oldCell.isSelected = !isSelected
-            oldCell.isUserInteractionEnabled = isSelected
             oldCell.cellTappedToggle()
         }
         guard let cell = collectionView.cellForItem(at: indexPath) as? HashTagCollectionViewCell else {
@@ -150,7 +149,6 @@ extension MainView: HashTagCellDelegate {
             scrollToClickedFilter(item: Double(indexPath.item))
         } else {
             cell.isSelected = isSelected
-            cell.isUserInteractionEnabled = !isSelected
         }
         cell.cellTappedToggle()
         lastCell = indexPath

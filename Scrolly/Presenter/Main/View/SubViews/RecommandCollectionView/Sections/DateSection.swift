@@ -18,6 +18,15 @@ enum DateSection: String, MainSection {
         return self.rawValue
     }
     
+    var index: Int {
+        return switch self {
+        case .banner: 0
+        case .popular: 1
+        case .recently: 2
+        case .newWaitingFree: 3
+        }
+    }
+    
     var header: String? {
         return switch self {
         case .newWaitingFree: "기다무 신작"

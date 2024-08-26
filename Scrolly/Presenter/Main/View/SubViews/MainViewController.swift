@@ -44,14 +44,13 @@ final class MainViewController: BaseViewController<MainView> {
     
     private let scrollViewPaging = PublishRelay<IndexPath>()
     
-    
     override func loadView() {
         super.loadView()
         rootView?.delegate = self
     }
     
-    override func configNavigationbar(navigationColor: UIColor, shadowImage: Bool, titlePosition: TitlePosition) {
-        super.configNavigationbar(navigationColor: .white, shadowImage: false, titlePosition: .left)
+    override func configNavigationbar(backgroundColor: UIColor, shadowImage: Bool, foregroundColor: UIColor, titlePosition: TitlePosition) {
+        super.configNavigationbar(backgroundColor: .white, shadowImage: false, foregroundColor: Resource.Asset.CIColor.blue, titlePosition: .left)
         navigationItem.title = Resource.UIConstants.Text.appTitle
     }
     
@@ -76,9 +75,7 @@ final class MainViewController: BaseViewController<MainView> {
                 owner.updateFilterSnapShot(values)
             }
             .disposed(by: disposeBag)
-        
-        configAllDataSoruces()
-        
+    
         output.recommandDatas
             .bind(with: self) { owner, resultList in
                 owner.fetchDatas(sections: RecommandSection.allCases, resultList: resultList)
@@ -116,26 +113,23 @@ final class MainViewController: BaseViewController<MainView> {
             .disposed(by: disposeBag)
     }
     
-    private func configAllDataSoruces() {
-        configDataSource(sections: RecommandSection.allCases)
-        configDataSource(sections: MaleSection.allCases)
-        configDataSource(sections: FemaleSection.allCases)
-        configDataSource(sections: FantasySection.allCases)
-        configDataSource(sections: RomanceSection.allCases)
-        configDataSource(sections: DateSection.allCases)
-    }
-    
     private func fetchDatas<T: MainSection>(sections: [T], resultList: [APIManager.ModelResult<GetPostsModel>]) {
         var dataDict: [String:[PostsModel]] = [:]
+        var noDataSection: T?
         resultList.enumerated().forEach { idx, result in
             switch result {
             case .success(let model):
+                if model.data.count == 0 {
+                    noDataSection = sections[idx]
+                    return
+                }
                 let section = sections[idx]
                 dataDict[section.value] = section.callConvertData(section, model.data)
             case .failure(let error):
                showToastToView(error)
             }
         }
+        configDataSource(sections: sections, noDataSection: noDataSection)
         updateSnapShot(sections: sections, dataDict)
     }
     
@@ -170,16 +164,19 @@ final class MainViewController: BaseViewController<MainView> {
     }
     
     //MARK: - 추천 콜렉션뷰
-    private func collectionViewHeaderRegestration<T: MainSection>(_ sections: [T]) -> HeaderRegistration {
+    private func collectionViewHeaderRegestration<T: MainSection>(_ sections: [T], _ noDataSection: T?) -> HeaderRegistration {
         UICollectionView.SupplementaryRegistration<collectionViewHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) {
             (supplementaryView, string, indexPath) in
+            if let noDataSection, sections[indexPath.section] == noDataSection {
+                return
+            }
             supplementaryView.titleLabel.text = sections[indexPath.section].header
         }
     }
     
-    private func configDataSource<T: MainSection>(sections: [T]) {
+    private func configDataSource<T: MainSection>(sections: [T], noDataSection: T?) {
         
-        let headerRegistration = collectionViewHeaderRegestration(sections)
+        let headerRegistration = collectionViewHeaderRegestration(sections, noDataSection)
         
         var collectionView: BaseCollectionViewController?
         switch sections {

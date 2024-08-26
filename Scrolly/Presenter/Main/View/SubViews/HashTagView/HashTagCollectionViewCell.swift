@@ -59,6 +59,7 @@ final class HashTagCollectionViewCell: BaseCollectionViewCell {
 //    }
     
     func cellTappedToggle() {
+        isUserInteractionEnabled = !isSelected
         layer.borderWidth = isSelected ? 0 : 1
         backgroundColor = isSelected ? Resource.Asset.CIColor.blue : Resource.Asset.CIColor.white
         hashTag.textColor = isSelected ? Resource.Asset.CIColor.white : Resource.Asset.CIColor.darkGray

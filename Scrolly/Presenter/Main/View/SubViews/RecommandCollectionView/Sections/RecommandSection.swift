@@ -10,17 +10,26 @@ import Foundation
 enum RecommandSection: String, MainSection {
     case banner
     case popular
-    case newWaitingFree
     case recently
-    
+    case newWaitingFree
+   
     var value: String {
         return self.rawValue
     }
     
+    var index: Int {
+        return switch self {
+        case .banner: 0
+        case .popular: 1
+        case .recently: 2
+        case .newWaitingFree: 3
+        }
+    }
+    
     var header: String? {
         return switch self {
-        case .newWaitingFree: "기다무 신작"
         case .recently: "최근 본 작품"
+        case .newWaitingFree: "기다무 신작"
         default: nil
         }
     }
