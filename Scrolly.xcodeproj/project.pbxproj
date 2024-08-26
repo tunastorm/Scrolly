@@ -579,8 +579,8 @@
 		BCCBDA7E2C78886400073E31 /* RecommandCollectionView */ = {
 			isa = PBXGroup;
 			children = (
-				BC670A982C7B0A1F006FB171 /* Sections */,
 				BC670A962C7B09D2006FB171 /* HeaderView */,
+				BC670A982C7B0A1F006FB171 /* Sections */,
 				BC670A972C7B09E6006FB171 /* Cell */,
 			);
 			path = RecommandCollectionView;

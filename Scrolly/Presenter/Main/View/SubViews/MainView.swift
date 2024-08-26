@@ -17,6 +17,8 @@ protocol HashTagCellDelegate {
 
 final class MainView: BaseView {
     
+    var delegate: MainViewDelegate?
+    
     private var screenSize: CGRect?
     private let disposeBag = DisposeBag()
     
@@ -128,15 +130,7 @@ final class MainView: BaseView {
         hashTagView.delegate = mainVC
         print(#function, "하이")
     }
-    
-    override func bind() {
-//        let hashTagClicked = hashTagView.rx.modelSelected(HashTagSection.HashTag.self)
-//        hashTagClicked
-//            .debug("해시태그 클릭 왜안됨")
-//            .bind { value in
-//                print("model: ", value)
-//            }.disposed(by: disposeBag)
-    }
+
 }
 
 extension MainView: HashTagCellDelegate {
@@ -178,6 +172,11 @@ extension MainView: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentPage = Int(scrollView.contentOffset.x/scrollView.frame.size.width)
         pageControl.currentPage = currentPage
+    }
+    // 인덱스 조작해서 현재 페이지 구하는데 안전할까?
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        let indexPath = IndexPath(item: pageControl.currentPage + 1, section: 0)
+        delegate?.emitFromScrollView(indexPath)
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {

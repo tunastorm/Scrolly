@@ -11,6 +11,10 @@ import RxCocoa
 import SnapKit
 import Then
 
+protocol MainViewDelegate {
+    func emitFromScrollView(_ indexPath: IndexPath)
+}
+
 final class MainViewController: BaseViewController<MainView> {
     
     typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<collectionViewHeaderView>
@@ -38,8 +42,13 @@ final class MainViewController: BaseViewController<MainView> {
         cell.configCell(itemIdentifier)
     }
     
-    private let hashTagCellTap = PublishRelay<HashTagSection.HashTag>()
+    private let scrollViewPaging = PublishRelay<IndexPath>()
     
+    
+    override func loadView() {
+        super.loadView()
+        rootView?.delegate = self
+    }
     
     override func configNavigationbar(navigationColor: UIColor, shadowImage: Bool, titlePosition: TitlePosition) {
         super.configNavigationbar(navigationColor: .white, shadowImage: false, titlePosition: .left)
@@ -51,22 +60,17 @@ final class MainViewController: BaseViewController<MainView> {
     }
     
     override func bindData() {
-       
+
         guard let mainViewModel = viewModel as? MainViewModel, let rootView else {
             return
         }
-//        rootView.hashTagView.rx.modelSelected(HashTagSection.HashTag.self)
         
-        let hashTagCellTap = PublishSubject<HashTagSection.HashTag>()
-        
-        let input = MainViewModel.Input(hashTagCellTap: rootView.hashTagView.rx.itemSelected)
-//        let input = MainViewModel.Input(hashTagCellTap: hashTagCellTap)
+        let input = MainViewModel.Input(hashTagCellTap: rootView.hashTagView.rx.itemSelected, srollViewPaging: scrollViewPaging)
         guard let output = mainViewModel.transform(input: input) else {
             return
         }
         
         output.filterList
-            .debug("필터리스트")
             .bind(with: self) { owner, values in
                 owner.configFilterDataSource()
                 owner.updateFilterSnapShot(values)
@@ -412,16 +416,17 @@ final class MainViewController: BaseViewController<MainView> {
 }
 
 extension MainViewController: UICollectionViewDelegate {
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("collectionView: ", collectionView.self, "indexPath: ", indexPath)
         rootView?.changeRecentCell(indexPath, isSelected: true, isClicked: true)
-        hashTagCellTap.accept(HashTagSection.HashTag.allCases[indexPath.item])
     }
-//    
-//    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-//        print("collectionView: ", collectionView.self, "indexPath: ", indexPath)
-//        hashTagCellTap.accept(HashTagSection.HashTag.allCases[indexPath.item])
-//        
-//        return true
-//    }
+
+}
+
+extension MainViewController: MainViewDelegate {
+    
+    func emitFromScrollView(_ indexPath: IndexPath) {
+        scrollViewPaging.accept(indexPath)
+    }
+    
 }

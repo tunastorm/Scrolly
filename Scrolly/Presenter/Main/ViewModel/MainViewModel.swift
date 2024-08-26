@@ -33,7 +33,7 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
     
     struct Input {
         let hashTagCellTap: ControlEvent<IndexPath>
-//        let hashTagCellTap: PublishSubject<HashTagSection.HashTag>
+        let srollViewPaging: PublishRelay<IndexPath>
     }
     
     struct Output {
@@ -48,7 +48,11 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
     
     func transform(input: Input) -> Output? {
       
+        var novelInfoResults: [String : [NetworkResults]] = [:]
+        
         callRecommandDatas()
+        setAllSubjects()
+        
         PublishSubject.zip(recommandResults.sorted { $0.key < $1.key }.map{ $0.value })
             .bind(with: self) { owner, results in
                 owner.output.recommandDatas.onNext(results)
@@ -56,24 +60,23 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
             }
             .disposed(by: disposeBag)
         
-        allViewSubjects()
         input.hashTagCellTap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .distinctUntilChanged()
             .debug("해시태그 셀 클릭")
-            .bind(with: self) { owner, i in
-                switch HashTagSection.HashTag.allCases[i.item] {
-                case .male: owner.callMaleDatas()
-                case .female: owner.callFemaleDatas()
-                case .fantasy: owner.callFantasyDatas()
-                case .romance: owner.callRomanceDatas()
-                case .day: owner.callRecommandDatas() // 요일 별 뷰 구현 전까지 사용
-                default: break
-                }
+            .bind(with: self) { owner, indexPath in
+                owner.callDataRouter(indexPath)
             }
             .disposed(by: disposeBag)
         
-        var novelInfoResults: [String : [NetworkResults]] = [:]
+        input.srollViewPaging
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .distinctUntilChanged()
+            .debug("스크롤뷰 페이징")
+            .bind(with: self) { owner, indexPath in
+                owner.callDataRouter(indexPath)
+            }
+            .disposed(by: disposeBag)
         
         (HashTagSection.HashTag.allCases).forEach { section in
             var results: [Int: PublishSubject<HashTagsQuery>]
@@ -85,7 +88,7 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
             case .day: results = dateResults
             default: return
             }
-            novelInfoResults[section.rawValue] = results.values.map { results in
+            novelInfoResults[section.rawValue] = results.sorted { $0.key < $1.key }.map{ $0.value }.map { results in
                 results.flatMap{ APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags($0)) }
                 .debug("\(section.rawValue) 네크워킹")
             }
@@ -116,7 +119,7 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
         return output
     }
 
-    private func allViewSubjects() {
+    private func setAllSubjects() {
         //MARK: - 남성인기
         (0...MaleSection.allCases.count-1).forEach { maleResults[$0] = PublishSubject<HashTagsQuery>() }
         //MARK: - 여성인기
@@ -128,6 +131,18 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
         //MARK: - 요일
         (0...DateSection.allCases.count-1).forEach { dateResults[$0] = PublishSubject<HashTagsQuery>() }
     }
+    
+    private func callDataRouter(_ indexPath: IndexPath) {
+        switch HashTagSection.HashTag.allCases[indexPath.item] {
+        case .male: callMaleDatas()
+        case .female: callFemaleDatas()
+        case .fantasy: callFantasyDatas()
+        case .romance: callRomanceDatas()
+        case .day: callRecommandDatas() // 요일 별 뷰 구현 전까지 사용
+        default: break
+        }
+    }
+    
     
     private func callRecommandDatas() {
         guard recommandResults.values.isEmpty else {
