@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BC06E8472C7C86EA00148785 /* UIScrollView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC06E8462C7C86EA00148785 /* UIScrollView+Extension.swift */; };
 		BC097C622C7330120038A21C /* RetryInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC097C612C7330120038A21C /* RetryInterceptor.swift */; };
 		BC097C642C73583A0038A21C /* PostsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC097C632C73583A0038A21C /* PostsModel.swift */; };
 		BC097C682C737F170038A21C /* QueryBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC097C672C737F170038A21C /* QueryBuilder.swift */; };
@@ -93,6 +94,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BC06E8462C7C86EA00148785 /* UIScrollView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+Extension.swift"; sourceTree = "<group>"; };
 		BC097C612C7330120038A21C /* RetryInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetryInterceptor.swift; sourceTree = "<group>"; };
 		BC097C632C73583A0038A21C /* PostsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsModel.swift; sourceTree = "<group>"; };
 		BC097C672C737F170038A21C /* QueryBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryBuilder.swift; sourceTree = "<group>"; };
@@ -273,6 +275,7 @@
 				BC097C772C74C37E0038A21C /* UIView+Extension.swift */,
 				BC097C942C74E3C80038A21C /* UIColor+Extension.swift */,
 				BCCBDA662C7739AD00073E31 /* UIImage+Extension.swift */,
+				BC06E8462C7C86EA00148785 /* UIScrollView+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -486,9 +489,9 @@
 		BC8F1CF62C6CB2CE005D63CB /* ResponseModel */ = {
 			isa = PBXGroup;
 			children = (
+				BC8F1D3B2C70B14C005D63CB /* RefreshTokenModel.swift */,
 				BC8F1D352C70A264005D63CB /* SigninModel.swift */,
 				BC8F1D372C70A85F005D63CB /* LoginModel.swift */,
-				BC8F1D3B2C70B14C005D63CB /* RefreshTokenModel.swift */,
 				BC8F1D3D2C70B999005D63CB /* WithDrawModel.swift */,
 				BC8F1D3F2C70BC50005D63CB /* MyProfileModel.swift */,
 				BC8F1D412C70C406005D63CB /* UploadFilesModel.swift */,
@@ -670,6 +673,7 @@
 			files = (
 				BC097C9D2C75061D0038A21C /* LikeModel.swift in Sources */,
 				BC097C682C737F170038A21C /* QueryBuilder.swift in Sources */,
+				BC06E8472C7C86EA00148785 /* UIScrollView+Extension.swift in Sources */,
 				BC8F1CDA2C6CAE4B005D63CB /* DummyDataViewController.swift in Sources */,
 				BC8F1D2A2C6D187E005D63CB /* GetPostsQuery.swift in Sources */,
 				BCCBDA792C78660000073E31 /* WaitingFreeLabel.swift in Sources */,

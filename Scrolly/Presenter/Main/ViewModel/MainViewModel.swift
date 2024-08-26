@@ -72,6 +72,9 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .distinctUntilChanged()
             .bind(with: self) { owner, indexPath in
+                guard indexPath.item >= 0, indexPath.item < HashTagSection.HashTag.allCases.count else {
+                    return
+                }
                 owner.callDataRouter(indexPath)
             }
             .disposed(by: disposeBag)
