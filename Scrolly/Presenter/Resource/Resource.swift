@@ -54,6 +54,7 @@ enum Resource {
             
             static let editProfileTitle = "EDIT PROFILE"
         }
+    
     }
     
     enum Asset {

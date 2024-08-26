@@ -119,6 +119,7 @@ final class DummyDataViewController: UIViewController {
                     let getPostsModel = model as! GetPostsModel
                     print("count: ", getPostsModel.data.count)
                     getPostsModel.data.enumerated().forEach { idx, model in
+                       
                         print("-[\(idx)]-----------------------------------------------------")
                         print("postId: ", model.postId)
                         print("title: ", model.title)
@@ -130,10 +131,18 @@ final class DummyDataViewController: UIViewController {
                         print("조회수: ", model.content3)
                         print("평균별점, 입력수: ", model.content4)
                         print("waiting: ", model.content5)
-                        
-                        
-//                        let query = PostsQuery(productId: nil, title: nil, content: nil, content1: owner.waitingFree[idx], content2: nil, content3: nil, content4: nil, content5: nil, files: nil)
-//                        owner.updatePosts(postId: model.postId, query: query)
+//                        if var dates = model.content2 , let oldContent = model.content {
+//                            var dateString = ""
+//                            let dateList = String(dates.replacing("[", with: "").replacing("]", with: "")).split(separator: ",")
+//                            let krDates = ["월", "화", "수", "목", "금", "토", "일"]
+//                            dateList.enumerated().forEach { idx, date in
+//                                dateString += date == "1" ? "#\(krDates[idx])" : ""
+//                            }
+//                            let content = oldContent + dateString
+//                            let query = PostsQuery(productId: nil, title: nil, content: content, content1: nil, content2: nil, content3: nil, content4: nil, content5: nil, files: nil)
+//                            owner.updatePosts(postId: model.postId, query: query)
+//                        }
+                       
                         
 //                        if let content = model.content {
 //                            var newContent = content.contains("#판타지") ?  content + " #남성인기" : content + " #여성인기"

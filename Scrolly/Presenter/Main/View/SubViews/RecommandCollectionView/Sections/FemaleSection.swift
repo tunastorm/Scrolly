@@ -25,4 +25,40 @@ enum FemaleSection: String, MainSection {
         }
     }
     
+    var allCase: [Self] {
+        return Self.allCases
+    }
+    
+    var query: HashTagsQuery {
+        return switch self {
+        case .banner, .popular:
+            HashTagsQuery(next: nil, limit: "10", productId: APIConstants.ProductId.novelInfo, hashTag: APIConstants.SearchKeyword.female)
+        case .newWaitingFree:
+            HashTagsQuery(next: nil, limit: "6", productId: APIConstants.ProductId.novelInfo, hashTag: APIConstants.SearchKeyword.female)
+        case .recently:
+            HashTagsQuery(next: nil, limit: "10", productId: APIConstants.ProductId.novelEpisode, hashTag: APIConstants.SearchKeyword.female)
+        }
+    }
+    
+    func convertData(_ section: FemaleSection, _ model: [PostsModel]) -> [PostsModel] {
+        switch section {
+        case .banner:
+            return model.shuffled()
+        case .popular:
+            let sortedModel = model.sorted(by: { left, right in
+                guard let lViewed = left.content3, let rViewed = right.content3,
+                      let leftViewed = Int(lViewed), let rightViewd = Int(rViewed)  else {
+                    return false
+                }
+                return leftViewed > rightViewd
+            })
+            return Array<PostsModel>(sortedModel.prefix(6))
+        case .newWaitingFree:
+            return model.filter{($0.content1 ?? "false").contains("true") }
+        case .recently:
+            return setViewedNovel(model)
+        }
+        
+    }
+    
 }

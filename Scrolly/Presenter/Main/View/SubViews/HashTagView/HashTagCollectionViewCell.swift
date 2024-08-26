@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 import SnapKit
 import Then
 
@@ -13,6 +15,8 @@ final class HashTagCollectionViewCell: BaseCollectionViewCell {
     
     var delegate: HashTagCellDelegate?
 
+    private var disposeBag = DisposeBag()
+    
     private var indexPath: IndexPath?
     
     private let hashTag = UILabel().then {
@@ -36,25 +40,25 @@ final class HashTagCollectionViewCell: BaseCollectionViewCell {
         layer.masksToBounds = true
         layer.cornerRadius = 14
         layer.borderColor = Resource.Asset.CIColor.gray.cgColor
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(cellTapped))
-        addGestureRecognizer(gesture)
+//        let gesture = UITapGestureRecognizer(target: self, action: #selector(cellTapped))
+//        addGestureRecognizer(gesture)
     }
-    
     override func configInteractionWithViewController<T>(viewController: T) where T : UIViewController {
         
     }
     
-    @objc private func cellTapped(_ sender: UITapGestureRecognizer) {
-        print(#function, "\(indexPath)셀 클릭됨", "isSelected:", isSelected)
-        if let indexPath {
-            isSelected = true
-            print(#function, "isSelected:", isSelected)
-            delegate?.changeRecentCell(indexPath, isSelected: isSelected, isClicked: true)
-        }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
     }
     
+//    @objc private func cellTapped(_ sender: UITapGestureRecognizer) {
+//        if let indexPath {
+//         
+//        }
+//    }
+    
     func cellTappedToggle() {
-        print(#function, "\(self.indexPath) isSelected: ", isSelected)
         layer.borderWidth = isSelected ? 0 : 1
         backgroundColor = isSelected ? Resource.Asset.CIColor.blue : Resource.Asset.CIColor.white
         hashTag.textColor = isSelected ? Resource.Asset.CIColor.white : Resource.Asset.CIColor.darkGray
@@ -65,6 +69,7 @@ final class HashTagCollectionViewCell: BaseCollectionViewCell {
         hashTag.text = identifier.krValue
         if let indexPath = self.indexPath, indexPath.item == 0 {
             isSelected = true
+            isUserInteractionEnabled = !isSelected
         }
         cellTappedToggle()
     }

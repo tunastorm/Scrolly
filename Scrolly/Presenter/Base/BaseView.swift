@@ -15,6 +15,7 @@ class BaseView: UIView {
         configHierarchy()
         configLayout()
         configView()
+        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -31,6 +32,10 @@ class BaseView: UIView {
     
     func configView() {
         self.backgroundColor = Resource.Asset.CIColor.white
+    }
+    
+    func bind() {
+        
     }
     
     func configInteractionWithViewController<T: UIViewController>(viewController: T) {

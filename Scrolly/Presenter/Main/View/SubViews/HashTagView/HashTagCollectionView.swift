@@ -24,5 +24,5 @@ final class HashTagCollectionView: BaseCollectionViewController {
         let layout = UICollectionViewCompositionalLayout(section: section, configuration:  configuration)
         return layout
     }
-    
+
 }

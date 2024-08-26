@@ -88,7 +88,7 @@ final class RecommandCollectionViewCell: BaseCollectionViewCell {
             }
         }
         let isHidden = identifier.content1 == "true"
-        waitingFreeToggle(isHidden)
+        waitingFreeToggle(!isHidden)
     }
     
     private func waitingFreeToggle(_ isHidden: Bool) {

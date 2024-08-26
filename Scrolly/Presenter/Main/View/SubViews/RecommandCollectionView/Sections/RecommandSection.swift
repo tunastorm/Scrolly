@@ -25,4 +25,32 @@ enum RecommandSection: String, MainSection {
         }
     }
     
+    var allCase: [Self] {
+        return Self.allCases
+    }
+    
+    func convertData(_ section: RecommandSection, _ model: [PostsModel]) -> [PostsModel] {
+        print(#function, section)
+        switch section {
+        case .banner:
+            print(#function, "banner: ", model.count)
+            return model.shuffled()
+        case .popular:
+            let sortedModel = model.sorted(by: { left, right in
+                guard let lViewed = left.content3, let rViewed = right.content3,
+                      let leftViewed = Int(lViewed), let rightViewd = Int(rViewed)  else {
+                    return false
+                }
+                return leftViewed > rightViewd
+            })
+            print(#function, "popular: ", sortedModel.count)
+            return Array<PostsModel>(sortedModel.prefix(6))
+        case .recently:
+            return setViewedNovel(model)
+        default:
+            return model
+        }
+        
+    }
+    
 }

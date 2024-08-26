@@ -130,8 +130,10 @@ final class BannerCollectionViewCell: BaseCollectionViewCell {
         titleLabel.text = identifier.title
         descriptionLabel.text = identifier.content5
         let hashTags = identifier.hashTags
-        let tagString = hashTags[2...3].joined(separator: "﹒")
-        tagLabel.text = tagString
+        if hashTags.count > 0 {
+            let tagString = hashTags[2...3].joined(separator: "﹒")
+            tagLabel.text = tagString
+        }
         // 기다무 여부 토글
         let isHidden = identifier.content1 == "true"
         waitingFreeToggle(isHidden)

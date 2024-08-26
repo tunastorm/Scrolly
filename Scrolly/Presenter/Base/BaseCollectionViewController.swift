@@ -12,6 +12,7 @@ class BaseCollectionViewController: UICollectionView {
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         registerHeaderView()
+        showScrollInset()
     }
     
     required init?(coder: NSCoder) {
@@ -20,6 +21,11 @@ class BaseCollectionViewController: UICollectionView {
     
     func registerHeaderView() {
         
+    }
+    
+    func showScrollInset(horizontal: Bool = false, vertical: Bool = false) {
+        showsHorizontalScrollIndicator = horizontal
+        showsVerticalScrollIndicator = vertical
     }
     
 }

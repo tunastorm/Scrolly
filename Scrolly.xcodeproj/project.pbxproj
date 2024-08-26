@@ -347,8 +347,8 @@
 				BC097C8B2C74E23B0038A21C /* BaseView.swift */,
 				BC097CBE2C761CB40038A21C /* BaseViewModel.swift */,
 				BC097C892C74E2020038A21C /* BaseViewController.swift */,
-				BC097CCF2C76249C0038A21C /* BaseCollectionViewController.swift */,
 				BC097C8D2C74E2CB0038A21C /* BaseCollectionViewCell.swift */,
+				BC097CCF2C76249C0038A21C /* BaseCollectionViewController.swift */,
 				BC097C962C74E4500038A21C /* BaseCollectionResuableView.swift */,
 			);
 			path = Base;
@@ -398,6 +398,7 @@
 			children = (
 				BC097CC42C761E0E0038A21C /* MainView.swift */,
 				BC097CC22C761E020038A21C /* MainViewController.swift */,
+				BCCBDA7F2C78887900073E31 /* RecommandCollectionView.swift */,
 				BC097CD62C7636F70038A21C /* HashTagView */,
 				BCCBDA7E2C78886400073E31 /* RecommandCollectionView */,
 			);
@@ -581,7 +582,6 @@
 				BC670A982C7B0A1F006FB171 /* Sections */,
 				BC670A962C7B09D2006FB171 /* HeaderView */,
 				BC670A972C7B09E6006FB171 /* Cell */,
-				BCCBDA7F2C78887900073E31 /* RecommandCollectionView.swift */,
 			);
 			path = RecommandCollectionView;
 			sourceTree = "<group>";

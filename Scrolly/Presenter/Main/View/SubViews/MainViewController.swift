@@ -38,6 +38,9 @@ final class MainViewController: BaseViewController<MainView> {
         cell.configCell(itemIdentifier)
     }
     
+    private let hashTagCellTap = PublishRelay<HashTagSection.HashTag>()
+    
+    
     override func configNavigationbar(navigationColor: UIColor, shadowImage: Bool, titlePosition: TitlePosition) {
         super.configNavigationbar(navigationColor: .white, shadowImage: false, titlePosition: .left)
         navigationItem.title = Resource.UIConstants.Text.appTitle
@@ -48,17 +51,25 @@ final class MainViewController: BaseViewController<MainView> {
     }
     
     override func bindData() {
-        guard let mainViewModel = viewModel as? MainViewModel else {
+       
+        guard let mainViewModel = viewModel as? MainViewModel, let rootView else {
             return
         }
-        let input = MainViewModel.Input()
+//        rootView.hashTagView.rx.modelSelected(HashTagSection.HashTag.self)
+        
+        let hashTagCellTap = PublishSubject<HashTagSection.HashTag>()
+        
+        let input = MainViewModel.Input(hashTagCellTap: rootView.hashTagView.rx.itemSelected)
+//        let input = MainViewModel.Input(hashTagCellTap: hashTagCellTap)
         guard let output = mainViewModel.transform(input: input) else {
             return
         }
+        
         output.filterList
-            .bind(with: self) { owner, value in
+            .debug("필터리스트")
+            .bind(with: self) { owner, values in
                 owner.configFilterDataSource()
-                owner.updateFilterSnapShot(value)
+                owner.updateFilterSnapShot(values)
             }
             .disposed(by: disposeBag)
         
@@ -66,127 +77,37 @@ final class MainViewController: BaseViewController<MainView> {
         
         output.recommandDatas
             .bind(with: self) { owner, resultList in
-                let sections = RecommandSection.allCases
-                var dataDict: [String:[PostsModel]] = [:]
-                resultList.enumerated().forEach { idx, result in
-                    switch result {
-                    case .success(let model):
-                        let section = sections[idx]
-                        if section == .banner {
-                            owner.rootView?.configBannerLabel(model.data.count)
-                        }
-                        let data = section == .recently ? owner .setViewedNovel(model.data) : model.data
-                        dataDict[section.rawValue] = data
-                    case .failure(let error):
-                        owner.showToastToView(error)
-                    }
-                }
-                owner.updateSnapShot(sections: sections, dataDict)
+                owner.fetchDatas(sections: RecommandSection.allCases, resultList: resultList)
             }
             .disposed(by: disposeBag)
         
         output.maleDatas
             .bind(with: self) { owner, resultList in
-                let sections = MaleSection.allCases
-                var dataDict: [String:[PostsModel]] = [:]
-                resultList.enumerated().forEach { idx, result in
-                    switch result {
-                    case .success(let model):
-                        let section = sections[idx]
-                        if section == .banner {
-                            owner.rootView?.configBannerLabel(model.data.count)
-                        }
-                        let data = section == .recently ? owner .setViewedNovel(model.data) : model.data
-                        dataDict[section.rawValue] = data
-                    case .failure(let error):
-                        owner.showToastToView(error)
-                    }
-                }
-                owner.updateSnapShot(sections: sections, dataDict)
+                owner.fetchDatas(sections: MaleSection.allCases, resultList: resultList)
             }
             .disposed(by: disposeBag)
         
         output.femaleDatas
             .bind(with: self) { owner, resultList in
-                let sections = FemaleSection.allCases
-                var dataDict: [String:[PostsModel]] = [:]
-                resultList.enumerated().forEach { idx, result in
-                    switch result {
-                    case .success(let model):
-                        let section = sections[idx]
-                        if section == .banner {
-                            owner.rootView?.configBannerLabel(model.data.count)
-                        }
-                        let data = section == .recently ? owner .setViewedNovel(model.data) : model.data
-                        dataDict[section.rawValue] = data
-                    case .failure(let error):
-                        owner.showToastToView(error)
-                    }
-                }
-                owner.updateSnapShot(sections: sections, dataDict)
+                owner.fetchDatas(sections: FemaleSection.allCases, resultList: resultList)
             }
             .disposed(by: disposeBag)
         
         output.fantasyDatas
             .bind(with: self) { owner, resultList in
-                let sections = FantasySection.allCases
-                var dataDict: [String:[PostsModel]] = [:]
-                resultList.enumerated().forEach { idx, result in
-                    switch result {
-                    case .success(let model):
-                        let section = sections[idx]
-                        if section == .banner {
-                            owner.rootView?.configBannerLabel(model.data.count)
-                        }
-                        let data = section == .recently ? owner .setViewedNovel(model.data) : model.data
-                        dataDict[section.rawValue] = data
-                    case .failure(let error):
-                        owner.showToastToView(error)
-                    }
-                }
-                owner.updateSnapShot(sections: sections, dataDict)
+                owner.fetchDatas(sections: FantasySection.allCases, resultList: resultList)
             }
             .disposed(by: disposeBag)
         
         output.romanceDatas
             .bind(with: self) { owner, resultList in
-                let sections = RomanceSection.allCases
-                var dataDict: [String:[PostsModel]] = [:]
-                resultList.enumerated().forEach { idx, result in
-                    switch result {
-                    case .success(let model):
-                        let section = sections[idx]
-                        if section == .banner {
-                            owner.rootView?.configBannerLabel(model.data.count)
-                        }
-                        let data = section == .recently ? owner .setViewedNovel(model.data) : model.data
-                        dataDict[section.rawValue] = data
-                    case .failure(let error):
-                        owner.showToastToView(error)
-                    }
-                }
-                owner.updateSnapShot(sections: sections, dataDict)
+                owner.fetchDatas(sections: RomanceSection.allCases, resultList: resultList)
             }
             .disposed(by: disposeBag)
         
         output.dateDatas
             .bind(with: self) { owner, resultList in
-                let sections = DateSection.allCases
-                var dataDict: [String:[PostsModel]] = [:]
-                resultList.enumerated().forEach { idx, result in
-                    switch result {
-                    case .success(let model):
-                        let section = sections[idx]
-                        if section == .banner {
-                            owner.rootView?.configBannerLabel(model.data.count)
-                        }
-                        let data = section == .recently ? owner .setViewedNovel(model.data) : model.data
-                        dataDict[section.rawValue] = data
-                    case .failure(let error):
-                        owner.showToastToView(error)
-                    }
-                }
-                owner.updateSnapShot(sections: sections, dataDict)
+                owner.fetchDatas(sections: DateSection.allCases, resultList: resultList)
             }
             .disposed(by: disposeBag)
     }
@@ -199,16 +120,19 @@ final class MainViewController: BaseViewController<MainView> {
         configDataSource(sections: RomanceSection.allCases)
         configDataSource(sections: DateSection.allCases)
     }
-
-    private func setViewedNovel(_ postList: [PostsModel]) -> [PostsModel] {
-        var viewed: [PostsModel] = []
-        postList.forEach { post in
-            if viewed.last?.hashTags.first == post.hashTags.first {
-                return
+    
+    private func fetchDatas<T: MainSection>(sections: [T], resultList: [APIManager.ModelResult<GetPostsModel>]) {
+        var dataDict: [String:[PostsModel]] = [:]
+        resultList.enumerated().forEach { idx, result in
+            switch result {
+            case .success(let model):
+                let section = sections[idx]
+                dataDict[section.value] = section.callConvertData(section, model.data)
+            case .failure(let error):
+               showToastToView(error)
             }
-            viewed.append(post)
         }
-        return viewed
+        updateSnapShot(sections: sections, dataDict)
     }
     
     private func showToastToView(_ error: APIError) {
@@ -289,12 +213,10 @@ final class MainViewController: BaseViewController<MainView> {
             }
             switch section {
             case .banner:
-                print(#function, "section: " , section)
                 return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
             case .popular, .newWaitingFree:
                 return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
             case .recently:
-                print(#function, "section: " , section)
                 return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
             }
         })
@@ -313,12 +235,10 @@ final class MainViewController: BaseViewController<MainView> {
             }
             switch section {
             case .banner:
-                print(#function, "section: " , section)
                 return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
             case .popular, .newWaitingFree:
                 return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
             case .recently:
-                print(#function, "section: " , section)
                 return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
             }
         })
@@ -337,12 +257,10 @@ final class MainViewController: BaseViewController<MainView> {
             }
             switch section {
             case .banner:
-                print(#function, "section: " , section)
                 return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
             case .popular, .newWaitingFree:
                 return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
             case .recently:
-                print(#function, "section: " , section)
                 return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
             }
         })
@@ -383,12 +301,10 @@ final class MainViewController: BaseViewController<MainView> {
             }
             switch section {
             case .banner:
-                print(#function, "section: " , section)
                 return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
             case .popular, .newWaitingFree:
                 return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
             case .recently:
-                print(#function, "section: " , section)
                 return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
             }
         })
@@ -407,12 +323,10 @@ final class MainViewController: BaseViewController<MainView> {
             }
             switch section {
             case .banner:
-                print(#function, "section: " , section)
                 return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
             case .popular, .newWaitingFree:
                 return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
             case .recently:
-                print(#function, "section: " , section)
                 return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
             }
         })
@@ -489,6 +403,7 @@ final class MainViewController: BaseViewController<MainView> {
         snapShot.appendSections(sections)
         snapShot.sectionIdentifiers.forEach { section in
             guard let models = modelDict[section.value] else { return }
+            
             snapShot.appendItems(models, toSection: section)
         }
         dateDataSource?.apply(snapShot)
@@ -498,7 +413,15 @@ final class MainViewController: BaseViewController<MainView> {
 
 extension MainViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(#function, "collectionView: ", collectionView)
-        print(#function, "indexPath: ", indexPath)
+        print("collectionView: ", collectionView.self, "indexPath: ", indexPath)
+        rootView?.changeRecentCell(indexPath, isSelected: true, isClicked: true)
+        hashTagCellTap.accept(HashTagSection.HashTag.allCases[indexPath.item])
     }
+//    
+//    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+//        print("collectionView: ", collectionView.self, "indexPath: ", indexPath)
+//        hashTagCellTap.accept(HashTagSection.HashTag.allCases[indexPath.item])
+//        
+//        return true
+//    }
 }

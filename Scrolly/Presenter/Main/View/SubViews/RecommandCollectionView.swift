@@ -34,7 +34,7 @@ final class RecommandCollectionView: BaseCollectionViewController {
     private static func createSection(for section: RecommandSection) -> NSCollectionLayoutSection {
         switch section {
         case .banner:
-            let height = screenSize?.width ?? 350
+            let height = (screenSize?.width ?? 350) - 40
             return createSingleColumnSection(height)
         case .popular, .newWaitingFree:
             return createThreeXTwoSection(for: section)
@@ -78,6 +78,7 @@ final class RecommandCollectionView: BaseCollectionViewController {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(200))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        group.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
         group.interItemSpacing = .fixed(4)
         let section = NSCollectionLayoutSection(group: group)
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(20))
@@ -86,9 +87,8 @@ final class RecommandCollectionView: BaseCollectionViewController {
             elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         section.boundarySupplementaryItems = [sectionHeader]
         let topInset: CGFloat = sectionInfo.header == nil ? 4 : 10
-        section.orthogonalScrollingBehavior = .continuous
-        section.contentInsets = NSDirectionalEdgeInsets(top: topInset, leading: 10, bottom: 10, trailing: 10)
-        section.interGroupSpacing = 4
+        section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
+        section.contentInsets = NSDirectionalEdgeInsets(top: topInset, leading: 10, bottom: 10, trailing: 0)
         
         return section
     }

@@ -18,11 +18,11 @@ protocol HashTagCellDelegate {
 final class MainView: BaseView {
     
     private var screenSize: CGRect?
+    private let disposeBag = DisposeBag()
+    
     // MARK: - CollectionViews
     let hashTagView = HashTagCollectionView(frame: .zero, collectionViewLayout: HashTagCollectionView.createLayout())
-//    let bannerView = BannerCollectionView(frame: .zero, collectionViewLayout: BannerCollectionView.createLayout())
     let recommandView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
-    
     let maleView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
     let femaleView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
     let fantasyView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
@@ -30,9 +30,6 @@ final class MainView: BaseView {
     let dateView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
     
     lazy var collectionViewList = [ recommandView, maleView, femaleView, fantasyView, romanceView, dateView ]
-//    lazy var pageLabelList = []
-//    private let collectionViewArea = UIView()
-//    let recentlyViewedView = RecentlyViewedCollectionView(frame: .zero, collectionViewLayout: RecentlyViewedCollectionView.createLayout())
     
     private let bannerPageLabel = UILabel().then {
         $0.font = Resource.Asset.Font.boldSystem13
@@ -40,11 +37,10 @@ final class MainView: BaseView {
         $0.textAlignment = .right
         $0.text = "1/"
     }
-    
-    private var lastCell = IndexPath(item: 0, section: 0)
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let pageControl = UIPageControl()
+    var lastCell = IndexPath(item: 0, section: 0)
     
     override func configHierarchy() {
         addSubview(hashTagView)
@@ -83,12 +79,6 @@ final class MainView: BaseView {
             make.verticalEdges.equalToSuperview()
             make.leading.equalToSuperview()
         }
-//        bannerPageLabel.snp.makeConstraints { make in
-//            make.height.equalTo(20)
-//            make.width.equalTo(80)
-//            make.bottom.equalTo(bannerView.snp.bottom).offset(-20)
-//            make.trailing.equalTo(bannerView.snp.trailing).offset(-32)
-//        }
         maleView.snp.makeConstraints { make in
             make.width.equalTo(screenSize.width)
             make.verticalEdges.equalToSuperview()
@@ -115,60 +105,47 @@ final class MainView: BaseView {
             make.leading.equalTo(romanceView.snp.trailing)
             make.trailing.equalToSuperview()
         }
-        
     }
     
     override func configView() {
         super.configView()
         setPageControl()
-        scrollView.isPagingEnabled = true
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.delegate = self
-        hashTagView.showsHorizontalScrollIndicator = false
-        hashTagView.backgroundColor = .clear
-        recommandView.backgroundColor = .clear
-//        maleView.backgroundColor = .blue
-//        femaleView.backgroundColor = .red
-//        recommandView.showsVerticalScrollIndicator = false
-//        recentlyViewedView.showsHorizontalScrollIndicator = false
-//        recommandView.isScrollEnabled = false
     }
-    
     
     final private func setPageControl() {
+        scrollView.delegate = self
+        scrollView.isPagingEnabled = true
+        scrollView.showsHorizontalScrollIndicator = false
         pageControl.numberOfPages = collectionViewList.count
         pageControl.currentPage = 0
-//        pageControl.page
-//        pageControl.currentPageIndicatorTintColor = .darkGray
-//        pageControl.pageIndicatorTintColor = .lightGray
     }
+    
     
     override func configInteractionWithViewController<T: UIViewController >(viewController: T) {
         guard let mainVC = viewController as? MainViewController else {
             return
         }
-//        popularView.delegate = mainVC
-//        newWaitingFreeView.delegate = mainVC
-//        bannerView.delegate = mainVC
+        hashTagView.delegate = mainVC
+        print(#function, "하이")
     }
     
-    func configBannerLabel(_ length: Int) {
-        if let bannerPage = bannerPageLabel.text {
-            bannerPageLabel.text = bannerPage + "\(length)"
-        }
+    override func bind() {
+//        let hashTagClicked = hashTagView.rx.modelSelected(HashTagSection.HashTag.self)
+//        hashTagClicked
+//            .debug("해시태그 클릭 왜안됨")
+//            .bind { value in
+//                print("model: ", value)
+//            }.disposed(by: disposeBag)
     }
-    
 }
 
 extension MainView: HashTagCellDelegate {
     
     func changeRecentCell(_ indexPath: IndexPath, isSelected: Bool, isClicked: Bool = false) {
         let collectionView = hashTagView
-        print(#function, "lastCell:", lastCell)
         if let oldCell = collectionView.cellForItem(at: lastCell) as? HashTagCollectionViewCell {
-            print(#function, "oldCell.isSelected: ", oldCell.isSelected)
             oldCell.isSelected = !isSelected
-            print(#function, "oldCell.isSelected: ", oldCell.isSelected)
+            oldCell.isUserInteractionEnabled = isSelected
             oldCell.cellTappedToggle()
         }
         guard let cell = collectionView.cellForItem(at: indexPath) as? HashTagCollectionViewCell else {
@@ -178,13 +155,14 @@ extension MainView: HashTagCellDelegate {
         if isClicked {
             scrollToClickedFilter(item: Double(indexPath.item))
         } else {
-            cell.isSelected = true
+            cell.isSelected = isSelected
+            cell.isUserInteractionEnabled = !isSelected
         }
         cell.cellTappedToggle()
         lastCell = indexPath
     }
     
-    private func scrollToClickedFilter(item: Double) {
+    func scrollToClickedFilter(item: Double) {
         guard let screenSize else {
             return
         }

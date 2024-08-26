@@ -11,7 +11,7 @@ import Foundation
 enum HashTagSection: Int, CaseIterable {
     case main = 0
     
-    enum HashTag: CaseIterable {
+    enum HashTag: String, CaseIterable {
         case recommand
         case male
         case female
@@ -21,7 +21,7 @@ enum HashTagSection: Int, CaseIterable {
         
         var krValue: String {
             return switch self {
-            case .recommand: "지금핫한"
+            case .recommand: "HOT 추천"
             case .male: "남성인기"
             case .female: "여성인기"
             case .fantasy: "판타지"
