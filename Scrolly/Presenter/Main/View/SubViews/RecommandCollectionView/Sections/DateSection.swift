@@ -11,8 +11,9 @@ import Foundation
 enum DateSection: String, MainSection {
     case banner
     case popular
-    case newWaitingFree
     case recently
+    case newWaitingFree
+   
     
     var value: String {
         return self.rawValue
