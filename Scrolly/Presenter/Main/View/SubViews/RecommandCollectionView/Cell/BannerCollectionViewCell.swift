@@ -27,7 +27,7 @@ final class BannerCollectionViewCell: BaseCollectionViewCell {
     
     private let titleLabel = UILabel().then {
         $0.textColor = Resource.Asset.CIColor.white
-        $0.font = Resource.Asset.Font.boldSystem20
+        $0.font = Resource.Asset.Font.boldSystem22
         $0.textAlignment = .left
         $0.numberOfLines = .zero
     }
@@ -78,7 +78,7 @@ final class BannerCollectionViewCell: BaseCollectionViewCell {
             make.bottom.equalTo(detailView.snp.top).offset(-20)
         }
         titleLabel.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.3)
+            make.width.equalToSuperview().multipliedBy(0.5)
             make.leading.equalToSuperview().inset(20)
             make.bottom.equalTo(descriptionLabel.snp.top).offset(-20)
         }
