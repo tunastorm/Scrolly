@@ -8,7 +8,14 @@
 import Foundation
 
 final class EpisodeViewerViewModel: BaseViewModel, ViewModelProvider {
-   
+    
+    private var novel: PostsModel?
+    
+    var model: PostsModel? {
+        get { novel }
+        set { novel = newValue }
+    }
+
     struct Input {
         
     }
