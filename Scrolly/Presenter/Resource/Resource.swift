@@ -63,8 +63,12 @@ enum Resource {
             static let stopwatch = UIImage(systemName: "stopwatch")
             static let lineThreeHorizontal = UIImage(systemName: "line.3.horizontal")
             static let magnifyingGlass = UIImage(systemName: "magnifyingglass")
+            static let dolcPlaintext = UIImage(systemName: "doc.plaintext")
+            static let eye = UIImage(systemName: "eye")
+            static let star = UIImage(systemName: "star")
+            static let starFill = UIImage(systemName: "star.fill")?.withTintColor(.systemYellow, renderingMode: .alwaysTemplate)
+            static let personCropCircle = UIImage(systemName: "person.crop.circle")
 //            static let chevronRight = UIImage(systemName: "chevron.right")
-//            static let starFill = UIImage(systemName: "star.fill")?.withTintColor(.systemYellow, renderingMode: .alwaysTemplate)
 //            static let heart = UIImage(systemName: "heart")
 //            static let cameraFill = UIImage(systemName: "camera.fill")
            
@@ -79,39 +83,6 @@ enum Resource {
         
         enum NamedImage {
             static let gradationCover = UIImage(named: "background")
-//            static let empty = UIImage(named: "empty")
-//            static let launch = UIImage(named: "launchImage")
-//            static let loadingApple = UIImage (named: "loading_apple")
-//            static let tabTrend = UIImage(named: "tab_trend")
-//            static let tabTrendInActive = UIImage(named: "tap_trend_inactive")
-//            static let tabRandom = UIImage(named: "tab_random")
-//            static let tabRandomInActive = UIImage(named: "tab_random_inactive")
-//            static let tabSearch = UIImage(named: "tab_search")
-//            static let tabSearchInActive = UIImage(named: "tab_search_inactive")
-//            static let tabLike = UIImage(named: "tab_like")
-//            static let tabLikeInActive = UIImage(named: "tab_like_inactive")
-//            static let like = UIImage(named: "like")?.withRenderingMode(.alwaysOriginal)
-//            static let likeInActive = UIImage(named: "like_inactive")?.withRenderingMode(.alwaysTemplate)
-//            static let sort = UIImage(named: "sort")!.withRenderingMode(.alwaysOriginal)
-//            
-//            static func profileImage(number: Int) -> UIImage? {
-//                guard number >= 0 && number <= 11 else {
-//                    return nil
-//                }
-//                return UIImage(named: "profile_\(number)")
-//            }
-//            
-//            static var randomProfile: UIImage {
-//                return UIImage(named: "profile_\(Int.random(in: 0...11))")!
-//            }
-//            
-//            static var allProfile: [UIImage] {
-//                var list: [UIImage] = []
-//                for i in 0...11 {
-//                    list.append(UIImage(named: "profile_\(i)")!)
-//                }
-//                return list
-//            }
         }
         
         enum Font {
@@ -133,6 +104,7 @@ enum Resource {
             static let boldSystem18 = UIFont.boldSystemFont(ofSize: 18)
             static let boldSystem19 = UIFont.boldSystemFont(ofSize: 19)
             static let boldSystem20 = UIFont.boldSystemFont(ofSize: 20)
+            static let boldSystem22 = UIFont.boldSystemFont(ofSize: 22)
             static let boldSystem25 = UIFont.boldSystemFont(ofSize: 25)
             static let boldSystem30 = UIFont.boldSystemFont(ofSize: 30)
         }

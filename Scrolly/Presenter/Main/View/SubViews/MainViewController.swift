@@ -64,6 +64,10 @@ final class MainViewController: BaseViewController<MainView> {
             return
         }
         
+        rootView.collectionViewList.enumerated().forEach { idx, collectionView in
+            rxPushToDetailViewController(dataSource: idx, from: collectionView)
+        }
+        
         let input = MainViewModel.Input(hashTagCellTap: rootView.hashTagView.rx.itemSelected, srollViewPaging: scrollViewPaging)
         guard let output = mainViewModel.transform(input: input) else {
             return
@@ -111,6 +115,7 @@ final class MainViewController: BaseViewController<MainView> {
                 owner.fetchDatas(sections: DateSection.allCases, resultList: resultList)
             }
             .disposed(by: disposeBag)
+    
     }
     
     private func fetchDatas<T: MainSection>(sections: [T], resultList: [APIManager.ModelResult<GetPostsModel>]) {
@@ -135,6 +140,28 @@ final class MainViewController: BaseViewController<MainView> {
     
     private func showToastToView(_ error: APIError) {
         rootView?.makeToast(error.message, duration: 3.0, position: .bottom)
+    }
+    
+    private func rxPushToDetailViewController(dataSource idx: Int, from collectionView: BaseCollectionViewController) {
+        collectionView.rx.itemSelected
+            .bind(with: self) { owner, indexPath in
+                var post: PostsModel?
+                switch HashTagSection.HashTag.allCases[idx] {
+                case .recommand: post = owner.recommandDataSource?.itemIdentifier(for: indexPath)
+                case .male: post = owner.maleDataSource?.itemIdentifier(for: indexPath)
+                case .female: post = owner.femaleDataSource?.itemIdentifier(for: indexPath)
+                case .fantasy: post = owner.fantasyDataSource?.itemIdentifier(for: indexPath)
+                case .romance: post = owner.romanceDataSource?.itemIdentifier(for: indexPath)
+                case .day: post = owner.dateDataSource?.itemIdentifier(for: indexPath)
+                }
+                let vc = NovelDetailViewContreoller(view: NovelDetailView(), viewModel: NovelDetailViewModel())
+                guard let post else {
+                    return
+                }
+                vc.viewModel?.model = post
+                owner.pushAfterView(view: vc, backButton: true, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
     
     //MARK: - 해시태그 필터 콜렉션뷰
