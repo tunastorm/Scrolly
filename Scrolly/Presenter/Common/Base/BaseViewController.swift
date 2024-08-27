@@ -40,6 +40,7 @@ class BaseViewController<View: BaseView>: UIViewController, UIViewControllerProv
     override func viewDidLoad() {
         super.viewDidLoad()
         configInteraction()
+        injectModelToView()
         bindData()
     }
     
@@ -56,11 +57,13 @@ class BaseViewController<View: BaseView>: UIViewController, UIViewControllerProv
         
     }
     
-    func configNavigationbar(backgroundColor: UIColor, shadowImage: Bool, foregroundColor: UIColor = .black, titlePosition: TitlePosition = .center) {
-        let searchButton = UIBarButtonItem(image: Resource.Asset.SystemImage.magnifyingGlass, style: .plain, target: self, action: #selector(searchButtonClicked))
+    func configNavigationbar(backgroundColor: UIColor, backButton: Bool = true, shadowImage: Bool, foregroundColor: UIColor = .black, barbuttonColor: UIColor = .black, titlePosition: TitlePosition = .center) {
+        navigationItem.backButtonTitle = ""
+        navigationItem.backBarButtonItem?.isHidden = !backButton
+//        let searchButton = UIBarButtonItem(image: Resource.Asset.SystemImage.magnifyingGlass, style: .plain, target: self, action: #selector(searchButtonClicked))
         let profileButton = UIBarButtonItem(image: Resource.Asset.SystemImage.lineThreeHorizontal, style: .plain, target: self, action: #selector(profileButtonClicked))
-        searchButton.tintColor = Resource.Asset.CIColor.black
-        profileButton.tintColor = Resource.Asset.CIColor.black
+//        searchButton.tintColor = barbuttonColor
+        profileButton.tintColor = barbuttonColor
         
         let textAttributes = [
             NSAttributedString.Key.foregroundColor : foregroundColor,
@@ -75,11 +78,22 @@ class BaseViewController<View: BaseView>: UIViewController, UIViewControllerProv
             appearance.titlePositionAdjustment = UIOffset(horizontal: -(view.frame.width/2),
                                                           vertical: 0)
         }
+//        if backgroundColor == .clear {
+//            self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+//            self.navigationController?.navigationBar.isTranslucent = false
+//        }
         self.navigationController?.navigationBar.standardAppearance = appearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
         self.navigationController?.navigationBar.tintColor = .black
-        navigationItem.rightBarButtonItems = [profileButton, searchButton]
-        navigationItem.backButtonTitle = ""
+        
+        navigationItem.rightBarButtonItems = [profileButton]
+    }
+    
+    func injectModelToView() {
+        guard let model = viewModel?.model else {
+            return
+        }
+        rootView?.configData(model)
     }
     
     @objc private func searchButtonClicked(_ sender: UIBarButtonItem) {

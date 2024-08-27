@@ -81,11 +81,7 @@ final class RecentlyCollectionViewCell: BaseCollectionViewCell {
     
     func configCell(_ identifier: PostsModel) {
         KingfisherManager.shared.setHeaders()
-        guard let file = identifier.files.first, let url = URL(string: APIConstants.URI + "/\(file)") else {
-            // 테스트 중에만 사용
-            if let url = URL(string: APIConstants.URI + "/uploads/posts/dummyImage_3_1724433820182.jpg") {
-                imageView.kf.setImage(with: url)
-            }
+        guard let file = identifier.files.first, let url = URL(string: APIConstants.URI + file) else {
             return
         }
         imageView.kf.setImage(with: url)
@@ -93,7 +89,6 @@ final class RecentlyCollectionViewCell: BaseCollectionViewCell {
         categoryLabel.text = identifier.hashTags[1] ?? ""
         let isHidden = identifier.content1 == "true"
         waitingFreeToggle(isHidden)
-        
     }
     
     private func waitingFreeToggle(_ isHidden: Bool) {

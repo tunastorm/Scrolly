@@ -57,7 +57,7 @@ final class RecommandCollectionViewCell: BaseCollectionViewCell {
     
     func configCell(_ identifier: PostsModel) {
         KingfisherManager.shared.setHeaders()
-        guard let file = identifier.files.first, let url = URL(string: APIConstants.URI + "/\(file)") else {
+        guard let file = identifier.files.first, let url = URL(string: APIConstants.URI + file) else {
             return
         }
         imageView.kf.setImage(with: url) { [weak self] result in

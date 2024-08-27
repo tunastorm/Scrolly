@@ -114,7 +114,7 @@ final class BannerCollectionViewCell: BaseCollectionViewCell {
     
     func configCell(_ identifier: PostsModel) {
         KingfisherManager.shared.setHeaders()
-        guard let file = identifier.files.first, let url = URL(string: APIConstants.URI + "/\(file)") else {
+        guard let file = identifier.files.first, let url = URL(string: APIConstants.URI + file) else {
             return
         }
         imageView.kf.setImage(with: url) { [weak self] result in
@@ -128,11 +128,7 @@ final class BannerCollectionViewCell: BaseCollectionViewCell {
         }
         titleLabel.text = identifier.title
         descriptionLabel.text = identifier.content5
-        let hashTags = identifier.hashTags
-        if hashTags.count > 0 {
-            let tagString = hashTags[2...3].joined(separator: "﹒")
-            tagLabel.text = tagString
-        }
+        tagLabel.text = identifier.categorys
         let isHidden = identifier.content1 == APIConstants.isWaitingFree
         waitingFreeToggle(!isHidden)
     }

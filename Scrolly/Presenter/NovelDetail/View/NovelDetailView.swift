@@ -6,16 +6,26 @@
 //
 
 import UIKit
+import Kingfisher
 import SnapKit
 import Then
 
 final class NovelDetailView: BaseView {
     
+    var delegate: NovelDetailViewDelegate?
+    
     private let backgroundImageView = UIImageView().then {
-        $0.contentMode = .scaleAspectFill
+        $0.contentMode = .scaleToFill
     }
     
     private let backgroundBlurView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+    
+    private let backButton = CustomButton().then {
+        $0.configImage(image: Resource.Asset.SystemImage.chevronLeft)
+    }
+    private let profileButton = CustomButton().then {
+        $0.configImage(image: Resource.Asset.SystemImage.lineThreeHorizontal)
+    }
     
     private let coverImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
@@ -27,6 +37,10 @@ final class NovelDetailView: BaseView {
     
     private let waitingFreeLabel = WaitingFreeLabel()
     
+    private let infoBackgroundView = UIView().then {
+        $0.backgroundColor = Resource.Asset.CIColor.white
+    }
+    
     private let titleLabel = UILabel().then {
         $0.font = Resource.Asset.Font.boldSystem20
         $0.textAlignment = .center
@@ -37,35 +51,7 @@ final class NovelDetailView: BaseView {
         $0.textAlignment = .center
     }
     
-    private let categoryIconView = UIImageView().then {
-        $0.image = Resource.Asset.SystemImage.dolcPlaintext
-        $0.tintColor = Resource.Asset.CIColor.gray
-    }
-    
-    private let infoLabel = UILabel().then {
-        $0.font = Resource.Asset.Font.system13
-        $0.textColor = Resource.Asset.CIColor.gray
-    }
-    
-    private let viewdIconView = UIImageView().then {
-        $0.image = Resource.Asset.SystemImage.eye
-        $0.tintColor = Resource.Asset.CIColor.gray
-    }
-
-    private let viewedLabel = UILabel().then {
-        $0.font = Resource.Asset.Font.system13
-        $0.textColor = Resource.Asset.CIColor.gray
-    }
-    
-    private let averageRateIconView = UIImageView().then {
-        $0.image = Resource.Asset.SystemImage.star
-        $0.tintColor = Resource.Asset.CIColor.gray
-    }
-
-    private let averageRateLabel = UILabel().then {
-        $0.font = Resource.Asset.Font.system13
-        $0.textColor = Resource.Asset.CIColor.gray
-    }
+    private let infoView = InfoView()
     
     private let hashTagView = UIView().then {
         $0.backgroundColor = Resource.Asset.CIColor.lightGray
@@ -81,36 +67,143 @@ final class NovelDetailView: BaseView {
     
     override func configHierarchy() {
         addSubview(backgroundImageView)
+        addSubview(infoBackgroundView)
         addSubview(backgroundBlurView)
+        addSubview(backButton)
+        addSubview(profileButton)
         addSubview(coverImageView)
+        addSubview(waitingFreeImageView)
+        addSubview(waitingFreeLabel)
         addSubview(titleLabel)
         addSubview(creatorLabel)
-        addSubview(categoryIconView)
-        addSubview(infoLabel)
-        addSubview(viewdIconView)
-        addSubview(viewedLabel)
-        addSubview(averageRateIconView)
-        addSubview(averageRateLabel)
+        addSubview(infoView)
         addSubview(hashTagView)
         addSubview(descriptionTextView)
     }
     
     override func configLayout() {
+        backButton.snp.makeConstraints { make in
+            make.width.equalTo(20)
+            make.height.equalTo(36)
+            make.top.equalToSuperview().inset(50)
+            make.leading.equalToSuperview().inset(10)
+        }
+        profileButton.snp.makeConstraints { make in
+            make.width.equalTo(35)
+            make.height.equalTo(30)
+            make.top.equalToSuperview().inset(50)
+            make.trailing.equalToSuperview().inset(10)
+        }
+        coverImageView.snp.makeConstraints { make in
+            make.width.equalTo(150)
+            make.height.equalTo(220)
+            make.top.equalTo(safeAreaLayoutGuide).inset(40)
+            make.centerX.equalTo(safeAreaLayoutGuide)
+        }
+        waitingFreeImageView.snp.makeConstraints { make in
+            make.size.equalTo(16)
+            make.top.equalTo(coverImageView.snp.top).inset(10)
+            make.leading.equalTo(coverImageView.snp.leading).inset(10)
+        }
+        waitingFreeLabel.snp.makeConstraints { make in
+            make.height.equalTo(waitingFreeImageView)
+            make.width.equalTo(waitingFreeImageView).multipliedBy(2.0)
+            make.top.equalTo(coverImageView.snp.top).inset(10)
+            make.leading.equalTo(waitingFreeImageView.snp.trailing)
+        }
+        titleLabel.snp.makeConstraints { make in
+            make.height.equalTo(30)
+            make.top.equalTo(coverImageView.snp.bottom).offset(20)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
+        }
+        creatorLabel.snp.makeConstraints { make in
+            make.height.equalTo(14)
+            make.top.equalTo(titleLabel.snp.bottom).offset(6)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
+        }
+        infoView.snp.makeConstraints { make in
+            make.height.equalTo(14)
+            make.width.lessThanOrEqualTo(safeAreaLayoutGuide)
+            make.top.equalTo(creatorLabel.snp.bottom).offset(6)
+            make.centerX.equalToSuperview()
+        }
         backgroundImageView.snp.makeConstraints { make in
-            make.height.equalTo(200)
-            make.top.horizontalEdges.equalToSuperview()
+            make.top.equalToSuperview().offset(-100)
+            make.horizontalEdges.equalToSuperview()
+            make.bottom.equalTo(infoView.snp.bottom)
         }
         backgroundBlurView.snp.makeConstraints { make in
-        
+            make.top.equalToSuperview().offset(-100)
+            make.top.horizontalEdges.equalToSuperview()
+            make.bottom.equalTo(infoView.snp.bottom)
+        }
+        infoBackgroundView.snp.makeConstraints { make in
+            make.top.equalTo(coverImageView.snp.bottom)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            make.bottom.equalTo(infoView.snp.bottom)
+        }
+        hashTagView.snp.makeConstraints { make in
+            make.height.equalTo(40)
+            make.top.equalTo(infoView.snp.bottom).offset(20)
+            make.horizontalEdges.equalToSuperview().inset(20)
+        }
+        descriptionTextView.snp.makeConstraints { make in
+            make.height.equalTo(hashTagView.snp.width)
+            make.top.equalTo(hashTagView.snp.bottom).offset(10)
+            make.horizontalEdges.equalToSuperview().inset(20)
         }
     }
     
     override func configView() {
-      
+        super.configView()
+        backgroundImageView.backgroundColor = .blue
+        coverImageView.backgroundColor = .gray
+        let backbuttonTap = UITapGestureRecognizer(target: self, action: #selector(backButtonTapped))
+        backButton.addGestureRecognizer(backbuttonTap)
+        let profileButtonTap = UITapGestureRecognizer(target: self, action: #selector(profileButtonTapped))
+        profileButton.addGestureRecognizer(profileButtonTap)
     }
     
     override func configInteractionWithViewController<T>(viewController: T) where T : UIViewController {
         
+    }
+    
+    override func configData(_ model: some Decodable) {
+        guard let post = model as? PostsModel else {
+            return
+        }
+        if let file = post.files.first, let url = URL(string: APIConstants.URI + file) {
+            KingfisherManager.shared.setHeaders()
+            backgroundImageView.kf.setImage(with: url) { [weak self] result in
+                switch result {
+                case .success(let data):
+                    self?.backgroundImageView.image = data.image
+                case .failure(let error):
+                    self?.makeToast(error.errorDescription,duration: 3.0, position: .bottom)
+                    return
+                }
+            }
+            coverImageView.kf.setImage(with: url) { [weak self] result in
+                switch result {
+                case .success(let data):
+                    self?.coverImageView.image = data.image
+                case .failure(let error):
+                    self?.makeToast(error.errorDescription,duration: 3.0, position: .bottom)
+                    return
+                }
+            }
+        }
+        titleLabel.text = post.title
+        creatorLabel.text = post.creatorHashTag
+        infoView.configData(model)
+    }
+    
+    @objc private func backButtonTapped() {
+        delegate?.popToMainViewController()
+    }
+    
+    @objc private func profileButtonTapped() {
+        delegate?.pushToProfileViewController()
     }
     
 }

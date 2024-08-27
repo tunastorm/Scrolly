@@ -41,5 +41,9 @@ class BaseView: UIView {
     func configInteractionWithViewController<T: UIViewController>(viewController: T) {
         
     }
+    
+    func configData(_ model: some Decodable) {
+        
+    }
 }
 

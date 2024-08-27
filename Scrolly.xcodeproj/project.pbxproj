@@ -8,13 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		BC06E8472C7C86EA00148785 /* UIScrollView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC06E8462C7C86EA00148785 /* UIScrollView+Extension.swift */; };
-		BC06E8492C7C8B7700148785 /* NovelDetailViewContreoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC06E8482C7C8B7700148785 /* NovelDetailViewContreoller.swift */; };
+		BC06E8492C7C8B7700148785 /* NovelDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC06E8482C7C8B7700148785 /* NovelDetailViewController.swift */; };
 		BC06E84B2C7C8BAF00148785 /* NovelDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC06E84A2C7C8BAF00148785 /* NovelDetailView.swift */; };
 		BC06E84D2C7CC80200148785 /* ViewTransitaion.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC06E84C2C7CC80200148785 /* ViewTransitaion.swift */; };
 		BC06E84F2C7CC83800148785 /* NovelDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC06E84E2C7CC83800148785 /* NovelDetailViewModel.swift */; };
 		BC06E8512C7CCA8F00148785 /* ViewModelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC06E8502C7CCA8F00148785 /* ViewModelProvider.swift */; };
 		BC06E8532C7CCB9B00148785 /* ViewControllerProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC06E8522C7CCB9B00148785 /* ViewControllerProvider.swift */; };
 		BC06E8552C7CD77000148785 /* HashTagLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC06E8542C7CD77000148785 /* HashTagLabel.swift */; };
+		BC06E8572C7CE03400148785 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC06E8562C7CE03400148785 /* InfoView.swift */; };
+		BC06E8682C7DBAD100148785 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC06E8672C7DBAD100148785 /* CustomButton.swift */; };
 		BC097C622C7330120038A21C /* RetryInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC097C612C7330120038A21C /* RetryInterceptor.swift */; };
 		BC097C642C73583A0038A21C /* PostsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC097C632C73583A0038A21C /* PostsModel.swift */; };
 		BC097C682C737F170038A21C /* QueryBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC097C672C737F170038A21C /* QueryBuilder.swift */; };
@@ -102,13 +104,15 @@
 
 /* Begin PBXFileReference section */
 		BC06E8462C7C86EA00148785 /* UIScrollView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+Extension.swift"; sourceTree = "<group>"; };
-		BC06E8482C7C8B7700148785 /* NovelDetailViewContreoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovelDetailViewContreoller.swift; sourceTree = "<group>"; };
+		BC06E8482C7C8B7700148785 /* NovelDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovelDetailViewController.swift; sourceTree = "<group>"; };
 		BC06E84A2C7C8BAF00148785 /* NovelDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovelDetailView.swift; sourceTree = "<group>"; };
 		BC06E84C2C7CC80200148785 /* ViewTransitaion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewTransitaion.swift; sourceTree = "<group>"; };
 		BC06E84E2C7CC83800148785 /* NovelDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovelDetailViewModel.swift; sourceTree = "<group>"; };
 		BC06E8502C7CCA8F00148785 /* ViewModelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelProvider.swift; sourceTree = "<group>"; };
 		BC06E8522C7CCB9B00148785 /* ViewControllerProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerProvider.swift; sourceTree = "<group>"; };
 		BC06E8542C7CD77000148785 /* HashTagLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashTagLabel.swift; sourceTree = "<group>"; };
+		BC06E8562C7CE03400148785 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
+		BC06E8672C7DBAD100148785 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		BC097C612C7330120038A21C /* RetryInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetryInterceptor.swift; sourceTree = "<group>"; };
 		BC097C632C73583A0038A21C /* PostsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsModel.swift; sourceTree = "<group>"; };
 		BC097C672C737F170038A21C /* QueryBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryBuilder.swift; sourceTree = "<group>"; };
@@ -207,6 +211,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BC06E8582C7CEAE400148785 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				BCCBDA6F2C78514400073E31 /* Protocol */,
+				BC097C8F2C74E34F0038A21C /* Resource */,
+				BC097C852C74E1110038A21C /* Base */,
+				BC097C762C74C3720038A21C /* Extension */,
+				BCCBDA752C7864FC00073E31 /* CustomView */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
 		BC097C652C737F000038A21C /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -236,11 +252,7 @@
 		BC097C6D2C7484C50038A21C /* Presenter */ = {
 			isa = PBXGroup;
 			children = (
-				BCCBDA752C7864FC00073E31 /* CustomView */,
-				BCCBDA6F2C78514400073E31 /* Protocol */,
-				BC097C8F2C74E34F0038A21C /* Resource */,
-				BC097C852C74E1110038A21C /* Base */,
-				BC097C762C74C3720038A21C /* Extension */,
+				BC06E8582C7CEAE400148785 /* Common */,
 				BC097C792C74E0500038A21C /* Main */,
 				BC097C7B2C74E0680038A21C /* NovelDetail */,
 				BC097C6E2C7484D70038A21C /* EpisodeViewer */,
@@ -252,7 +264,6 @@
 		BC097C6E2C7484D70038A21C /* EpisodeViewer */ = {
 			isa = PBXGroup;
 			children = (
-				BC097C712C7485100038A21C /* Model */,
 				BC097C702C74850D0038A21C /* View */,
 				BC097C6F2C7485020038A21C /* ViewModel */,
 			);
@@ -270,6 +281,7 @@
 		BC097C702C74850D0038A21C /* View */ = {
 			isa = PBXGroup;
 			children = (
+				BC097C712C7485100038A21C /* Model */,
 				BC097C722C7485270038A21C /* EpisodeViewerViewController.swift */,
 			);
 			path = View;
@@ -340,7 +352,7 @@
 			isa = PBXGroup;
 			children = (
 				BC06E84A2C7C8BAF00148785 /* NovelDetailView.swift */,
-				BC06E8482C7C8B7700148785 /* NovelDetailViewContreoller.swift */,
+				BC06E8482C7C8B7700148785 /* NovelDetailViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -579,6 +591,8 @@
 				BCCBDA782C78660000073E31 /* WaitingFreeLabel.swift */,
 				BCCBDA832C78BE3A00073E31 /* CreatorLabelView.swift */,
 				BC06E8542C7CD77000148785 /* HashTagLabel.swift */,
+				BC06E8562C7CE03400148785 /* InfoView.swift */,
+				BC06E8672C7DBAD100148785 /* CustomButton.swift */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -691,8 +705,9 @@
 				BC8F1D2A2C6D187E005D63CB /* GetPostsQuery.swift in Sources */,
 				BCCBDA792C78660000073E31 /* WaitingFreeLabel.swift in Sources */,
 				BC8F1D422C70C406005D63CB /* UploadFilesModel.swift in Sources */,
+				BC06E8572C7CE03400148785 /* InfoView.swift in Sources */,
 				BC097CCA2C7622160038A21C /* HashTagCollectionView.swift in Sources */,
-				BC06E8492C7C8B7700148785 /* NovelDetailViewContreoller.swift in Sources */,
+				BC06E8492C7C8B7700148785 /* NovelDetailViewController.swift in Sources */,
 				BC8F1CF12C6CB25A005D63CB /* APIRouter.swift in Sources */,
 				BC097C8A2C74E2020038A21C /* BaseViewController.swift in Sources */,
 				BC097C832C74E0F70038A21C /* EpisodeViewerViewModel.swift in Sources */,
@@ -709,6 +724,7 @@
 				BC8F1D3E2C70B999005D63CB /* WithDrawModel.swift in Sources */,
 				BC670AA02C7B0A90006FB171 /* RomanceSection.swift in Sources */,
 				BC8F1D3C2C70B14C005D63CB /* RefreshTokenModel.swift in Sources */,
+				BC06E8682C7DBAD100148785 /* CustomButton.swift in Sources */,
 				BC097C782C74C37E0038A21C /* UIView+Extension.swift in Sources */,
 				BC097C912C74E3590038A21C /* Resource.swift in Sources */,
 				BC8F1D342C6D2026005D63CB /* HashTagsQuery.swift in Sources */,

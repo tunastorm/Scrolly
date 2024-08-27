@@ -68,7 +68,7 @@ enum Resource {
             static let star = UIImage(systemName: "star")
             static let starFill = UIImage(systemName: "star.fill")?.withTintColor(.systemYellow, renderingMode: .alwaysTemplate)
             static let personCropCircle = UIImage(systemName: "person.crop.circle")
-//            static let chevronRight = UIImage(systemName: "chevron.right")
+            static let chevronLeft = UIImage(systemName: "chevron.left")
 //            static let heart = UIImage(systemName: "heart")
 //            static let cameraFill = UIImage(systemName: "camera.fill")
            

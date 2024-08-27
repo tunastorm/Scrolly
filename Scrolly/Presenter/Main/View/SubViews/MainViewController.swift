@@ -49,9 +49,18 @@ final class MainViewController: BaseViewController<MainView> {
         rootView?.delegate = self
     }
     
-    override func configNavigationbar(backgroundColor: UIColor, shadowImage: Bool, foregroundColor: UIColor, titlePosition: TitlePosition) {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.backBarButtonItem?.isHidden = true
+        navigationItem.backBarButtonItem?.isEnabled = false
+    }
+    
+    override func configNavigationbar(backgroundColor: UIColor, backButton: Bool = true, shadowImage: Bool, foregroundColor: UIColor = .black, barbuttonColor: UIColor = .black, titlePosition: TitlePosition = .center) {
         super.configNavigationbar(backgroundColor: .white, shadowImage: false, foregroundColor: Resource.Asset.CIColor.blue, titlePosition: .left)
         navigationItem.title = Resource.UIConstants.Text.appTitle
+        navigationController?.navigationBar.isHidden = false
+        navigationItem.rightBarButtonItem?.isEnabled = true
+        print(#function, "왜 안나오라ㅣㅇ너ㅣㅁㄴ럼나ㅣ러")
     }
     
     override func configInteraction() {
@@ -154,7 +163,7 @@ final class MainViewController: BaseViewController<MainView> {
                 case .romance: post = owner.romanceDataSource?.itemIdentifier(for: indexPath)
                 case .day: post = owner.dateDataSource?.itemIdentifier(for: indexPath)
                 }
-                let vc = NovelDetailViewContreoller(view: NovelDetailView(), viewModel: NovelDetailViewModel())
+                let vc = NovelDetailViewController(view: NovelDetailView(), viewModel: NovelDetailViewModel())
                 guard let post else {
                     return
                 }
