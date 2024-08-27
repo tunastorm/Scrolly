@@ -116,7 +116,7 @@ struct PostsModel: Decodable, Hashable {
         if check == [0] {
             return "완결 "
         } else if check == [1] {
-           return "매일 "
+           return "매일 연재"
         }
         
         dayList.enumerated().forEach { i, isUpload in
