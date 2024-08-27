@@ -66,7 +66,8 @@ final class APIClient {
     
     private static func setUploadFilesForm(_ multipartFormData: MultipartFormData, _ query: UploadFilesQuery)  {
         query.files.enumerated().forEach { idx, file in
-            let mimeType = idx == 0 ? "image/jpg" : "application/pdf"
+//            let mimeType = idx == 0 ? "application/pdf" : "image/jpg"
+            let mimeType = query.types[idx]
             let fileType = ".\(mimeType.split(separator: "/")[1])"
             multipartFormData.append(file, withName: "files", fileName: query.names[idx] + fileType, mimeType: mimeType)
         }

@@ -12,7 +12,7 @@ struct PostsModel: Decodable, Hashable {
     let postId: String
     let productId: String
     let title: String?
-    let price: String?
+    let price: Int?
     let content: String?
     let content1: String?
     let content2: String?
@@ -147,9 +147,7 @@ struct PostsModel: Decodable, Hashable {
         guard let raw = Int(content3 ?? "0"), let length = content3?.count else {
             return "0" + CountName.allCases[0].kr
         }
-        print(#function, "rawViewed: ", raw)
         let splited = raw.formatted().split(separator: ",")
-        print(#function, "splited: ", splited)
         guard var viewed = splited.first, raw >= 10000 else {
             return content3 ?? "0" + CountName.allCases[0].kr
         }

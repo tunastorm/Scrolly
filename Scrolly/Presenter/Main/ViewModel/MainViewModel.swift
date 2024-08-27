@@ -12,14 +12,14 @@ import RxCocoa
 
 final class MainViewModel: BaseViewModel, ViewModelProvider {
     
+    typealias NetworkResults = Observable<PrimitiveSequence<SingleTrait, Result<GetPostsModel, APIError>>.Element>
+    
+//    private var apiProvider: APIManagerProvide
+    
     var model: PostsModel? {
         get { return nil }
         set { }
     }
-    
-    typealias NetworkResults = Observable<PrimitiveSequence<SingleTrait, Result<GetPostsModel, APIError>>.Element>
-    
-    private let disposeBag = DisposeBag()
     
     private var recommandResults: [Int : NetworkResults] = [:]
     private var maleResults: [Int : PublishSubject<HashTagsQuery>] = [:]
@@ -37,10 +37,19 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
                                 dateDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
                                 recommandCellTap: PublishSubject<PostsModel>())
     
+//    init(apiProvider: APIManagerProvider, dummy: PostsModel? = nil) {
+//        self.apiProvider = apiProvider
+//    }
+//    
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+    
+    private let disposeBag = DisposeBag()
+    
     struct Input {
         let hashTagCellTap: ControlEvent<IndexPath>
         let srollViewPaging: PublishRelay<IndexPath>
-//        let recommandCellTap: ControlEvent<IndexPath>
     }
     
     struct Output {
@@ -60,10 +69,6 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
         
         callRecommandDatas()
         setAllSubjects()
-        
-//        input.recommandCellTap.bind(with: self) { owner, indexPath in
-//            owner
-//        }.disposed(by: disposeBag)
         
         PublishSubject.zip(recommandResults.sorted { $0.key < $1.key }.map{ $0.value })
             .bind(with: self) { owner, results in

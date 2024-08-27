@@ -29,7 +29,8 @@ final class MainView: BaseView {
     let femaleView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
     let fantasyView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
     let romanceView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
-    let dateView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
+    let dateView
+    = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
     
     lazy var collectionViewList = [ recommandView, maleView, femaleView, fantasyView, romanceView, dateView ]
     
@@ -42,6 +43,7 @@ final class MainView: BaseView {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let pageControl = UIPageControl()
+    
     var lastCell = IndexPath(item: 0, section: 0)
     
     override func configHierarchy() {

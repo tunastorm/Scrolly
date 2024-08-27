@@ -11,6 +11,7 @@ import Alamofire
 struct UploadFilesQuery: Encodable {
     
     let names: [String]
+    let types: [String]
     let files: [Data]
     
 }

@@ -20,5 +20,9 @@ final class HashTagLabel: UILabel {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func configText(text: String) {
+        self.text = text
+    }
+    
 }
 

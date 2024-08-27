@@ -64,21 +64,21 @@ final class NovelDetailView: BaseView {
         $0.layer.masksToBounds = true
         $0.layer.cornerRadius = 10
     }
+
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
+    
+    let collectionView = NovelDetailCollectionView(frame: .zero, collectionViewLayout: NovelDetailCollectionView.createLayout())
     
     override func configHierarchy() {
         addSubview(backgroundImageView)
-        addSubview(infoBackgroundView)
-        addSubview(backgroundBlurView)
+        addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        [infoBackgroundView, backgroundBlurView, coverImageView, waitingFreeImageView, waitingFreeLabel, titleLabel, creatorLabel, infoView, collectionView].forEach { view in
+            contentView.addSubview(view)
+        }
         addSubview(backButton)
         addSubview(profileButton)
-        addSubview(coverImageView)
-        addSubview(waitingFreeImageView)
-        addSubview(waitingFreeLabel)
-        addSubview(titleLabel)
-        addSubview(creatorLabel)
-        addSubview(infoView)
-        addSubview(hashTagView)
-        addSubview(descriptionTextView)
     }
     
     override func configLayout() {
@@ -93,6 +93,15 @@ final class NovelDetailView: BaseView {
             make.height.equalTo(30)
             make.top.equalToSuperview().inset(50)
             make.trailing.equalToSuperview().inset(10)
+        }
+        scrollView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(-150)
+            make.bottom.horizontalEdges.equalToSuperview()
+        }
+        contentView.snp.makeConstraints { make in
+            make.edges.equalTo(scrollView.contentLayoutGuide)
+            make.width.equalTo(scrollView.frameLayoutGuide)
+            make.height.equalTo(scrollView.frameLayoutGuide)
         }
         coverImageView.snp.makeConstraints { make in
             make.width.equalTo(150)
@@ -114,16 +123,16 @@ final class NovelDetailView: BaseView {
         titleLabel.snp.makeConstraints { make in
             make.height.equalTo(30)
             make.top.equalTo(coverImageView.snp.bottom).offset(20)
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
+            make.horizontalEdges.equalToSuperview().inset(20)
         }
         creatorLabel.snp.makeConstraints { make in
             make.height.equalTo(14)
             make.top.equalTo(titleLabel.snp.bottom).offset(6)
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
+            make.horizontalEdges.equalToSuperview().inset(20)
         }
         infoView.snp.makeConstraints { make in
             make.height.equalTo(14)
-            make.width.lessThanOrEqualTo(safeAreaLayoutGuide)
+            make.width.lessThanOrEqualToSuperview()
             make.top.equalTo(creatorLabel.snp.bottom).offset(6)
             make.centerX.equalToSuperview()
         }
@@ -133,25 +142,25 @@ final class NovelDetailView: BaseView {
             make.bottom.equalTo(infoView.snp.bottom)
         }
         backgroundBlurView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(-100)
-            make.top.horizontalEdges.equalToSuperview()
+            make.top.equalTo(self).offset(-100)
+            make.horizontalEdges.equalToSuperview()
             make.bottom.equalTo(infoView.snp.bottom)
         }
         infoBackgroundView.snp.makeConstraints { make in
             make.top.equalTo(coverImageView.snp.bottom)
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            make.horizontalEdges.equalToSuperview()
             make.bottom.equalTo(infoView.snp.bottom)
         }
-        hashTagView.snp.makeConstraints { make in
-            make.height.equalTo(40)
-            make.top.equalTo(infoView.snp.bottom).offset(20)
-            make.horizontalEdges.equalToSuperview().inset(20)
-        }
-        descriptionTextView.snp.makeConstraints { make in
-            make.height.equalTo(hashTagView.snp.width)
-            make.top.equalTo(hashTagView.snp.bottom).offset(10)
-            make.horizontalEdges.equalToSuperview().inset(20)
-        }
+//        hashTagView.snp.makeConstraints { make in
+//            make.height.equalTo(40)
+//            make.top.equalTo(infoView.snp.bottom).offset(20)
+//            make.horizontalEdges.equalToSuperview().inset(20)
+//        }
+//        descriptionTextView.snp.makeConstraints { make in
+//            make.height.equalTo(hashTagView.snp.width)
+//            make.top.equalTo(hashTagView.snp.bottom).offset(10)
+//            make.horizontalEdges.equalToSuperview().inset(20)
+//        }
     }
     
     override func configView() {
@@ -196,6 +205,7 @@ final class NovelDetailView: BaseView {
         titleLabel.text = post.title
         creatorLabel.text = post.creatorHashTag
         infoView.configData(model)
+       
     }
     
     @objc private func backButtonTapped() {

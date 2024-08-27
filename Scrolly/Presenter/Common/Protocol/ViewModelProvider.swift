@@ -9,8 +9,7 @@ import UIKit
 
 protocol ViewModelProvider {
     associatedtype Input
-    associatedtype Output
-    
+    associatedtype Output    
     var model: PostsModel? { get set }
     
     func transform(input: Input) -> Output?

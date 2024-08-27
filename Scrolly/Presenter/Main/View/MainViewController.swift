@@ -18,18 +18,18 @@ protocol MainViewDelegate {
 final class MainViewController: BaseViewController<MainView> {
     
     typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<collectionViewHeaderView>
-    typealias DataSource<T: MainSection> = UICollectionViewDiffableDataSource<T, PostsModel>
+    typealias NovelDataSource<T: MainSection> = UICollectionViewDiffableDataSource<T, PostsModel>
     
     private let disposeBag = DisposeBag()
     
     // MARK: - CollectionView DiffableDataSources
     private var filterDataSource: UICollectionViewDiffableDataSource<HashTagSection, HashTagSection.HashTag>?
-    private var recommandDataSource: DataSource<RecommandSection>?
-    private var maleDataSource: DataSource<MaleSection>?
-    private var femaleDataSource: DataSource<FemaleSection>?
-    private var fantasyDataSource: DataSource<FantasySection>?
-    private var romanceDataSource: DataSource<RomanceSection>?
-    private var dateDataSource: DataSource<DateSection>?
+    private var recommandDataSource: NovelDataSource<RecommandSection>?
+    private var maleDataSource: NovelDataSource<MaleSection>?
+    private var femaleDataSource: NovelDataSource<FemaleSection>?
+    private var fantasyDataSource: NovelDataSource<FantasySection>?
+    private var romanceDataSource: NovelDataSource<RomanceSection>?
+    private var dateDataSource: NovelDataSource<DateSection>?
 
     // MARK: - CellRegistrations
     private let bannerCellRegistration = UICollectionView.CellRegistration<BannerCollectionViewCell, PostsModel> { cell, indexPath, itemIdentifier in
@@ -152,16 +152,17 @@ final class MainViewController: BaseViewController<MainView> {
     }
     
     private func rxPushToDetailViewController(dataSource idx: Int, from collectionView: BaseCollectionViewController) {
+    
         collectionView.rx.itemSelected
             .bind(with: self) { owner, indexPath in
                 var post: PostsModel?
                 switch HashTagSection.HashTag.allCases[idx] {
-                case .recommand: post = owner.recommandDataSource?.itemIdentifier(for: indexPath)
-                case .male: post = owner.maleDataSource?.itemIdentifier(for: indexPath)
-                case .female: post = owner.femaleDataSource?.itemIdentifier(for: indexPath)
-                case .fantasy: post = owner.fantasyDataSource?.itemIdentifier(for: indexPath)
-                case .romance: post = owner.romanceDataSource?.itemIdentifier(for: indexPath)
-                case .day: post = owner.dateDataSource?.itemIdentifier(for: indexPath)
+                case .recommand: post = owner.recommandDataSource!.itemIdentifier(for: indexPath)
+                case .male: post = owner.maleDataSource!.itemIdentifier(for: indexPath)
+                case .female: post = owner.femaleDataSource!.itemIdentifier(for: indexPath)
+                case .fantasy: post = owner.fantasyDataSource!.itemIdentifier(for: indexPath)
+                case .romance: post = owner.romanceDataSource!.itemIdentifier(for: indexPath)
+                case .day: post = owner.dateDataSource!.itemIdentifier(for: indexPath)
                 }
                 let vc = NovelDetailViewController(view: NovelDetailView(), viewModel: NovelDetailViewModel())
                 guard let post else {

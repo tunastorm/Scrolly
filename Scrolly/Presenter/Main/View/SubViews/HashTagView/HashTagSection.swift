@@ -22,7 +22,7 @@ enum HashTagSection: Int, CaseIterable {
         var krValue: String {
             return switch self {
             case .recommand: "HOT 추천"
-            case .male: "남성인기"
+            case .male: "남성인기fasdfdsafasfasdfasfadsfdsafasdfsafsadfsa"
             case .female: "여성인기"
             case .fantasy: "판타지"
             case .romance: "로맨스"

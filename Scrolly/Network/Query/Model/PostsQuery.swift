@@ -11,6 +11,7 @@ struct PostsQuery: Encodable {
     
     let productId: String?
     let title: String?
+    let price: Int?
     let content: String?
     let content1: String?
     let content2: String?
@@ -22,7 +23,7 @@ struct PostsQuery: Encodable {
     
     enum CodingKeys: String, CodingKey {
         case productId = "product_id"
-        case title, content, content1, content2, content3, content4, content5, files
+        case title, price, content, content1, content2, content3, content4, content5, files
     }
     
 }

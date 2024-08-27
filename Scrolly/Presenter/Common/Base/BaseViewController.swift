@@ -19,9 +19,9 @@ class BaseViewController<View: BaseView>: UIViewController, UIViewControllerProv
     var viewModel: (any ViewModelProvider)?
     
     init(view: View, viewModel: (any ViewModelProvider)? = nil) {
+        super.init(nibName: nil, bundle: nil)
         self.rootView = view
         self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {

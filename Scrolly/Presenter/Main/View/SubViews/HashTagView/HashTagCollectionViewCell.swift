@@ -24,6 +24,7 @@ final class HashTagCollectionViewCell: BaseCollectionViewCell {
         $0.font = Resource.Asset.Font.system14
     }
     
+    //인트랜
     override func configHierarchy() {
         contentView.addSubview(hashTag)
     }
