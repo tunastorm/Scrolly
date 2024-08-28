@@ -39,6 +39,15 @@ enum DateSection: String, MainSection {
     var allCase: [Self] {
         return Self.allCases
     }
+    // 임시 구현
+    var query: HashTagsQuery {
+        return switch self {
+        case .banner, .popular, .newWaitingFree:
+            HashTagsQuery(next: nil, limit: "10", productId: APIConstants.ProductId.novelInfo, hashTag: APIConstants.SearchKeyword.romance)
+        case .recently:
+            HashTagsQuery(next: nil, limit: "10", productId: APIConstants.ProductId.novelEpisode, hashTag: APIConstants.SearchKeyword.romance)
+        }
+    }
     
     func convertData(_ section: DateSection, _ model: [PostsModel]) -> [PostsModel] {
         switch section {

@@ -11,6 +11,7 @@ protocol MainSection: CaseIterable, Hashable {
     var value: String { get }
     var header: String? { get }
     var allCase: [Self] { get }
+    var query: HashTagsQuery { get }
     
     func callConvertData<T: MainSection>(_ section: T, _ model: [PostsModel]) -> [PostsModel]
     

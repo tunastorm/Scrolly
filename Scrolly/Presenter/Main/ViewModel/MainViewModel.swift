@@ -12,7 +12,8 @@ import RxCocoa
 
 final class MainViewModel: BaseViewModel, ViewModelProvider {
     
-    typealias NetworkResults = Observable<PrimitiveSequence<SingleTrait, Result<GetPostsModel, APIError>>.Element>
+    typealias PostListResults = Observable<PrimitiveSequence<SingleTrait, Result<GetPostsModel, APIError>>.Element>
+    typealias PostResults = Observable<PrimitiveSequence<SingleTrait, Result<PostsModel, APIError>>.Element>
     
 //    private var apiProvider: APIManagerProvide
     
@@ -21,7 +22,7 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
         set { }
     }
     
-    private var recommandResults: [Int : NetworkResults] = [:]
+    private var recommandResults: [Int : PostListResults] = [:]
     private var maleResults: [Int : PublishSubject<HashTagsQuery>] = [:]
     private var femaleResults: [Int : PublishSubject<HashTagsQuery>] = [:]
     private var fantasyResults: [Int : PublishSubject<HashTagsQuery>] = [:]
@@ -36,14 +37,6 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
                                 romanceDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
                                 dateDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
                                 recommandCellTap: PublishSubject<PostsModel>())
-    
-//    init(apiProvider: APIManagerProvider, dummy: PostsModel? = nil) {
-//        self.apiProvider = apiProvider
-//    }
-//    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
     
     private let disposeBag = DisposeBag()
     
@@ -65,7 +58,7 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
     
     func transform(input: Input) -> Output? {
       
-        var novelInfoResults: [String : [NetworkResults]] = [:]
+        var novelInfoResults: [String : [PostListResults]] = [:]
         
         callRecommandDatas()
         setAllSubjects()
@@ -152,12 +145,32 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
     
     private func callDataRouter(_ indexPath: IndexPath) {
         switch HashTagSection.HashTag.allCases[indexPath.item] {
-        case .male: callMaleDatas()
-        case .female: callFemaleDatas()
-        case .fantasy: callFantasyDatas()
-        case .romance: callRomanceDatas()
-        case .day: callRecommandDatas() // 요일 별 뷰 구현 전까지 사용
-        default: break
+        case .male: callDatas(for: MaleSection.allCases)
+        case .female: callDatas(for: FemaleSection.allCases)
+        case .fantasy: callDatas(for: FantasySection.allCases)
+        case .romance: callDatas(for: RomanceSection.allCases)
+        case .day: callRecommandDatas()
+        default: return
+        }
+    }
+
+    private func callDatas<T:MainSection>(for sections: [T]) {
+        var results: [Int : PublishSubject<HashTagsQuery>]
+        switch sections {
+        case is [MaleSection]: results = maleResults
+        case is [FemaleSection]: results = femaleResults
+        case is [FantasySection]: results = fantasyResults
+        case is [RomanceSection]: results = romanceResults
+        case is [DateSection]: results = dateResults
+        default: return
+        }
+        
+        results.keys.forEach { key in
+            let query = sections[key].query
+            if let result = results[key] {
+                result.onNext(query)
+                result.onCompleted()
+            }
         }
     }
     
@@ -165,61 +178,54 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
         guard recommandResults.values.isEmpty else {
             return
         }
+        
         recommandResults[RecommandSection.banner.index] = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "\(Int.random(in: 10...20))", productId: APIConstants.ProductId.novelInfo))
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
         
         recommandResults[RecommandSection.popular.index] = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "20", productId: APIConstants.ProductId.novelInfo))
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
       
-        recommandResults[RecommandSection.recently.index] = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "20", productId: APIConstants.ProductId.novelEpisode) )
+
+        recommandResults[RecommandSection.recently.index] = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "50", productId: APIConstants.ProductId.novelEpisode))
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
-       
-        recommandResults[RecommandSection.newWaitingFree.index] = BehaviorSubject(value: HashTagsQuery(next: nil, limit: "6", productId:  APIConstants.ProductId.novelInfo, hashTag: APIConstants.SearchKeyword.waitingFree) )
+        
+        recommandResults[RecommandSection.newWaitingFree.index] = BehaviorSubject(value: RecommandSection.newWaitingFree.query)
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags($0)) }
     }
     
-    private func callMaleDatas() {
-        maleResults.keys.forEach { key in
-            let query = MaleSection.allCases[key].query
-            if let result = maleResults[key] {
-                result.onNext(query)
-                result.onCompleted()
-            }
-        }
-    }
-    
-    private func callFemaleDatas() {
-        femaleResults.keys.forEach { key in
-            let query = FemaleSection.allCases[key].query
-            if let result = femaleResults[key] {
-                result.onNext(query)
-                result.onCompleted()
-            }
-        }
-    }
-    
-    private func callFantasyDatas() {
-        fantasyResults.keys.forEach { key in
-            let query = FantasySection.allCases[key].query
-            if let result = fantasyResults[key] {
-                result.onNext(query)
-                result.onCompleted()
-            }
-        }
-    }
-    
-    private func callRomanceDatas() {
-        romanceResults.keys.forEach { key in
-            let query = RomanceSection.allCases[key].query
-            if let result = romanceResults[key] {
-                result.onNext(query)
-                result.onCompleted()
-            }
-        }
-    }
+//    
+//    private func callFemaleDatas() {
+//        femaleResults.keys.forEach { key in
+//            let query = FemaleSection.allCases[key].query
+//            if let result = femaleResults[key] {
+//                result.onNext(query)
+//                result.onCompleted()
+//            }
+//        }
+//    }
+//    
+//    private func callFantasyDatas() {
+//        fantasyResults.keys.forEach { key in
+//            let query = FantasySection.allCases[key].query
+//            if let result = fantasyResults[key] {
+//                result.onNext(query)
+//                result.onCompleted()
+//            }
+//        }
+//    }
+//    
+//    private func callRomanceDatas() {
+//        romanceResults.keys.forEach { key in
+//            let query = RomanceSection.allCases[key].query
+//            if let result = romanceResults[key] {
+//                result.onNext(query)
+//                result.onCompleted()
+//            }
+//        }
+//    }
     
     private func callDateDatas() {
-
+            
     }
     
 }

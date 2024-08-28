@@ -154,24 +154,26 @@ final class MainViewController: BaseViewController<MainView> {
     private func rxPushToDetailViewController(dataSource idx: Int, from collectionView: BaseCollectionViewController) {
     
         collectionView.rx.itemSelected
-            .bind(with: self) { owner, indexPath in
-                var post: PostsModel?
-                switch HashTagSection.HashTag.allCases[idx] {
-                case .recommand: post = owner.recommandDataSource!.itemIdentifier(for: indexPath)
-                case .male: post = owner.maleDataSource!.itemIdentifier(for: indexPath)
-                case .female: post = owner.femaleDataSource!.itemIdentifier(for: indexPath)
-                case .fantasy: post = owner.fantasyDataSource!.itemIdentifier(for: indexPath)
-                case .romance: post = owner.romanceDataSource!.itemIdentifier(for: indexPath)
-                case .day: post = owner.dateDataSource!.itemIdentifier(for: indexPath)
-                }
-                let vc = NovelDetailViewController(view: NovelDetailView(), viewModel: NovelDetailViewModel())
-                guard let post else {
-                    return
-                }
-                vc.viewModel?.model = post
+            .bind(with: self) { [weak self] owner, indexPath in
+                let dataSource = HashTagSection.HashTag.allCases[idx]
+                let model = self?.getModel(from: dataSource, indexPath)
+                let vc = NovelDetailViewController(view: NovelDetailView(), viewModel: NovelDetailViewModel(detailInfo: model))
                 owner.pushAfterView(view: vc, backButton: true, animated: true)
             }
             .disposed(by: disposeBag)
+    }
+    
+    private func getModel(from dataSource: HashTagSection.HashTag, _ indexPath: IndexPath) -> PostsModel? {
+        var post: PostsModel?
+        switch dataSource {
+        case .recommand: post = recommandDataSource!.itemIdentifier(for: indexPath)
+        case .male: post = maleDataSource!.itemIdentifier(for: indexPath)
+        case .female: post = femaleDataSource!.itemIdentifier(for: indexPath)
+        case .fantasy: post = fantasyDataSource!.itemIdentifier(for: indexPath)
+        case .romance: post = romanceDataSource!.itemIdentifier(for: indexPath)
+        case .day: post = dateDataSource!.itemIdentifier(for: indexPath)
+        }
+        return post
     }
     
     //MARK: - 해시태그 필터 콜렉션뷰

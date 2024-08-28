@@ -38,6 +38,14 @@ enum RecommandSection: String, MainSection {
         return Self.allCases
     }
     
+    var query: HashTagsQuery {
+        switch self {
+        case .newWaitingFree:
+            HashTagsQuery(next: nil, limit: "6", productId:  APIConstants.ProductId.novelInfo, hashTag: APIConstants.SearchKeyword.waitingFree)
+        default: HashTagsQuery(next: nil, limit: "1", productId: "----------------------", hashTag: APIConstants.SearchKeyword.waitingFree)
+        }
+    }
+    
     func convertData(_ section: RecommandSection, _ model: [PostsModel]) -> [PostsModel] {
         print(#function, section)
         switch section {

@@ -11,6 +11,8 @@ import RxCocoa
 
 protocol NovelDetailViewDelegate {
     
+    func getModel() -> PostsModel?
+    
     func popToMainViewController()
     
     func pushToProfileViewController()
@@ -20,6 +22,8 @@ protocol NovelDetailViewDelegate {
 final class NovelDetailViewController: BaseViewController<NovelDetailView> {
     
     typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<collectionViewHeaderView>
+    
+    private let disposeBag = DisposeBag()
     
     private var detailDataSource: UICollectionViewDiffableDataSource<NovelDetailSection, PostsModel>?
     
@@ -52,10 +56,19 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
     }
 
     override func bindData() {
-//        let input = NovelDetailViewModel.Input()
-//        guard let output = viewModel?.transform(input: input) else {
-//            return
-//        }
+        guard let detailViewModel = viewModel as? NovelDetailViewModel, let rootView else {
+            return
+        }
+        let input = NovelDetailViewModel.Input()
+        guard let output = detailViewModel.transform(input: input) else {
+            return
+        }
+        output.fetchedModel
+            .bind(with: self) { owner, model in
+                print(#function, "다운로드한 model: ", model)
+                owner.rootView?.configDataAfterNetworking(model: model)
+            }
+            .disposed(by: disposeBag)
     }
     
     private func collectionViewHeaderRegestration(_ sections: [NovelDetailSection], _ noDataSection: NovelDetailSection?) -> HeaderRegistration {
@@ -89,7 +102,6 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
              }
          })
         
-        
      }
     
     private func updateSnapShot(_ models: [PostsModel], _ section: NovelDetailSection) {
@@ -102,6 +114,10 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
 }
 
 extension NovelDetailViewController: NovelDetailViewDelegate {
+    
+    func getModel() -> PostsModel? {
+        return viewModel?.model
+    }
     
     func popToMainViewController() {
         popBeforeView(animated: true)

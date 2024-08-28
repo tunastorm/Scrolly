@@ -16,6 +16,7 @@ final class NovelDetailView: BaseView {
     
     private let backgroundImageView = UIImageView().then {
         $0.contentMode = .scaleToFill
+        $0.backgroundColor = Resource.Asset.CIColor.lightGray
     }
     
     private let backgroundBlurView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
@@ -28,6 +29,7 @@ final class NovelDetailView: BaseView {
     }
     
     private let coverImageView = UIImageView().then {
+        $0.backgroundColor = Resource.Asset.CIColor.lightGray
         $0.contentMode = .scaleAspectFill
         $0.layer.masksToBounds = true
         $0.layer.cornerRadius = 10
@@ -74,7 +76,7 @@ final class NovelDetailView: BaseView {
         addSubview(backgroundImageView)
         addSubview(scrollView)
         scrollView.addSubview(contentView)
-        [infoBackgroundView, backgroundBlurView, coverImageView, waitingFreeImageView, waitingFreeLabel, titleLabel, creatorLabel, infoView, collectionView].forEach { view in
+        [infoBackgroundView, backgroundBlurView, coverImageView, waitingFreeImageView, waitingFreeLabel, titleLabel, creatorLabel, infoView, collectionView ].forEach { view in
             contentView.addSubview(view)
         }
         addSubview(backButton)
@@ -150,27 +152,21 @@ final class NovelDetailView: BaseView {
             make.top.equalTo(coverImageView.snp.bottom)
             make.horizontalEdges.equalToSuperview()
             make.bottom.equalTo(infoView.snp.bottom)
+            make.bottom.equalTo(infoView.snp.bottom)
         }
-//        hashTagView.snp.makeConstraints { make in
-//            make.height.equalTo(40)
-//            make.top.equalTo(infoView.snp.bottom).offset(20)
-//            make.horizontalEdges.equalToSuperview().inset(20)
-//        }
-//        descriptionTextView.snp.makeConstraints { make in
-//            make.height.equalTo(hashTagView.snp.width)
-//            make.top.equalTo(hashTagView.snp.bottom).offset(10)
-//            make.horizontalEdges.equalToSuperview().inset(20)
-//        }
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(infoView.snp.bottom)
+            make.bottom.horizontalEdges.equalToSuperview()
+        }
     }
     
     override func configView() {
         super.configView()
-        backgroundImageView.backgroundColor = .blue
-        coverImageView.backgroundColor = .gray
         let backbuttonTap = UITapGestureRecognizer(target: self, action: #selector(backButtonTapped))
         backButton.addGestureRecognizer(backbuttonTap)
         let profileButtonTap = UITapGestureRecognizer(target: self, action: #selector(profileButtonTapped))
         profileButton.addGestureRecognizer(profileButtonTap)
+        collectionView.backgroundColor = .lightGray
     }
     
     override func configInteractionWithViewController<T>(viewController: T) where T : UIViewController {
@@ -202,10 +198,21 @@ final class NovelDetailView: BaseView {
                 }
             }
         }
+        
+        guard post.productId == APIConstants.ProductId.novelInfo else {
+           return
+        }
+        
         titleLabel.text = post.title
         creatorLabel.text = post.creatorHashTag
         infoView.configData(model)
-       
+    }
+    
+    func configDataAfterNetworking(model: PostsModel) {
+        print(#function, "다운로드한 모델로 처리")
+        titleLabel.text = model.title
+        creatorLabel.text = model.creatorHashTag
+        infoView.configData(model)
     }
     
     @objc private func backButtonTapped() {
