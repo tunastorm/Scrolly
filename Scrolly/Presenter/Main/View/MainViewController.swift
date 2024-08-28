@@ -58,9 +58,8 @@ final class MainViewController: BaseViewController<MainView> {
     override func configNavigationbar(backgroundColor: UIColor, backButton: Bool = true, shadowImage: Bool, foregroundColor: UIColor = .black, barbuttonColor: UIColor = .black, titlePosition: TitlePosition = .center) {
         super.configNavigationbar(backgroundColor: .white, shadowImage: false, foregroundColor: Resource.Asset.CIColor.blue, titlePosition: .left)
         navigationItem.title = Resource.UIConstants.Text.appTitle
-        navigationController?.navigationBar.isHidden = false
         navigationItem.rightBarButtonItem?.isEnabled = true
-        print(#function, "왜 안나오라ㅣㅇ너ㅣㅁㄴ럼나ㅣ러")
+        navigationController?.navigationBar.isHidden = false
     }
     
     override func configInteraction() {
@@ -145,10 +144,6 @@ final class MainViewController: BaseViewController<MainView> {
         }
         configDataSource(sections: sections, noDataSection: noDataSection)
         updateSnapShot(sections: sections, dataDict)
-    }
-    
-    private func showToastToView(_ error: APIError) {
-        rootView?.makeToast(error.message, duration: 3.0, position: .bottom)
     }
     
     private func rxPushToDetailViewController(dataSource idx: Int, from collectionView: BaseCollectionViewController) {

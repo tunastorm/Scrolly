@@ -96,6 +96,10 @@ class BaseViewController<View: BaseView>: UIViewController, UIViewControllerProv
         rootView?.configData(model)
     }
     
+    func showToastToView(_ error: APIError) {
+        rootView?.makeToast(error.message, duration: 3.0, position: .bottom)
+    }
+    
     @objc private func searchButtonClicked(_ sender: UIBarButtonItem) {
         print(#function, "클릭됨")
     }

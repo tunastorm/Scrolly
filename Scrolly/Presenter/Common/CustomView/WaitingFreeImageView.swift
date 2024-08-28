@@ -33,5 +33,9 @@ final class WaitingFreeImageView: BaseView {
         layer.masksToBounds = true
         layer.cornerRadius = 4
     }
+    
+    func clipAllEdges() {
+        layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner]
+    }
 
 }

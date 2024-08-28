@@ -11,6 +11,8 @@ import RxCocoa
 
 final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
     
+    typealias GetPostsModelResult = APIManager.ModelResult<GetPostsModel>
+    
     private let disposeBag = DisposeBag()
     
     private var detailInfo: PostsModel?
@@ -24,17 +26,18 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
         super.init()
         self.detailInfo = detailInfo
         if detailInfo?.productId == APIConstants.ProductId.novelEpisode, let postId = detailInfo?.content5 {
-            print("소설 정보 요청")
             callNovelInfoFromEpisode(postId: postId)
         }
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     private let output = Output(fetchedModel: PublishSubject<PostsModel>(),
                                 description: PublishSubject<PostsModel>(),
-                                hashtag: PublishSubject<PostsModel>())
+                                hashtag: PublishSubject<PostsModel>(),
+                                episodes: PublishSubject<GetPostsModelResult>())
 
     struct Input {
         
@@ -44,6 +47,7 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
         var fetchedModel: PublishSubject<PostsModel>
         let description: PublishSubject<PostsModel>
         let hashtag: PublishSubject<PostsModel>
+        let episodes: PublishSubject<GetPostsModelResult>
     }
     
     func transform(input: Input) -> Output? {
@@ -51,21 +55,31 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
             return nil
         }
         
-        let novelInfo = BehaviorSubject(value: model)
-        let episoeds = BehaviorSubject(value: "")
-            .map { _ in
-                GetPostsQuery(next: nil, limit: "20", productId: APIConstants.ProductId.novelEpisode)
+        let novelInfo = Observable.just(model)
+       
+        let episoeds = BehaviorSubject(value: model.hashTags.first)
+            .map { HashTagsQuery(next: nil, limit: "50", productId: APIConstants.ProductId.novelEpisode, hashTag: $0) }
+            .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags($0)) }
+        
+        BehaviorSubject.zip(novelInfo, episoeds)
+            .bind(with: self) { owner, results in
+                let episodes = results.1
+                owner.output.description.onNext(results.0)
+                owner.output.description.onCompleted()
+                owner.output.hashtag.onNext(results.0)
+                owner.output.hashtag.onCompleted()
+                owner.output.episodes.onNext(results.1)
+                owner.output.episodes.onCompleted()
             }
+            .disposed(by: disposeBag)
         
         return output
     }
     
     private func callNovelInfoFromEpisode(postId: String) {
-        var result: APIManager.ModelResult<PostsModel>
         BehaviorSubject(value: postId)
             .flatMap { _ in APIManager.shared.callRequestAPI(model: PostsModel.self, router: .queryOnePosts(postId)) }
             .bind(with: self) { owner, result in
-                var data: PostsModel?
                 switch result {
                 case .success(let model):
                     self.model = model

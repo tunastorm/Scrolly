@@ -6,9 +6,12 @@
 //
 
 import Foundation
+import Differentiator
 
-struct PostsModel: Decodable, Hashable {
-    let uuid = UUID()
+struct PostsModel: Decodable, Hashable, IdentifiableType {
+
+    let id = UUID()
+    let identity = UUID()
     let postId: String
     let productId: String
     let title: String?

@@ -32,8 +32,8 @@ final class NovelDetailCollectionView: BaseCollectionViewController {
 
     private static func createSection(for section: NovelDetailSection) -> NSCollectionLayoutSection {
         switch section {
-        case .description,.hashTag:
-            return createSingleColumnSection()
+//        case .description,.hashTag:
+//            return createSingleColumnSection()
         case .episode:
             return createTableViewSection()
         }
@@ -53,7 +53,7 @@ final class NovelDetailCollectionView: BaseCollectionViewController {
     private static func createTableViewSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         group.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
         let section = NSCollectionLayoutSection(group: group)
