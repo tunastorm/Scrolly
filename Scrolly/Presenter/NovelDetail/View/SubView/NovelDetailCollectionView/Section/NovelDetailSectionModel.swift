@@ -14,7 +14,7 @@ import UIKit
 struct NovelDetailSectionModel {
     
     var identity = UUID()
-    var header: Item 
+    var header: UICollectionReusableView
     var items: [Item]
     
 }

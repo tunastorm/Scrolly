@@ -72,7 +72,7 @@ final class NovelDetailView: BaseView {
     private let continueBar = UIView().then {
         $0.backgroundColor = Resource.Asset.CIColor.blue
         $0.layer.masksToBounds = true
-        $0.layer.cornerRadius = 10
+        $0.layer.cornerRadius = 20
         $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
     
@@ -107,19 +107,20 @@ final class NovelDetailView: BaseView {
             make.trailing.equalToSuperview().inset(10)
         }
         continueBar.snp.makeConstraints { make in
-            make.height.equalTo(60)
+            make.height.equalTo(80)
             make.horizontalEdges.equalToSuperview()
             make.bottom.equalToSuperview()
         }
         collectionView.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.bottom.horizontalEdges.equalToSuperview()
+            make.horizontalEdges.equalToSuperview()
+            make.bottom.equalTo(continueBar.snp.top).offset(6)
         }
     }
     
     override func configView() {
         super.configView()
-        collectionView.backgroundColor = .red
+        collectionView.bounces = false
         let backbuttonTap = UITapGestureRecognizer(target: self, action: #selector(backButtonTapped))
         backButton.addGestureRecognizer(backbuttonTap)
         let profileButtonTap = UITapGestureRecognizer(target: self, action: #selector(profileButtonTapped))

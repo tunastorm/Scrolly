@@ -10,7 +10,7 @@ import Kingfisher
 import SnapKit
 import Then
 
-final class EpsisodeHeaderView: BaseCollectionResuableView {
+final class InfoCell: BaseCollectionViewCell {
     
     private let backgroundImageView = UIImageView().then {
         $0.contentMode = .scaleToFill
@@ -56,7 +56,7 @@ final class EpsisodeHeaderView: BaseCollectionResuableView {
     
     override func configHierarchy() {
         [backgroundImageView,infoBackgroundView, backgroundBlurView, coverImageView, waitingFreeImageView, waitingFreeLabel, titleLabel, creatorLabel, infoView].forEach {
-            addSubview($0)
+            contentView.addSubview($0)
         }
     }
     
@@ -96,12 +96,12 @@ final class EpsisodeHeaderView: BaseCollectionResuableView {
             make.bottom.equalToSuperview()
         }
         backgroundImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+            make.top.equalToSuperview().offset(-100)
             make.horizontalEdges.equalToSuperview()
             make.bottom.equalTo(infoView.snp.bottom)
         }
         backgroundBlurView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+            make.top.equalToSuperview().offset(-100)
             make.horizontalEdges.equalToSuperview()
             make.bottom.equalTo(infoView.snp.bottom)
         }
@@ -114,10 +114,10 @@ final class EpsisodeHeaderView: BaseCollectionResuableView {
     }
     
     override func configView() {
-        
+        isUserInteractionEnabled = false
     }
     
-    func configData(model: PostsModel) {
+    func configCell(_ model: PostsModel) {
         if let file = model.files.first, let url = URL(string: APIConstants.URI + file) {
             KingfisherManager.shared.setHeaders()
             backgroundImageView.kf.setImage(with: url) { [weak self] result in

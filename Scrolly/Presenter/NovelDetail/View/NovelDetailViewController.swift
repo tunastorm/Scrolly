@@ -23,38 +23,44 @@ protocol NovelDetailViewDelegate {
     
 final class NovelDetailViewController: BaseViewController<NovelDetailView> {
 
-    typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<EpsisodeHeaderView>
+    typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<CollectionViewHeaderView>
+    typealias CellRegistration<T: BaseCollectionViewCell> = UICollectionView.CellRegistration<T, PostsModel>
     
     private let disposeBag = DisposeBag()
     
-    private let descriptionCellRegistration = UICollectionView.CellRegistration<DescriptionCell, PostsModel> { cell, indexPath, itemIdentifier in
-        cell.configCell(itemIdentifier) 
-    }
-    
-    private let hashTagCellRegistration = UICollectionView.CellRegistration<HashTagListCell, PostsModel> { cell, indexPath, itemIdentifier in
+    private let descriptionCellRegistration = CellRegistration<DescriptionCell> { cell, indexPath, itemIdentifier in
         cell.configCell(itemIdentifier)
     }
     
-    private let episodeCellRegistration = UICollectionView.CellRegistration<EpisodeCell, PostsModel> { cell, indexPath, itemIdentifier in
+    private let infoCellRegistration = CellRegistration<InfoCell> { cell, indexPath, itemIdentifier in
         cell.configCell(itemIdentifier)
     }
     
-    private var headerRegistration: UICollectionView.SupplementaryRegistration<EpsisodeHeaderView>?
+    private let episodeCellRegistration = CellRegistration<EpisodeCell> { cell, indexPath, itemIdentifier in
+        cell.configCell(itemIdentifier)
+    }
+    
+    private var headerRegistration: HeaderRegistration?
    
     private func collectionViewHeaderRegestration(_ sections: [NovelDetailSectionModel]) -> HeaderRegistration {
-        UICollectionView.SupplementaryRegistration<EpsisodeHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) {
+        HeaderRegistration(elementKind: UICollectionView.elementKindSectionHeader) {
             (supplementaryView, string, indexPath) in
-            let model = sections[indexPath.section].header
-            supplementaryView.configData(model: model)
+          
         }
     }
 
     lazy var detailDataSource = RxCollectionViewSectionedAnimatedDataSource<NovelDetailSectionModel> (
         configureCell: { [weak self] dataSource, collectionView, indexPath, item in
-            guard let cellRegistration = self?.episodeCellRegistration else {
-                return UICollectionViewCell()
+            let section = NovelDetailSection.allCases[indexPath.section]
+            
+            if section == .info, let cellRegistration = self?.infoCellRegistration {
+                return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: item)
             }
-            return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: item)
+            
+            if section == .episode, let cellRegistration = self?.episodeCellRegistration {
+                return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: item)
+            }
+            return UICollectionViewCell()
         }, configureSupplementaryView: { [weak self] dataSource, collectionView, kind, indexPath in
             guard let headerRegistration = self?.headerRegistration else {
                 return UICollectionReusableView()
@@ -83,17 +89,23 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
     
         PublishSubject<[NovelDetailSectionModel]>
             .zip(output.fetchedModel, output.episodes) { [weak self] novel, episodes in
+                let headerView = CollectionViewHeaderView()
+                var sectionList = [
+                    NovelDetailSectionModel(header: headerView, items: []),
+                    NovelDetailSectionModel(header: headerView, items: [])
+                ]
                 switch episodes {
                 case .success(let model):
                     guard let data = self?.sortingEpiosdes(list: model.data) else {
-                        return [NovelDetailSectionModel(header: novel, items: [])]
+                        return sectionList
                     }
-                    let sectionList = [NovelDetailSectionModel(header: novel, items: data)]
                     self?.headerRegistration = self?.collectionViewHeaderRegestration(sectionList)
+                    sectionList[0].items = [novel]
+                    sectionList[1].items = data
                     return sectionList
                 case .failure(let error):
                     self?.showToastToView(error)
-                    return [NovelDetailSectionModel(header: novel, items: [])]
+                    return sectionList
                 }
             }
             .bind(to: rootView.collectionView.rx.items(dataSource: detailDataSource))

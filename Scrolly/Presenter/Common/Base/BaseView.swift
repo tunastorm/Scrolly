@@ -31,6 +31,7 @@ class BaseView: UIView {
     }
     
     func configView() {
+        
         self.backgroundColor = Resource.Asset.CIColor.white
     }
     
