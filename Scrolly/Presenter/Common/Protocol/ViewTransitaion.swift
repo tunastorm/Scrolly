@@ -39,6 +39,7 @@ extension UIViewController: ViewTransition {
     
     func navigationPresentAfterView<T: UIViewControllerProvider>(view: T, style: UIModalPresentationStyle, animated: Bool) {
         let nav = UINavigationController(rootViewController: view)
+        nav.navigationItem.hidesBackButton = false
         nav.modalPresentationStyle = style
         present(nav, animated: animated)
     }

@@ -10,7 +10,7 @@ import PDFKit
 import SnapKit
 import Then
 
-final class EpisodeViewerView: BaseView {
+final class EpisodeViewerView: BaseView, PDFViewDelegate {
     
     private let pdfView = {
         let view = PDFView()
@@ -24,11 +24,12 @@ final class EpisodeViewerView: BaseView {
         return view
     }()
     
-    private func configureHierarchy() {
+    override func configHierarchy() {
         addSubview(pdfView)
     }
     
-    private func configureLayout() {
+    
+    override func configLayout() {
         pdfView.snp.makeConstraints { make in
             make.verticalEdges.equalToSuperview()
             make.left.equalToSuperview().offset(-120)
@@ -36,20 +37,39 @@ final class EpisodeViewerView: BaseView {
         }
     }
     
-    private func configureView() {
-       
+    override func configView() {
+        super.configView()
     }
     
     override func configInteractionWithViewController<T>(viewController: T) where T : UIViewController {
         guard let vc = viewController as? EpisodeViewerViewController else {
             return
         }
-        pdfView.delegate = vc
+        
     }
     
     func configPDFView(_ document: PDFDocument) {
-        print("pageCount: ", document.pageCount)
+        pdfView.delegate = self
         pdfView.document = document
+        let test = pdfView.onScrollOffsetChange { scrollView in
+            print(#function, "움직이니?")
+        }
     }
     
 }
+
+
+extension EpisodeViewerViewController: PDFDocumentDelegate {
+    
+    func documentDidEndPageFind(_ notification: Notification) {
+
+    }
+   
+}
+
+extension EpisodeViewerViewController: PDFViewDelegate {
+    
+
+
+}
+

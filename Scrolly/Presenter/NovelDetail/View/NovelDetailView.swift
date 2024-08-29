@@ -75,7 +75,7 @@ final class NovelDetailView: BaseView {
         $0.layer.cornerRadius = 10
         $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
-
+    
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
@@ -92,9 +92,9 @@ final class NovelDetailView: BaseView {
         [infoBackgroundView, backgroundBlurView, coverImageView, waitingFreeImageView, waitingFreeLabel, titleLabel, creatorLabel, infoView].forEach {
             topView.addSubview($0)
         }
-//        [infoBackgroundView, backgroundBlurView, coverImageView, waitingFreeImageView, waitingFreeLabel, titleLabel, creatorLabel, infoView, hashTagView, collectionView ].forEach { view in
-//            contentView.addSubview(view)
-//        }
+        //        [infoBackgroundView, backgroundBlurView, coverImageView, waitingFreeImageView, waitingFreeLabel, titleLabel, creatorLabel, infoView, hashTagView, collectionView ].forEach { view in
+        //            contentView.addSubview(view)
+        //        }
         addSubview(collectionView)
         addSubview(continueBar)
         addSubview(backButton)
@@ -173,21 +173,15 @@ final class NovelDetailView: BaseView {
             make.bottom.equalTo(infoView.snp.bottom)
             make.bottom.equalTo(infoView.snp.bottom)
         }
-//        hashTagView.snp.makeConstraints { make in
-//            make.height.equalTo(120)
-//            make.top.equalTo(infoView.snp.bottom).offset(10)
-//            make.horizontalEdges.equalToSuperview().inset(10)
-//        }
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(topView.snp.bottom).offset(10)
             make.bottom.horizontalEdges.equalToSuperview()
         }
-       
+        
     }
     
     override func configView() {
         super.configView()
-        scrollView.isScrollEnabled = true
         let backbuttonTap = UITapGestureRecognizer(target: self, action: #selector(backButtonTapped))
         backButton.addGestureRecognizer(backbuttonTap)
         let profileButtonTap = UITapGestureRecognizer(target: self, action: #selector(profileButtonTapped))
@@ -225,7 +219,7 @@ final class NovelDetailView: BaseView {
         }
         
         guard post.productId == APIConstants.ProductId.novelInfo else {
-           return
+            return
         }
         titleLabel.text = post.title
         creatorLabel.text = post.creatorHashTag
@@ -245,7 +239,7 @@ final class NovelDetailView: BaseView {
     @objc private func profileButtonTapped() {
         delegate?.pushToProfileViewController()
     }
-    
+}
 //    func setScrollview() {
 //        // 스크롤뷰 기본 설정 - 충분한 높이로 임의로 설정
 //        scrollView.contentSize = CGSize(width: scrollView.frame.width, height: 1200)
@@ -269,8 +263,6 @@ final class NovelDetailView: BaseView {
 //                return cell
 //            }
 //    }
-    
-}
 
 extension NovelDetailView: UIScrollViewDelegate {
     

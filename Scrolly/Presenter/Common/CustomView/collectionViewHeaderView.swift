@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class collectionViewHeaderView: BaseCollectionResuableView {
+final class CollectionViewHeaderView: BaseCollectionResuableView {
     
     let titleLabel = UILabel().then {
         $0.textAlignment = .left

@@ -23,7 +23,7 @@ protocol NovelDetailViewDelegate {
     
 final class NovelDetailViewController: BaseViewController<NovelDetailView> {
 
-    typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<collectionViewHeaderView>
+    typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<CollectionViewHeaderView>
     
     private let disposeBag = DisposeBag()
     
@@ -42,7 +42,7 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
     }
     
     private func collectionViewHeaderRegestration(_ sections: [NovelDetailSectionModel]) -> HeaderRegistration {
-        UICollectionView.SupplementaryRegistration<collectionViewHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) {
+        UICollectionView.SupplementaryRegistration<CollectionViewHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) {
             (supplementaryView, string, indexPath) in
             supplementaryView.titleLabel.text = sections[indexPath.section].header
         }
@@ -54,12 +54,14 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
                 return UICollectionViewCell()
             }
             return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: item)
-        }, configureSupplementaryView: { [weak self] dataSource, collectionView, title, indexPath in
-            guard let headerRegistration = self?.collectionViewHeaderRegestration(dataSource.sectionModels) else {
-                return UIView() as! UICollectionReusableView
-            }
-            return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: indexPath)
-        })
+       }//, configureSupplementaryView: { [weak self] dataSource, collectionView, title, indexPath in
+//            guard let headerRegistration = self?.collectionViewHeaderRegestration(dataSource.sectionModels) else {
+//                return UIView() as! UICollectionReusableView
+//            }
+//            print(#function,  "하이")
+//            return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: indexPath)
+//        }
+       )
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,10 +70,6 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
         navigationItem.backBarButtonItem?.isHidden = true
         navigationItem.backBarButtonItem?.isEnabled = false
         navigationItem.rightBarButtonItem?.isEnabled = false
-    }
-    
-    override func configInteraction() {
-        
     }
 
     override func bindData() {
@@ -147,46 +145,6 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
             return false
         }
     }
-    
-    private func collectionViewHeaderRegestration(_ sections: [NovelDetailSection], _ noDataSection: NovelDetailSection?) -> HeaderRegistration {
-        UICollectionView.SupplementaryRegistration<collectionViewHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) {
-            (supplementaryView, string, indexPath) in
-            if let noDataSection, sections[indexPath.section] == noDataSection {
-                return
-            }
-            supplementaryView.titleLabel.text = sections[indexPath.section].header
-        }
-    }
-    
-//    private func configDataSource(_ sections: [NovelDetailSection]) {
-//        guard let collectionView = rootView?.collectionView else {
-//            return
-//        }
-//        
-//        detailDataSource = UICollectionViewDiffableDataSource<NovelDetailSection, PostsModel>(collectionView: collectionView, cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
-//             guard let descriptionCellRegistration = self?.descriptionCellRegistration, 
-//                   let hashTagCellRegistration = self?.hashTagCellRegistration,
-//                   let episodeCellRegistration = self?.episodeCellRegistration else {
-//                 return UICollectionViewCell()
-//             }
-//             switch sections[indexPath.section] {
-////             case .description:
-////                 return collectionView.dequeueConfiguredReusableCell(using: descriptionCellRegistration , for: indexPath, item: itemIdentifier)
-////             case .hashTag:
-////                 return collectionView.dequeueConfiguredReusableCell(using: hashTagCellRegistration, for: indexPath, item: itemIdentifier)
-//             case .episode:
-//                 return collectionView.dequeueConfiguredReusableCell(using: episodeCellRegistration, for: indexPath, item: itemIdentifier)
-//             }
-//         })
-//        
-//     }
-//    
-//    private func updateSnapShot(_ models: [PostsModel], _ section: NovelDetailSection) {
-//        var snapShot = NSDiffableDataSourceSnapshot<NovelDetailSection, PostsModel>()
-//        snapShot.appendSections(NovelDetailSection.allCases)
-//        snapShot.appendItems(models, toSection: section)
-//        detailDataSource?.apply(snapShot)
-//    }
 
 }
 

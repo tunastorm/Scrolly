@@ -39,7 +39,7 @@ enum DateSection: String, MainSection {
     var allCase: [Self] {
         return Self.allCases
     }
-    // 임시 구현
+
     var query: HashTagsQuery {
         return switch self {
         case .banner, .popular, .newWaitingFree:

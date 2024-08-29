@@ -70,13 +70,14 @@ enum Resource {
             static let personCropCircle = UIImage(systemName: "person.crop.circle")
             static let chevronLeft = UIImage(systemName: "chevron.left")
             static let arrowDownToLine = UIImage(systemName: "arrow.down.to.line")
+            static let xmark = UIImage(systemName: "xmark")
 //            static let heart = UIImage(systemName: "heart")
 //            static let cameraFill = UIImage(systemName: "camera.fill")
            
 //            static let timerSquare = UIImage(systemName: "timer.square")
            
 //            static let clock = UIImage(systemName: "clock")
-//            static let xmark = UIImage(systemName: "xmark")
+
 //            static let person = UIImage(systemName: "person")
 //            static let networkSlash = UIImage(systemName: "network.slash")
 //            static let wifiExclamationmark = UIImage(systemName: "wifi.exclamationmark")?.withTintColor(Resource.Asset.CIColor.white, renderingMode: .alwaysOriginal)

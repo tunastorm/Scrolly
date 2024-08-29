@@ -8,6 +8,7 @@
 import Foundation
 import RxDataSources
 import Differentiator
+import UIKit
 
 
 struct NovelDetailSectionModel {

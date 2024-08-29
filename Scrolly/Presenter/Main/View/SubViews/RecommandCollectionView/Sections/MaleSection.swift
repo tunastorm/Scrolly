@@ -13,7 +13,6 @@ enum MaleSection: String, MainSection {
     case recently
     case newWaitingFree
     
-    
     var value: String {
         return self.rawValue
     }

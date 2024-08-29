@@ -13,7 +13,7 @@ import RxCocoa
 final class MainViewModel: BaseViewModel, ViewModelProvider {
     
     typealias PostListResults = Observable<PrimitiveSequence<SingleTrait, Result<GetPostsModel, APIError>>.Element>
-    typealias PostResults = Observable<PrimitiveSequence<SingleTrait, Result<PostsModel, APIError>>.Element>
+//    typealias PostResults = Observable<PrimitiveSequence<SingleTrait, Result<PostsModel, APIError>>.Element>
     
 //    private var apiProvider: APIManagerProvide
     
@@ -178,7 +178,6 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
         guard recommandResults.values.isEmpty else {
             return
         }
-        
         recommandResults[RecommandSection.banner.index] = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "\(Int.random(in: 10...20))", productId: APIConstants.ProductId.novelInfo))
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
         
@@ -192,37 +191,6 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
         recommandResults[RecommandSection.newWaitingFree.index] = BehaviorSubject(value: RecommandSection.newWaitingFree.query)
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags($0)) }
     }
-    
-//    
-//    private func callFemaleDatas() {
-//        femaleResults.keys.forEach { key in
-//            let query = FemaleSection.allCases[key].query
-//            if let result = femaleResults[key] {
-//                result.onNext(query)
-//                result.onCompleted()
-//            }
-//        }
-//    }
-//    
-//    private func callFantasyDatas() {
-//        fantasyResults.keys.forEach { key in
-//            let query = FantasySection.allCases[key].query
-//            if let result = fantasyResults[key] {
-//                result.onNext(query)
-//                result.onCompleted()
-//            }
-//        }
-//    }
-//    
-//    private func callRomanceDatas() {
-//        romanceResults.keys.forEach { key in
-//            let query = RomanceSection.allCases[key].query
-//            if let result = romanceResults[key] {
-//                result.onNext(query)
-//                result.onCompleted()
-//            }
-//        }
-//    }
     
     private func callDateDatas() {
             

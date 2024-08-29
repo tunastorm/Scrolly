@@ -14,7 +14,7 @@ final class HashTagListCell: BaseCollectionViewCell {
     let label = HashTagLabel()
     
     override func configHierarchy() {
-        addSubview(label)
+        contentView.addSubview(label)
     }
     
     override func configLayout() {

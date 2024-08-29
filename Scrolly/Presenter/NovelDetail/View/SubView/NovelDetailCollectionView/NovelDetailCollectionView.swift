@@ -12,7 +12,7 @@ final class NovelDetailCollectionView: BaseCollectionViewController {
     private static var screenSize: CGRect?
     
     override func registerHeaderView() {
-        self.register(collectionViewHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: collectionViewHeaderView.identifier)
+        self.register(CollectionViewHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CollectionViewHeaderView.identifier)
     }
     
     static func setScreenSize() {
@@ -32,7 +32,7 @@ final class NovelDetailCollectionView: BaseCollectionViewController {
 
     private static func createSection(for section: NovelDetailSection) -> NSCollectionLayoutSection {
         switch section {
-//        case .description,.hashTag:
+//        case .info, .description:
 //            return createSingleColumnSection()
         case .episode:
             return createTableViewSection()
@@ -42,11 +42,11 @@ final class NovelDetailCollectionView: BaseCollectionViewController {
     private static func createSingleColumnSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(300))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(400))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         group.contentInsets = .init(top: 0, leading: 10.0, bottom: 0, trailing: 10.0)
         let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .groupPagingCentered
+        section.orthogonalScrollingBehavior = .none
         return section
     }
     
@@ -56,7 +56,13 @@ final class NovelDetailCollectionView: BaseCollectionViewController {
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         group.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
+        
+//        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(300))
+//        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+//            layoutSize: headerSize,
+//            elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         let section = NSCollectionLayoutSection(group: group)
+//        section.boundarySupplementaryItems = [sectionHeader]
         return section
     }
     

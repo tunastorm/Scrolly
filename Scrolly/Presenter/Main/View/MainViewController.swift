@@ -17,7 +17,7 @@ protocol MainViewDelegate {
 
 final class MainViewController: BaseViewController<MainView> {
     
-    typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<collectionViewHeaderView>
+    typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<CollectionViewHeaderView>
     typealias NovelDataSource<T: MainSection> = UICollectionViewDiffableDataSource<T, PostsModel>
     
     private let disposeBag = DisposeBag()
@@ -123,7 +123,6 @@ final class MainViewController: BaseViewController<MainView> {
                 owner.fetchDatas(sections: DateSection.allCases, resultList: resultList)
             }
             .disposed(by: disposeBag)
-    
     }
     
     private func fetchDatas<T: MainSection>(sections: [T], resultList: [APIManager.ModelResult<GetPostsModel>]) {
@@ -199,7 +198,7 @@ final class MainViewController: BaseViewController<MainView> {
     
     //MARK: - 추천 콜렉션뷰
     private func collectionViewHeaderRegestration<T: MainSection>(_ sections: [T], _ noDataSection: T?) -> HeaderRegistration {
-        UICollectionView.SupplementaryRegistration<collectionViewHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) {
+        UICollectionView.SupplementaryRegistration<CollectionViewHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) {
             (supplementaryView, string, indexPath) in
             if let noDataSection, sections[indexPath.section] == noDataSection {
                 return

@@ -13,7 +13,7 @@ final class RecommandCollectionView: BaseCollectionViewController {
     private static var screenSize: CGRect?
     
     override func registerHeaderView() {
-        self.register(collectionViewHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: collectionViewHeaderView.identifier)
+        self.register(CollectionViewHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CollectionViewHeaderView.identifier)
     }
     
     static func setScreenSize() {
