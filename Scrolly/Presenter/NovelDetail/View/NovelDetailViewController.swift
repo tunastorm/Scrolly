@@ -23,11 +23,9 @@ protocol NovelDetailViewDelegate {
     
 final class NovelDetailViewController: BaseViewController<NovelDetailView> {
 
-    typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<CollectionViewHeaderView>
+    typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<EpsisodeHeaderView>
     
     private let disposeBag = DisposeBag()
-    
-//    private var detailDataSource: UICollectionViewDiffableDataSource<NovelDetailSection, PostsModel>?
     
     private let descriptionCellRegistration = UICollectionView.CellRegistration<DescriptionCell, PostsModel> { cell, indexPath, itemIdentifier in
         cell.configCell(itemIdentifier) 
@@ -41,10 +39,13 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
         cell.configCell(itemIdentifier)
     }
     
+    private var headerRegistration: UICollectionView.SupplementaryRegistration<EpsisodeHeaderView>?
+   
     private func collectionViewHeaderRegestration(_ sections: [NovelDetailSectionModel]) -> HeaderRegistration {
-        UICollectionView.SupplementaryRegistration<CollectionViewHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) {
+        UICollectionView.SupplementaryRegistration<EpsisodeHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) {
             (supplementaryView, string, indexPath) in
-            supplementaryView.titleLabel.text = sections[indexPath.section].header
+            let model = sections[indexPath.section].header
+            supplementaryView.configData(model: model)
         }
     }
 
@@ -54,14 +55,13 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
                 return UICollectionViewCell()
             }
             return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: item)
-       }//, configureSupplementaryView: { [weak self] dataSource, collectionView, title, indexPath in
-//            guard let headerRegistration = self?.collectionViewHeaderRegestration(dataSource.sectionModels) else {
-//                return UIView() as! UICollectionReusableView
-//            }
-//            print(#function,  "하이")
-//            return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: indexPath)
-//        }
-       )
+        }, configureSupplementaryView: { [weak self] dataSource, collectionView, kind, indexPath in
+            guard let headerRegistration = self?.headerRegistration else {
+                return UICollectionReusableView()
+            }
+            return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: indexPath)
+        }
+    )
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,54 +80,26 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
         guard let output = detailViewModel.transform(input: input) else {
             return
         }
-        
-        output.fetchedModel
-            .bind(with: self) { owner, model in
-                owner.rootView?.configDataAfterNetworking(model: model)
-            }
-            .disposed(by: disposeBag)
-       
-//        output.description
-//            .bind(with: self) { owner, model in
-//                owner.updateSnapShot([model], .description)
-//            }
-//            .disposed(by: disposeBag)
-//        
-//        output.hashtag
-//            .bind(with: self) { owner, model in
-//                owner.updateSnapShot([model], .hashTag)
-//            }
-//            .disposed(by: disposeBag)
-        
-
-//        output.episodes
-//            .bind(with: self) { owner, result in
-//                switch result {
-//                case .success(let model):
-//                    let sorted = owner.sortingEpiosdes(list: model.data)
-//                    owner.updateSnapShot(sorted, .episode)
-//                case .failure(let error):
-//                    owner.showToastToView(error)
-//                }
-//            }
-//            .disposed(by: disposeBag)
-        
-        output.episodes
-            .map { [weak self] result in
-                switch result {
+    
+        PublishSubject<[NovelDetailSectionModel]>
+            .zip(output.fetchedModel, output.episodes) { [weak self] novel, episodes in
+                switch episodes {
                 case .success(let model):
-                    guard let sorted = self?.sortingEpiosdes(list: model.data) else {
-                        return [NovelDetailSectionModel(header: "", items: [])]
+                    guard let data = self?.sortingEpiosdes(list: model.data) else {
+                        return [NovelDetailSectionModel(header: novel, items: [])]
                     }
-                    return [NovelDetailSectionModel(header: NovelDetailSection.episode.header, items: sorted)]
+                    let sectionList = [NovelDetailSectionModel(header: novel, items: data)]
+                    self?.headerRegistration = self?.collectionViewHeaderRegestration(sectionList)
+                    return sectionList
                 case .failure(let error):
                     self?.showToastToView(error)
-                    return [NovelDetailSectionModel(header: "", items: [])]
+                    return [NovelDetailSectionModel(header: novel, items: [])]
                 }
             }
+            .debug("NovelDetailSectionModel")
             .bind(to: rootView.collectionView.rx.items(dataSource: detailDataSource))
             .disposed(by: disposeBag)
-        
+    
         rootView.collectionView.rx.modelSelected(NovelDetailSectionModel.Item.self)
             .bind(with: self) { owner, item in
                 let vc = EpisodeViewerViewController(view: EpisodeViewerView(), viewModel: EpisodeViewerViewModel(novel: item))

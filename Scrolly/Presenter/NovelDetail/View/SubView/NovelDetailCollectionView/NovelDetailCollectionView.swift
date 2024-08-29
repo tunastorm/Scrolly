@@ -12,7 +12,9 @@ final class NovelDetailCollectionView: BaseCollectionViewController {
     private static var screenSize: CGRect?
     
     override func registerHeaderView() {
-        self.register(CollectionViewHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CollectionViewHeaderView.identifier)
+        self.register(EpsisodeHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: EpsisodeHeaderView.identifier)
+//        self.register(EpisodeCell.self, forCellWithReuseIdentifier: EpisodeCell.identifier)
+        print(#function, "레지스터")
     }
     
     static func setScreenSize() {
@@ -57,12 +59,12 @@ final class NovelDetailCollectionView: BaseCollectionViewController {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         group.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
         
-//        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(300))
-//        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
-//            layoutSize: headerSize,
-//            elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(300))
+        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         let section = NSCollectionLayoutSection(group: group)
-//        section.boundarySupplementaryItems = [sectionHeader]
+        section.boundarySupplementaryItems = [sectionHeader]
         return section
     }
     
