@@ -65,10 +65,6 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
             .bind(with: self) { owner, results in
                 let episodes = results.1
                 owner.output.fetchedModel.onNext(results.0)
-//                owner.output.description.onNext(results.0)
-//                owner.output.description.onCompleted()
-//                owner.output.hashtag.onNext(results.0)
-//                owner.output.hashtag.onCompleted()
                 owner.output.episodes.onNext(results.1)
                 owner.output.episodes.onCompleted()
             }

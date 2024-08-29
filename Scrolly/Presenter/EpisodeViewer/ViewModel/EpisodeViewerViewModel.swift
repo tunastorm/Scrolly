@@ -65,16 +65,6 @@ final class EpisodeViewerViewModel: BaseViewModel, ViewModelProvider {
                 owner.output.model.onCompleted()
             }
             .disposed(by: disposeBag)
-            
-            
-//            .bind(with: self) { owner, model in
-//                guard let model else {
-//                    return
-//                }
-//                owner.output.model.onNext(model)
-//                owner.output.model.onCompleted()
-//            }
-//            .disposed(by: disposeBag)
         
         return output
     }

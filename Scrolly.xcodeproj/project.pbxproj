@@ -474,6 +474,7 @@
 		BC48A9062C7DE4AE001C9B27 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				BC48A9322C8058AA001C9B27 /* EpsisodeHeaderView.swift */,
 				BC06E86C2C7DD49B00148785 /* HashTagListCell.swift */,
 				BC48A90B2C7DE96F001C9B27 /* DescriptionCell.swift */,
 				BC48A90D2C7DE99E001C9B27 /* EpisodeCell.swift */,
@@ -484,7 +485,6 @@
 		BC48A9072C7DE4BD001C9B27 /* HeaderView */ = {
 			isa = PBXGroup;
 			children = (
-				BC48A9322C8058AA001C9B27 /* EpsisodeHeaderView.swift */,
 			);
 			path = HeaderView;
 			sourceTree = "<group>";

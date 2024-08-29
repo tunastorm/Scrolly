@@ -96,7 +96,6 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
                     return [NovelDetailSectionModel(header: novel, items: [])]
                 }
             }
-            .debug("NovelDetailSectionModel")
             .bind(to: rootView.collectionView.rx.items(dataSource: detailDataSource))
             .disposed(by: disposeBag)
     
@@ -106,7 +105,6 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
                 owner.pushAfterView(view: vc, backButton: true, animated: true)
             }
             .disposed(by: disposeBag)
-        
     }
     
     private func sortingEpiosdes(list: [PostsModel], accending: Bool = false) -> [PostsModel] {
@@ -133,6 +131,5 @@ extension NovelDetailViewController: NovelDetailViewDelegate {
     func pushToProfileViewController() {
         print("프로필 뷰 화면전환 클릭")
     }
-    
     
 }

@@ -87,14 +87,6 @@ final class NovelDetailView: BaseView {
     }
     
     override func configHierarchy() {
-//        addSubview(topView)
-//        topView.addSubview(backgroundImageView)
-//        [infoBackgroundView, backgroundBlurView, coverImageView, waitingFreeImageView, waitingFreeLabel, titleLabel, creatorLabel, infoView].forEach {
-//            topView.addSubview($0)
-//        }
-        //        [infoBackgroundView, backgroundBlurView, coverImageView, waitingFreeImageView, waitingFreeLabel, titleLabel, creatorLabel, infoView, hashTagView, collectionView ].forEach { view in
-        //            contentView.addSubview(view)
-        //        }
         addSubview(collectionView)
         addSubview(continueBar)
         addSubview(backButton)
@@ -102,10 +94,6 @@ final class NovelDetailView: BaseView {
     }
     
     override func configLayout() {
-//        topView.snp.makeConstraints { make in
-//            make.top.equalToSuperview()
-//            make.horizontalEdges.equalToSuperview()
-//        }
         backButton.snp.makeConstraints { make in
             make.width.equalTo(20)
             make.height.equalTo(36)
@@ -124,67 +112,14 @@ final class NovelDetailView: BaseView {
             make.bottom.equalToSuperview()
         }
         collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.horizontalEdges.equalToSuperview()
         }
-//        coverImageView.snp.makeConstraints { make in
-//            make.width.equalTo(150)
-//            make.height.equalTo(220)
-//            make.top.equalTo(safeAreaLayoutGuide).inset(40)
-//            make.centerX.equalTo(safeAreaLayoutGuide)
-//        }
-//        waitingFreeImageView.snp.makeConstraints { make in
-//            make.size.equalTo(16)
-//            make.top.equalTo(coverImageView.snp.top).inset(10)
-//            make.leading.equalTo(coverImageView.snp.leading).inset(10)
-//        }
-//        waitingFreeLabel.snp.makeConstraints { make in
-//            make.height.equalTo(waitingFreeImageView)
-//            make.width.equalTo(waitingFreeImageView).multipliedBy(2.0)
-//            make.top.equalTo(coverImageView.snp.top).inset(10)
-//            make.leading.equalTo(waitingFreeImageView.snp.trailing)
-//        }
-//        titleLabel.snp.makeConstraints { make in
-//            make.height.equalTo(30)
-//            make.top.equalTo(coverImageView.snp.bottom).offset(20)
-//            make.horizontalEdges.equalToSuperview().inset(20)
-//        }
-//        creatorLabel.snp.makeConstraints { make in
-//            make.height.equalTo(14)
-//            make.top.equalTo(titleLabel.snp.bottom).offset(6)
-//            make.horizontalEdges.equalToSuperview().inset(20)
-//        }
-//        infoView.snp.makeConstraints { make in
-//            make.height.equalTo(14)
-//            make.width.lessThanOrEqualToSuperview()
-//            make.top.equalTo(creatorLabel.snp.bottom).offset(6)
-//            make.centerX.equalToSuperview()
-//            make.bottom.equalToSuperview()
-//        }
-//        backgroundImageView.snp.makeConstraints { make in
-//            make.top.equalToSuperview()
-//            make.horizontalEdges.equalToSuperview()
-//            make.bottom.equalTo(infoView.snp.bottom)
-//        }
-//        backgroundBlurView.snp.makeConstraints { make in
-//            make.top.equalToSuperview()
-//            make.horizontalEdges.equalToSuperview()
-//            make.bottom.equalTo(infoView.snp.bottom)
-//        }
-//        infoBackgroundView.snp.makeConstraints { make in
-//            make.top.equalTo(coverImageView.snp.bottom)
-//            make.horizontalEdges.equalToSuperview()
-//            make.bottom.equalTo(infoView.snp.bottom)
-//            make.bottom.equalTo(infoView.snp.bottom)
-//        }
-//        collectionView.snp.makeConstraints { make in
-//            make.top.equalTo(topView.snp.bottom).offset(10)
-//            make.bottom.horizontalEdges.equalToSuperview()
-//        }
-        
     }
     
     override func configView() {
         super.configView()
+        collectionView.backgroundColor = .red
         let backbuttonTap = UITapGestureRecognizer(target: self, action: #selector(backButtonTapped))
         backButton.addGestureRecognizer(backbuttonTap)
         let profileButtonTap = UITapGestureRecognizer(target: self, action: #selector(profileButtonTapped))
