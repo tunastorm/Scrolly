@@ -40,12 +40,16 @@ final class EpisodeCell: BaseCollectionViewCell {
     
     private let statusLabel = EpisodeStatusLabel()
     
-    let showButton = UIButton().then {
+    private let showButton = UIButton().then {
         $0.setImage(Resource.Asset.SystemImage.arrowDownToLine, for: .normal)
         $0.tintColor = Resource.Asset.CIColor.gray
         $0.contentMode = .scaleAspectFill
         $0.titleLabel?.font = .systemFont(ofSize: 0)
     }
+    
+    private var price: Int?
+    
+    private var indexPath: IndexPath?
     
     override func configHierarchy() {
         contentView.addSubview(imageView)
@@ -94,15 +98,21 @@ final class EpisodeCell: BaseCollectionViewCell {
     }
 
     override func configView() {
-        
+        rxButtonTapped()
     }
     
     private func rxButtonTapped() {
-        let needPay: [EpisodeStatusLabel.ShowingView] = [.none, .upload, .waitingFree]
         showButton.rx.tap
             .bind(with: self) { owner, _ in
-                if needPay.contains(owner.statusLabel.status) {
-                    
+                guard let indexPath = owner.indexPath, let price = owner.price  else {
+                    return
+                }
+                let status = owner.statusLabel.status
+                switch status {
+                case .none,.upload,.waitingFree:
+                    print("상태: ", status)
+                    owner.delegate?.showIamportAlert(indexPath)
+                default: owner.delegate?.pushToViewer(indexPath)
                 }
             }
             .disposed(by: disposeBag)
@@ -115,7 +125,7 @@ final class EpisodeCell: BaseCollectionViewCell {
         }
     }
     
-    func configCell(_ identifier: PostsModel, last: Bool = false) {
+    func configCell(_ identifier: PostsModel, indexPath: IndexPath, last: Bool = false) {
         guard let file = identifier.files.first, let url = URL(string: APIConstants.URI + file) else {
             return
         }
@@ -128,7 +138,12 @@ final class EpisodeCell: BaseCollectionViewCell {
                 print(#function, "error: ", error)
             }
         }
-        titleLabel.text = identifier.title
+        guard let title = identifier.title else {
+            return
+        }
+        titleLabel.text = title
+        self.indexPath = indexPath
+        price = identifier.price
         let date = DateFormatManager.shared.stringToformattedString(value: identifier.createdAt, before: .dateAndTimeWithTimezone, after: .dotSperatedyyyMMdd)
         uploadDateLabel.text = date
         
@@ -148,6 +163,7 @@ final class EpisodeCell: BaseCollectionViewCell {
             isShow = false
         default: break
         }
+        print(#function, "상태 설정 후: ", statusLabel.status)
         statusLabelLayoutToggle(isShow)
     }
     

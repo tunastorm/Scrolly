@@ -11,8 +11,6 @@ import iamport_ios
 import RxSwift
 import RxCocoa
 import RxDataSources
-import WebKit
-
 
 protocol NovelDetailViewDelegate {
     
@@ -26,9 +24,11 @@ protocol NovelDetailViewDelegate {
  
 protocol EpisodeCellDelegate {
     
-    func showIamportAlert(amount: String)
+    func showIamportAlert(_ indexPath: IndexPath)
     
-    func callIamportPayment(_ amount: String)
+    func pushToViewer(_ indexPath: IndexPath)
+    
+    func pushToPaymentView(_ indexPath: IndexPath)
 }
 
 
@@ -36,12 +36,6 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
 
     typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<CollectionViewHeaderView>
     typealias CellRegistration<T: BaseCollectionViewCell> = UICollectionView.CellRegistration<T, PostsModel>
-    
-    lazy var wkWebView: WKWebView = {
-        var view = WKWebView()
-        view.backgroundColor = UIColor.clear
-        return view
-    }()
     
     private let disposeBag = DisposeBag()
     
@@ -54,7 +48,7 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
     }
     
     private let episodeCellRegistration = CellRegistration<EpisodeCell> { cell, indexPath, itemIdentifier in
-        cell.configCell(itemIdentifier)
+        cell.configCell(itemIdentifier, indexPath: indexPath)
     }
     
     private var headerRegistration: HeaderRegistration?
@@ -133,13 +127,6 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
             }
             .bind(to: rootView.collectionView.rx.items(dataSource: detailDataSource))
             .disposed(by: disposeBag)
-    
-        rootView.collectionView.rx.modelSelected(NovelDetailSectionModel.Item.self)
-            .bind(with: self) { owner, item in
-                let vc = EpisodeViewerViewController(view: EpisodeViewerView(), viewModel: EpisodeViewerViewModel(novel: item))
-                owner.pushAfterView(view: vc, backButton: true, animated: true)
-            }
-            .disposed(by: disposeBag)
     }
     
     private func sortingEpiosdes(list: [PostsModel], accending: Bool = false) -> [PostsModel] {
@@ -171,34 +158,43 @@ extension NovelDetailViewController: NovelDetailViewDelegate {
 
 extension NovelDetailViewController: EpisodeCellDelegate {
     
-    func showIamportAlert(amount: String) {
+    func showIamportAlert(_ indexPath: IndexPath) {
         let title = Resource.UIConstants.Text.paymentAlertTitle
         let message = Resource.UIConstants.Text.paymentAlertMessage
         showAlert(style: .alert, title: title, message: message) { [weak self] UIAlertAction in
-            self?.callIamportPayment(amount)
+            self?.pushToPaymentView(indexPath)
         }
     }
     
-    func callIamportPayment(_ amount: String) {
-        let uid = APIKey.payUID.replacing("#0", with: APIKey.sesacKey)
-                               .replacing("#1", with: String(Int(Date().timeIntervalSince1970)))
-        let payment = IamportPayment(
-            pg: PG.html5_inicis.makePgRawName(pgId: APIKey.pgId),
-                merchant_uid: uid,
-                amount: String(amount)).then {
-        $0.pay_method = PayMethod.card.rawValue 
-        $0.name = APIKey.companyName
-        $0.buyer_name = APIKey.paymentTester
-        $0.app_scheme = APIKey.appScheme
-        }
-        
-        Iamport.shared.paymentWebView(
-            webViewMode: wkWebView,
-            userCode: APIKey.iamportCode,
-            payment: payment) { [weak self] iamportResponse in
-                self?.rootView?.makeToast(String(describing: iamportResponse))
-                print(String(describing: iamportResponse))
+    func pushToViewer(_ indexPath: IndexPath) {
+        do {
+            guard let model = try detailDataSource.model(at: indexPath) as? PostsModel else {
+                return
             }
+            let vc = EpisodeViewerViewController(view: EpisodeViewerView(), viewModel: EpisodeViewerViewModel(novel: model))
+            pushAfterView(view: vc, backButton: true, animated: true)
+        } catch {
+            return
+        }
+    
     }
-
+    
+    func pushToPaymentView(_ indexPath: IndexPath) {
+        do {
+            guard let model = try detailDataSource.model(at: indexPath) as? PostsModel else {
+                return
+            }
+            let vc = PaymentViewController(view: PaymentView())
+            vc.model = model
+            vc.complitionHandler = { [weak self] in
+                self?.popBeforeView(animated: false)
+                let viewer = EpisodeViewerViewController(view: EpisodeViewerView(), viewModel: EpisodeViewerViewModel(novel: model))
+                self?.pushAfterView(view: viewer, backButton: true, animated: true)
+            }
+            pushAfterView(view: vc, backButton: true, animated: true)
+        } catch {
+            return
+        }
+    }
+    
 }

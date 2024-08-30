@@ -41,12 +41,12 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string></string>
-			</array>
 			<key>CFBundleURLName</key>
 			<string>scrolly.payment</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>sesac</string>
+			</array>
 		</dict>
 	</array>
 	<key>NSAppTransportSecurity</key>

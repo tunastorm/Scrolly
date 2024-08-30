@@ -35,7 +35,7 @@ enum Resource {
         
         enum Text {
             static let appTitle = "Scrolly"
-            static let paymentAlertMessage = "유료 회차입니다. 100원 결제를 진행하시겠습니까?"
+            static let paymentAlertMessage = "유료 회차입니다.\n100원 결제를 진행하시겠습니까?"
             static let paymentAlertTitle = "결제하기"
             static let alertOK = "확인"
             static let alertCancle = "취소"

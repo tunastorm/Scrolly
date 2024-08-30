@@ -56,6 +56,11 @@
 		BC48A9332C8058AA001C9B27 /* InfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC48A9322C8058AA001C9B27 /* InfoCell.swift */; };
 		BC48A9382C8170A9001C9B27 /* iamport-ios in Frameworks */ = {isa = PBXBuildFile; productRef = BC48A9372C8170A9001C9B27 /* iamport-ios */; };
 		BC48A93B2C8170DF001C9B27 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = BC48A93A2C8170DF001C9B27 /* Then */; };
+		BC48A93D2C81ACA6001C9B27 /* PaymentValidationQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC48A93C2C81ACA6001C9B27 /* PaymentValidationQuery.swift */; };
+		BC48A93F2C81AF03001C9B27 /* PaymentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC48A93E2C81AF03001C9B27 /* PaymentModel.swift */; };
+		BC48A9412C81AF0C001C9B27 /* PaymentListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC48A9402C81AF0C001C9B27 /* PaymentListModel.swift */; };
+		BC48A9442C81B263001C9B27 /* PaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC48A9432C81B263001C9B27 /* PaymentViewController.swift */; };
+		BC48A9482C81B282001C9B27 /* PaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC48A9472C81B282001C9B27 /* PaymentView.swift */; };
 		BC670A9A2C7B0A60006FB171 /* MaleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC670A992C7B0A60006FB171 /* MaleSection.swift */; };
 		BC670A9C2C7B0A6E006FB171 /* FemaleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC670A9B2C7B0A6E006FB171 /* FemaleSection.swift */; };
 		BC670A9E2C7B0A81006FB171 /* FantasySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC670A9D2C7B0A81006FB171 /* FantasySection.swift */; };
@@ -162,6 +167,11 @@
 		BC48A9252C7F8975001C9B27 /* EpisodeViewerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeViewerView.swift; sourceTree = "<group>"; };
 		BC48A9302C803814001C9B27 /* PDFView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PDFView+Extension.swift"; sourceTree = "<group>"; };
 		BC48A9322C8058AA001C9B27 /* InfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCell.swift; sourceTree = "<group>"; };
+		BC48A93C2C81ACA6001C9B27 /* PaymentValidationQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentValidationQuery.swift; sourceTree = "<group>"; };
+		BC48A93E2C81AF03001C9B27 /* PaymentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentModel.swift; sourceTree = "<group>"; };
+		BC48A9402C81AF0C001C9B27 /* PaymentListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentListModel.swift; sourceTree = "<group>"; };
+		BC48A9432C81B263001C9B27 /* PaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewController.swift; sourceTree = "<group>"; };
+		BC48A9472C81B282001C9B27 /* PaymentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentView.swift; sourceTree = "<group>"; };
 		BC670A992C7B0A60006FB171 /* MaleSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaleSection.swift; sourceTree = "<group>"; };
 		BC670A9B2C7B0A6E006FB171 /* FemaleSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FemaleSection.swift; sourceTree = "<group>"; };
 		BC670A9D2C7B0A81006FB171 /* FantasySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FantasySection.swift; sourceTree = "<group>"; };
@@ -274,6 +284,7 @@
 				BC8F1D2F2C6D1F45005D63CB /* LikedPostsQuery.swift */,
 				BC8F1D312C6D1FD3005D63CB /* MyProfileQuery.swift */,
 				BC8F1D332C6D2026005D63CB /* HashTagsQuery.swift */,
+				BC48A93C2C81ACA6001C9B27 /* PaymentValidationQuery.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -294,6 +305,7 @@
 				BC097C7B2C74E0680038A21C /* NovelDetail */,
 				BC097C6E2C7484D70038A21C /* EpisodeViewer */,
 				BC097CBA2C76151E0038A21C /* EpisodeEnd */,
+				BC48A9422C81B240001C9B27 /* Payment */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -508,6 +520,23 @@
 			path = Util;
 			sourceTree = "<group>";
 		};
+		BC48A9422C81B240001C9B27 /* Payment */ = {
+			isa = PBXGroup;
+			children = (
+				BC48A9452C81B266001C9B27 /* View */,
+			);
+			path = Payment;
+			sourceTree = "<group>";
+		};
+		BC48A9452C81B266001C9B27 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				BC48A9472C81B282001C9B27 /* PaymentView.swift */,
+				BC48A9432C81B263001C9B27 /* PaymentViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		BC670A972C7B09E6006FB171 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -591,6 +620,8 @@
 				BC097C982C74F7C20038A21C /* BaseModel.swift */,
 				BC097C9A2C7500F80038A21C /* CommentsModel.swift */,
 				BC097C9C2C75061D0038A21C /* LikeModel.swift */,
+				BC48A93E2C81AF03001C9B27 /* PaymentModel.swift */,
+				BC48A9402C81AF0C001C9B27 /* PaymentListModel.swift */,
 			);
 			path = ResponseModel;
 			sourceTree = "<group>";
@@ -786,6 +817,7 @@
 				BC06E8492C7C8B7700148785 /* NovelDetailViewController.swift in Sources */,
 				BC8F1CF12C6CB25A005D63CB /* APIRouter.swift in Sources */,
 				BC097C8A2C74E2020038A21C /* BaseViewController.swift in Sources */,
+				BC48A93F2C81AF03001C9B27 /* PaymentModel.swift in Sources */,
 				BC097C832C74E0F70038A21C /* EpisodeViewerViewModel.swift in Sources */,
 				BC097CD02C76249C0038A21C /* BaseCollectionViewController.swift in Sources */,
 				BC8F1CEF2C6CB08F005D63CB /* APIConstants.swift in Sources */,
@@ -816,6 +848,7 @@
 				BC670A9E2C7B0A81006FB171 /* FantasySection.swift in Sources */,
 				BC097CD82C76370D0038A21C /* HashTagCollectionViewCell.swift in Sources */,
 				BC06E86A2C7DD14B00148785 /* NovelDetailCollectionView.swift in Sources */,
+				BC48A9442C81B263001C9B27 /* PaymentViewController.swift in Sources */,
 				BC8F1CED2C6CB083005D63CB /* APIKey.swift in Sources */,
 				BCCBDA772C78651400073E31 /* WaitingFreeImageView.swift in Sources */,
 				BC097C622C7330120038A21C /* RetryInterceptor.swift in Sources */,
@@ -833,6 +866,7 @@
 				BC8F1D4A2C717864005D63CB /* KingfisherManager+Extension.swift in Sources */,
 				BC06E8532C7CCB9B00148785 /* ViewControllerProvider.swift in Sources */,
 				BC8F1D402C70BC50005D63CB /* MyProfileModel.swift in Sources */,
+				BC48A9412C81AF0C001C9B27 /* PaymentListModel.swift in Sources */,
 				BCCBDA712C78515200073E31 /* ReusableIdentifier.swift in Sources */,
 				BC48A90C2C7DE96F001C9B27 /* DescriptionCell.swift in Sources */,
 				BCCBDA882C79BCB000073E31 /* RecentlyCollectionViewCell.swift in Sources */,
@@ -844,6 +878,7 @@
 				BC48A91A2C7F2674001C9B27 /* EpisodeStatusLabel.swift in Sources */,
 				BC06E84F2C7CC83800148785 /* NovelDetailViewModel.swift in Sources */,
 				BC8F1D382C70A85F005D63CB /* LoginModel.swift in Sources */,
+				BC48A9482C81B282001C9B27 /* PaymentView.swift in Sources */,
 				BC8F1CD82C6CAE4B005D63CB /* SceneDelegate.swift in Sources */,
 				BC48A9242C7F741F001C9B27 /* NovelDetailSectionModel.swift in Sources */,
 				BC670A9A2C7B0A60006FB171 /* MaleSection.swift in Sources */,
@@ -864,6 +899,7 @@
 				BC8F1D172C6CB50F005D63CB /* APIError.swift in Sources */,
 				BC06E8512C7CCA8F00148785 /* ViewModelProvider.swift in Sources */,
 				BC8F1D302C6D1F45005D63CB /* LikedPostsQuery.swift in Sources */,
+				BC48A93D2C81ACA6001C9B27 /* PaymentValidationQuery.swift in Sources */,
 				BC8F1D362C70A264005D63CB /* SigninModel.swift in Sources */,
 				BC670AA22C7B0A96006FB171 /* DateSection.swift in Sources */,
 				BC097CC12C761DA90038A21C /* MainViewModel.swift in Sources */,

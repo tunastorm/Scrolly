@@ -17,7 +17,6 @@ extension UIViewController {
         return window.screen
     }
     
-    
     func showAlert(style: UIAlertController.Style, title: String, message: String,
                    completionHandler: @escaping (UIAlertAction) -> Void) {
         let alert = UIAlertController(title: title,
@@ -27,10 +26,18 @@ extension UIViewController {
                                style: .default,
                                handler: completionHandler)
         let cancle = UIAlertAction(title: Resource.UIConstants.Text.alertCancle,
-                                   style: .cancel)
+                                   style: .destructive)
         alert.addAction(cancle)
         alert.addAction(ok)
         present(alert, animated: false)
+    }
+    
+    func popPreviousView() {
+        guard let viewStack = navigationController?.viewControllers else {
+            return
+        }
+        let previous = viewStack.count - 2
+        viewStack[previous].popBeforeView(animated: false)
     }
     
 }

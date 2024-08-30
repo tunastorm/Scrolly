@@ -68,11 +68,10 @@ final class EpisodeStatusLabel: BaseView {
     }
    
     func toggleShowingView(view: ShowingView = .none) {
-        print(#function, "show: ", view)
-        freeLabel.isHidden = !(view == .freelabel)
-        waitingFreeImageView.isHidden = !(view == .waitingFree)
-        print(#function, " waitingFreeImageView.isHidden: ", waitingFreeImageView.isHidden)
-        uploadLabel.isHidden = !(view == .upload)
+        status = view
+        freeLabel.isHidden = !(status == .freelabel)
+        waitingFreeImageView.isHidden = !(status == .waitingFree)
+        uploadLabel.isHidden = !(status == .upload)
     }
     
 }

@@ -31,6 +31,8 @@ enum APIRouter {
     case getMyProfile
     case updateMyProfile(_ query: MyProfileQuery)
     case searchHashTags(_ query: HashTagsQuery)
+    case paymentValidation(_ query: PaymentValidationQuery)
+    case paymentedList
 }
 
 extension APIRouter: TargetType {
@@ -78,9 +80,9 @@ extension APIRouter: TargetType {
     
     var method: HTTPMethod {
         switch self {
-        case .signin, .emailValidation, .login, .uploadFiles, .uploadPosts, .uploadComments, .likePostsToggle, .likePostsToggleSub:
+        case .signin, .emailValidation, .login, .uploadFiles, .uploadPosts, .uploadComments, .likePostsToggle, .likePostsToggleSub, .paymentValidation:
             return .post
-        case .refreshAccessToken, .withdraw, .getPosts, .getPostsImage, .queryOnePosts, .getLikedPosts, .getLikedPostsSub, .getMyProfile, .searchHashTags:
+        case .refreshAccessToken, .withdraw, .getPosts, .getPostsImage, .queryOnePosts, .getLikedPosts, .getLikedPostsSub, .getMyProfile, .searchHashTags, .paymentedList:
             return .get
         case .updatePosts, .updateComments, .updateMyProfile:
             return .put
@@ -103,7 +105,7 @@ extension APIRouter: TargetType {
             return HeadersOption.json.combineHeaders
         case .uploadFiles, .updateMyProfile:
             return HeadersOption.tokenAndMulipart.combineHeaders
-        case .uploadPosts, .updatePosts, .uploadComments, .updateComments, .likePostsToggle, .likePostsToggleSub:
+        case .uploadPosts, .updatePosts, .uploadComments, .updateComments, .likePostsToggle, .likePostsToggleSub, .paymentValidation, .paymentedList:
             return HeadersOption.tokenAndJson.combineHeaders
         }
     }
@@ -129,6 +131,8 @@ extension APIRouter: TargetType {
         case .updateComments(let id, let commentId, let query):
             encodeQuery(query)
         case .likePostsToggle(let id, let query), .likePostsToggleSub(let id, let query):
+            encodeQuery(query)
+        case .paymentValidation(let query):
             encodeQuery(query)
         default: nil
         }
@@ -171,6 +175,8 @@ extension APIRouter: TargetType {
         case .getMyProfile: "getMyProfile"
         case .updateMyProfile: "updateMyProfile"
         case .searchHashTags: "searchHashTags"
+        case .paymentValidation: "paymentValidation"
+        case .paymentedList: "paymentList"
         }
     }
     
