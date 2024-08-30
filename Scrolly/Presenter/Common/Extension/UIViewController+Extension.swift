@@ -17,4 +17,20 @@ extension UIViewController {
         return window.screen
     }
     
+    
+    func showAlert(style: UIAlertController.Style, title: String, message: String,
+                   completionHandler: @escaping (UIAlertAction) -> Void) {
+        let alert = UIAlertController(title: title,
+                                      message: message,
+                                      preferredStyle: style)
+        let ok = UIAlertAction(title: Resource.UIConstants.Text.alertOK,
+                               style: .default,
+                               handler: completionHandler)
+        let cancle = UIAlertAction(title: Resource.UIConstants.Text.alertCancle,
+                                   style: .cancel)
+        alert.addAction(cancle)
+        alert.addAction(ok)
+        present(alert, animated: false)
+    }
+    
 }

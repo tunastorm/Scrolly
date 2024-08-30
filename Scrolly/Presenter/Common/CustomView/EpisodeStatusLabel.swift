@@ -9,7 +9,9 @@ import UIKit
 import SnapKit
 import Then
 
-final class EpisodeInfoLabel: BaseView {
+final class EpisodeStatusLabel: BaseView {
+    
+    var status: ShowingView = .none
     
     enum ShowingView {
         case none
@@ -69,6 +71,7 @@ final class EpisodeInfoLabel: BaseView {
         print(#function, "show: ", view)
         freeLabel.isHidden = !(view == .freelabel)
         waitingFreeImageView.isHidden = !(view == .waitingFree)
+        print(#function, " waitingFreeImageView.isHidden: ", waitingFreeImageView.isHidden)
         uploadLabel.isHidden = !(view == .upload)
     }
     

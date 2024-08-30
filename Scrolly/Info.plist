@@ -2,6 +2,53 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>newsmartpib</string>
+		<string>supertoss</string>
+		<string>liivbank</string>
+		<string>lguthepay-xpay</string>
+		<string>lmslpay</string>
+		<string>com.wooricard.wcard</string>
+		<string>hyundaicardappcardid</string>
+		<string>kb-auth</string>
+		<string>chaipayment</string>
+		<string>payco</string>
+		<string>kakaotalk</string>
+		<string>citimobileapp</string>
+		<string>citicardappkr</string>
+		<string>citispay</string>
+		<string>nonghyupcardansimclick</string>
+		<string>nhappcardansimclick</string>
+		<string>cloudpay</string>
+		<string>lotteappcard</string>
+		<string>lottesmartpay</string>
+		<string>samsungpay</string>
+		<string>scardcertiapp</string>
+		<string>ansimclickipcollect</string>
+		<string>ansimclickipcollect</string>
+		<string>ansimclickscard</string>
+		<string>mpocket.online.ansimclick</string>
+		<string>kb-acp</string>
+		<string>smshinhanansimclick</string>
+		<string>shinhan-sr-ansimclick</string>
+		<string>smhyundaiansimclick</string>
+		<string>hdcardappcardansimclick</string>
+		<string>itms-apps</string>
+		<string>ispmobile</string>
+		<string>kftc-bankpay</string>
+	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string></string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>scrolly.payment</string>
+		</dict>
+	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

@@ -7,25 +7,41 @@
 
 import Foundation
 
+enum DateFormat {
+    case dateAndTimeWithTimezone
+    case dotSperatedyyyMMdd
+    
+    var formatString: String {
+        return switch self {
+        case .dateAndTimeWithTimezone: "yyyy-MM-ddEEEEEHH-mm-ssZ"
+        case .dotSperatedyyyMMdd:  "yyyy.MM.dd"
+        }
+    }
+}
 
-final class DateFormatManager {
-        
-//    enum DateFormat {
-//        case dateAndTimeWithTimezone = "yyyy-MM-ddEEEEEHH-mm-ssZ"
-//        case dotSperatedyyyMMdd = "yyyy.MM.dd"
-//        
-//        var value {
-//            switch self {
-//            case .dateAndTimeWithTimezone:
-//            case .dotSperatedyyyMMdd:
-//            }
-//        }
-//    }
-//    
-//    private let worker = DateFormatter()
-//
-//    func stringToformattedString(value: String, before: DateFormat, after: DateFormat) -> String {
-//        worker.dateFormat = before
-//    }
+protocol DateFormatterProvider {
+    
+    func stringToformattedString(value: String, before: DateFormat, after: DateFormat) -> String
+    
+}
+
+
+final class DateFormatManager: DateFormatterProvider {
+    
+    static let shared = DateFormatManager()
+    
+    private init() {}
+    
+    private let worker = DateFormatter()
+
+    func stringToformattedString(value: String, before: DateFormat, after: DateFormat) -> String {
+        worker.dateFormat = before.formatString
+        print("date: ", worker.date(from: value))
+        guard let beforeDate = worker.date(from: value) else {
+            return ""
+        }
+        worker.dateFormat = after.formatString
+        return worker.string(from: beforeDate)
+    }
     
 }

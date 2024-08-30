@@ -17,7 +17,9 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
     
     private var detailInfo: PostsModel?
     
-    var model: PostsModel? {
+    private var price: String?
+    
+    internal var model: PostsModel? {
         get { detailInfo }
         set { detailInfo = newValue }
     }

@@ -143,6 +143,8 @@ final class InfoCell: BaseCollectionViewCell {
         guard model.productId == APIConstants.ProductId.novelInfo else {
            return
         }
+        waitingFreeImageView.isHidden = model.content1 == "false"
+        waitingFreeLabel.isHidden = model.content1 == "false"
         titleLabel.text = model.title
         creatorLabel.text = model.creatorHashTag
         infoView.configData(model)

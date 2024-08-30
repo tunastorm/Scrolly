@@ -7,10 +7,16 @@
 
 import UIKit
 import Kingfisher
+import RxSwift
+import RxCocoa
 import SnapKit
 import Then
 
 final class EpisodeCell: BaseCollectionViewCell {
+    
+    var delegate: EpisodeCellDelegate?
+    
+    private let disposeBag = DisposeBag()
     
     private let imageView = UIImageView().then {
         $0.contentMode = .scaleToFill
@@ -32,7 +38,7 @@ final class EpisodeCell: BaseCollectionViewCell {
         $0.textAlignment = .left
     }
     
-    private let infoLabel = EpisodeInfoLabel()
+    private let statusLabel = EpisodeStatusLabel()
     
     let showButton = UIButton().then {
         $0.setImage(Resource.Asset.SystemImage.arrowDownToLine, for: .normal)
@@ -40,13 +46,13 @@ final class EpisodeCell: BaseCollectionViewCell {
         $0.contentMode = .scaleAspectFill
         $0.titleLabel?.font = .systemFont(ofSize: 0)
     }
-
+    
     override func configHierarchy() {
         contentView.addSubview(imageView)
         contentView.addSubview(infoView)
         infoView.addSubview(titleLabel)
         infoView.addSubview(uploadDateLabel)
-        infoView.addSubview(infoLabel)
+        infoView.addSubview(statusLabel)
         addSubview(showButton)
     }
     
@@ -72,7 +78,7 @@ final class EpisodeCell: BaseCollectionViewCell {
             make.top.equalTo(titleLabel.snp.bottom).offset(6)
             make.leading.equalToSuperview()
         }
-        infoLabel.snp.makeConstraints { make in
+        statusLabel.snp.makeConstraints { make in
             make.height.equalTo(15)
             make.top.equalTo(uploadDateLabel.snp.bottom).offset(6)
             make.leading.equalToSuperview()
@@ -86,9 +92,27 @@ final class EpisodeCell: BaseCollectionViewCell {
         }
         
     }
-    
+
     override func configView() {
         
+    }
+    
+    private func rxButtonTapped() {
+        let needPay: [EpisodeStatusLabel.ShowingView] = [.none, .upload, .waitingFree]
+        showButton.rx.tap
+            .bind(with: self) { owner, _ in
+                if needPay.contains(owner.statusLabel.status) {
+                    
+                }
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func statusLabelLayoutToggle(_ isShow: Bool) {
+        let height = isShow ? 15 : 0
+        self.statusLabel.snp.updateConstraints { make in
+            make.height.equalTo(height)
+        }
     }
     
     func configCell(_ identifier: PostsModel, last: Bool = false) {
@@ -105,22 +129,26 @@ final class EpisodeCell: BaseCollectionViewCell {
             }
         }
         titleLabel.text = identifier.title
-        uploadDateLabel.text = identifier.createdAt
+        let date = DateFormatManager.shared.stringToformattedString(value: identifier.createdAt, before: .dateAndTimeWithTimezone, after: .dotSperatedyyyMMdd)
+        uploadDateLabel.text = date
         
+        var isShow = true
         switch (identifier.content2, identifier.content3) {
-        case ("false", "false"): infoLabel.toggleShowingView(view: .freelabel)
-        case ("true", "true"): infoLabel.toggleShowingView(view: .waitingFree)
+        case ("false", "false"):
+            self.statusLabel.toggleShowingView(view: .freelabel)
+        case ("true", "true"): 
+            
+            self.statusLabel.toggleShowingView(view: .waitingFree)
         case ("true", "false"):
             if last {
-                infoLabel.toggleShowingView(view: .upload)
+                self.statusLabel.toggleShowingView(view: .upload)
                 break
             }
-            infoLabel.toggleShowingView(view: .none)
-            infoLabel.snp.updateConstraints { make in
-                make.height.equalTo(0)
-            }
+            self.statusLabel.toggleShowingView(view: .none)
+            isShow = false
         default: break
         }
-
+        statusLabelLayoutToggle(isShow)
     }
+    
 }

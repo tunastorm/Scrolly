@@ -51,7 +51,7 @@ final class DummyDataViewController: UIViewController {
 //    lazy var files = [
 //        UIImage(named: coverName)?.jpegData(compressionQuality: 1.0) ?? Data(),
 //    ]
-//    
+    
     lazy var signinQuery = SigninQuery(email: self.email, password: self.password, nick: self.nick, phoneNum: self.phoneNum, birthDay: self.birthDay)
     lazy var emailValidationQuery = EmailValidationQuery(email: self.email)
     lazy var loginQuery = LoginQuery(email: self.email, password: self.password)
@@ -61,13 +61,13 @@ final class DummyDataViewController: UIViewController {
     lazy var commentsQuery = CommentsQuery(content: "테스트 댓글3")
     lazy var likeQuery = LikeQuery(likeStatus: true)
     lazy var likedPostsQuery = LikedPostsQuery(next: nil, limit: "10")
-    lazy var hashTagsQuery = HashTagsQuery(next: nil, limit: "1", productId: APIConstants.ProductId.novelEpisode, hashTag: "만렙_자캐")
+    lazy var hashTagsQuery = HashTagsQuery(next: nil, limit: "50", productId: APIConstants.ProductId.novelEpisode, hashTag: "탐식의_재림")
     
     override func viewDidLoad() {
         super.viewDidLoad()
 //        validateEmail()
 //        signin()
-        login()
+//        login()
 //        withDraw()
 //        getMyProfile()
 //        updateMyProfile()
@@ -156,53 +156,20 @@ final class DummyDataViewController: UIViewController {
                     if let post = model as? PostsModel, post.content3 != nil {
                         print("success | ", post.title)
                         print(post.content5)
-//                        guard let old = post.files.first else {
-//                            return
-//                        }
-//                        let cover = "uploads/posts/dummyImage_2_1724433741089.jpg"
-//                        var new = [ cover, old ]
-//                        let query = PostsQuery(productId: APIConstants.ProductId.novelEpisode, title: nil, price: nil, content: nil, content1: nil, content2: nil, content3: nil, content4: nil, content5: nil, files: new)
-//
-//                        owner.updatePosts(postId: post.postId, query: query)
-                        
-                        
-                        
-                       
-//                        let random = Int.random(in: 10...100)
-//                        let nonPay = random > 50 ? Int(random / 10) : 0
-//                        let waitingFree = Int(Double(random - nonPay) * 0.9)
-//                        (0..<random).forEach { idx in
-//                            guard let hashtag = post.hashTags.first else {
-//                                return
-//                            }
-//                            let title = post.title! + " \(idx+1)화"
-//                            let content = "#\(post.title)"
-//                            let fileIdx = idx < 5 ? idx : (idx % 5)
-//                            let files = [owner.pdfFiles[fileIdx]]
-//                            let isPay = idx > nonPay
-//                            let isWaitingFree = (isPay == true && idx <= waitingFree)
-//                            
-//                            let query = PostsQuery(productId: APIConstants.ProductId.novelEpisode, title: title, price: 100, content: content, content1: String(idx), content2: String(isPay), content3:  String(isWaitingFree), content4: nil, content5: nil, files: files)
-//                            print("[\(idx)]\n", query)
-//                            
-//                            if let check = post.content3 {
-//                                owner.uploadPosts(query: query)
-//                            }
-//                        }
-                        
                     }
                 }
-                
-                
                 
                 if model is GetPostsModel {
                     let getPostsModel = model as! GetPostsModel
                     print("count: ", getPostsModel.data.count)
+                    let count = getPostsModel.data.count
                     getPostsModel.data.enumerated().forEach { idx, model in
 //                        owner.deletePosts(postId: model.postId)
+                        owner.updateEpisode(count: count, model: model)
+//                        owner.printEpisode(model: model)
                         
                         print("-[\(idx)]-----------------------------------------------------")
-//                        
+//
 //                        guard let old = model.files.first else {
 //                            return
 //                        }
@@ -210,7 +177,7 @@ final class DummyDataViewController: UIViewController {
 //                        var new = [ cover, old ]
 //                        let query = PostsQuery(productId: APIConstants.ProductId.novelEpisode, title: nil, price: nil, content: nil, content1: nil, content2: nil, content3: nil, content4: nil, content5: nil, files: new)
 //                        owner.updatePosts(postId: model.postId, query: query)
-//                        
+//
                         
 //                        let splited = old.split(separator: " ")
 //                        var new = String(splited[0]) + " " + String(splited[1])
@@ -218,57 +185,12 @@ final class DummyDataViewController: UIViewController {
 //
 //                        let id = owner.postIds[model.hashTags[0]]
 //                        print("수정할 아이디: ", id)
-//                        let query = PostsQuery(productId: nil, title: nil, price: nil, content: nil, content1: nil, content2: nil, content3: nil, content4: nil, content5: id, files: nil)
+//                        let query = g(productId: nil, title: nil, price: nil, content: nil, content1: nil, content2: nil, content3: nil, content4: nil, content5: id, files: nil)
 //                        owner.updatePosts(postId: model.postId, query: query)
 ////////
-//                        print("title: ", model.title)
-//                        print("productId: ", model.productId)
-//                        print("files: ", model.files)
-//                        print("태그: ", model.hashTags)
-//                        print("콘텐츠: ", model.content)
-//                        print("회차: ", model.content1)
-//                        print("유료: ", model.content2)
-//                        print("기다무: ", model.content3)
-//                        print("가격: ", model.price)
-//                        print("작성자:", model.creator)
-//
-////                        print("success | ", model.title)
-//                        let random = Int.random(in: 10...50)
-//                        let nonPay = random > 25 ? Int(random / 5) : 0
-//                        let waitingFree = Int(Double(random - nonPay) * 0.9)
-//                        (0..<random).forEach { idx in
-//                            guard let hashtag = model.hashTags.first else {
-//                                return
-//                            }
-//                            let title = model.title! + " \(idx+1)화"
-//                            let content = "#\(hashtag) #웹소설"
-//                            let fileIdx = idx < 5 ? idx : (idx % 5)
-//                            var files = model.files
-//                            files.append(owner.pdfFiles[fileIdx])
-//                            let isPay = idx > nonPay
-//                            let isWaitingFree = (isPay == true && idx <= waitingFree)
-//
-//                            let query = PostsQuery(productId: APIConstants.ProductId.novelEpisode, title: title, price: 100, content: content, content1: String(idx), content2: String(isPay), content3: String(isWaitingFree), content4: nil, content5: nil, files: files)
-//
-////                            print("[\(idx)] ", "nonPay: ", nonPay, "waitingFree: ", waitingFree, " isPay: ", isPay, " isWaitingFree: ", isWaitingFree)
-//
-//                            owner.uploadPosts(query: query)
-//                        }
 
-//                    
-////
-//                        print("title: ", model.title)
-//                        print("id: ", model.postId)
-//                        print("content: ",model.content)
-//                        print("tags: ", model.hashTags)
-//                        print("files: ", model.files)
-//                        print("기다무: ", model.content1)
-//                        print("연재주기: ", model.content2)
-//                        print("조회수: ", model.content3)
-//                        print("평균별점, 입력수: ", model.content4)
-//                        print("waiting: ", model.content5)
-//                        print("해시태그: ", model.hashTags)
-//                        print("작성자:", model.creator)
+
+
                         
                         
 //
@@ -296,24 +218,114 @@ final class DummyDataViewController: UIViewController {
                 }
                 
               
-                if model is UploadFilesModel {
-                    let uploadFilesModel = model as! UploadFilesModel
-                    if isUpdate {
-                        let query = PostsQuery(productId: nil, title: nil, price: nil, content: nil, content1: nil, content2: nil, content3: nil, content4: nil, content5: nil, files: nil)
-                        owner.updatePosts(postId: owner.postId, query: query)
-                        return
-                    }
-                    let result = model as! UploadFilesModel
-                    print(result.files)
-//                    let query = PostsQuery(productId: owner.productId, title: owner.dummyTitle, content: owner.content, content1: owner.creator, content2: owner.uploadDates, content3: owner.viewCount, content4: owner.averageRate, content5: owner.waiting, files: uploadFilesModel.files)
-//                    owner.uploadPosts(query: query)
-                }
+//                if model is UploadFilesModel {
+//                    let uploadFilesModel = model as! UploadFilesModel
+//                    if isUpdate {
+//                        let query = PostsQuery(productId: nil, title: nil, price: nil, content: nil, content1: nil, content2: nil, content3: nil, content4: nil, content5: nil, files: nil)
+//                        owner.updatePosts(postId: owner.postId, query: query)
+//                        return
+//                    }
+//                    let result = model as! UploadFilesModel
+//                    print(result.files)
+//                }
             case .failure(let error): print(#function, "error: ", error)
             }
         }
         .disposed(by: disposeBag)
     }
     
+    private func printNovelInfo(model: PostsModel) {
+        print("title: ", model.title)
+        print("id: ", model.postId)
+        print("content: ",model.content)
+        print("tags: ", model.hashTags)
+        print("files: ", model.files)
+        print("기다무: ", model.content1)
+        print("연재주기: ", model.content2)
+        print("조회수: ", model.content3)
+        print("평균별점, 입력수: ", model.content4)
+        print("배너 문구: ", model.content5)
+        print("해시태그: ", model.hashTags)
+        print("작성자:", model.creator)
+    }
+    
+    private func printEpisode(model: PostsModel) {
+        print("title: ", model.title)
+        print("productId: ", model.productId)
+        print("files: ", model.files)
+        print("태그: ", model.hashTags)
+        print("콘텐츠: ", model.content)
+        print("회차: ", model.content1)
+        print("유료: ", model.content2)
+        print("기다무: ", model.content3)
+        print("가격: ", model.price)
+        print("작성자:", model.creator)
+    }
+    
+    private func randomEpisodeUpload() {
+        //                        let random = Int.random(in: 10...100)
+        //                        let nonPay = random > 50 ? Int(random / 10) : 0
+        //                        let waitingFree = Int(Double(random - nonPay) * 0.9)
+        //                        (0..<random).forEach { idx in
+        //                            guard let hashtag = post.hashTags.first else {
+        //                                return
+        //                            }
+        //                            let title = post.title! + " \(idx+1)화"
+        //                            let content = "#\(post.title)"
+        //                            let fileIdx = idx < 5 ? idx : (idx % 5)
+        //                            let files = [owner.pdfFiles[fileIdx]]
+        //                            let isPay = idx > nonPay
+        //                            let isWaitingFree = (isPay == true && idx <= waitingFree)
+        //
+        //                            let query = PostsQuery(productId: APIConstants.ProductId.novelEpisode, title: title, price: 100, content: content, content1: String(idx), content2: String(isPay), content3:  String(isWaitingFree), content4: nil, content5: nil, files: files)
+        //                            print("[\(idx)]\n", query)
+        //
+        //                            if let check = post.content3 {
+        //                                owner.uploadPosts(query: query)
+        //                            }
+        //                        }
+        
+        //                        let random = Int.random(in: 10...50)
+        //                        let nonPay = random > 25 ? Int(random / 5) : 0
+        //                        let waitingFree = Int(Double(random - nonPay) * 0.9)
+        //                        (0..<random).forEach { idx in
+        //                            guard let hashtag = model.hashTags.first else {
+        //                                return
+        //                            }
+        //                            let title = model.title! + " \(idx+1)화"
+        //                            let content = "#\(hashtag) #웹소설"
+        //                            let fileIdx = idx < 5 ? idx : (idx % 5)
+        //                            var files = model.files
+        //                            files.append(owner.pdfFiles[fileIdx])
+        //                            let isPay = idx > nonPay
+        //                            let isWaitingFree = (isPay == true && idx <= waitingFree)
+        //
+        //                            let query = PostsQuery(productId: APIConstants.ProductId.novelEpisode, title: title, price: 100, content: content, content1: String(idx), content2: String(isPay), content3: String(isWaitingFree), content4: nil, content5: nil, files: files)
+        //
+        ////                            print("[\(idx)] ", "nonPay: ", nonPay, "waitingFree: ", waitingFree, " isPay: ", isPay, " isWaitingFree: ", isWaitingFree)
+        //
+        //                            owner.uploadPosts(query: query)
+        //                        }
+                                
+    }
+    
+    private func updateEpisode(count: Int, model: PostsModel) {
+        guard let raw = model.content1, let numbering = Int(raw) else {
+            return
+        }
+        let nonPay = count > 25 ? Int(count / 10) : 0
+        let waitingFree = Int(Double(count - nonPay) * 0.9)
+        let isPay = String(numbering > nonPay)
+        let isWaitingFree = (isPay == "true" && numbering <= waitingFree) ? "true" : "false"
+        print(#function, "episode: ", "\(numbering)/\(count-1)")
+        print(#function, "nonPay: ", nonPay)
+        print(#function, "count - nonPay", count - nonPay)
+        print(#function, "waitingFree: ", waitingFree)
+        print(#function, "isPay: ", isPay)
+        print(#function, "isWaitingFree: ", isWaitingFree)
+        let query = PostsQuery(productId: nil, title: nil, price: nil, content: nil, content1: nil, content2: isPay, content3: isWaitingFree, content4: nil, content5: nil, files: nil)
+        updatePosts(postId: model.postId, query: query)
+    }
     
     private func pdfUploader() {
         (0..<5).forEach { idx in

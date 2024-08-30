@@ -10,6 +10,8 @@ import Kingfisher
 import SnapKit
 import Then
 
+
+
 final class NovelDetailView: BaseView {
     
     var delegate: NovelDetailViewDelegate?

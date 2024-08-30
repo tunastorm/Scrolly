@@ -6,10 +6,13 @@
 //
 
 import UIKit
+import Differentiator
+import iamport_ios
 import RxSwift
 import RxCocoa
 import RxDataSources
-import Differentiator
+import WebKit
+
 
 protocol NovelDetailViewDelegate {
     
@@ -20,11 +23,25 @@ protocol NovelDetailViewDelegate {
     func pushToProfileViewController()
     
 }
+ 
+protocol EpisodeCellDelegate {
     
+    func showIamportAlert(amount: String)
+    
+    func callIamportPayment(_ amount: String)
+}
+
+
 final class NovelDetailViewController: BaseViewController<NovelDetailView> {
 
     typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<CollectionViewHeaderView>
     typealias CellRegistration<T: BaseCollectionViewCell> = UICollectionView.CellRegistration<T, PostsModel>
+    
+    lazy var wkWebView: WKWebView = {
+        var view = WKWebView()
+        view.backgroundColor = UIColor.clear
+        return view
+    }()
     
     private let disposeBag = DisposeBag()
     
@@ -58,7 +75,9 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
             }
             
             if section == .episode, let cellRegistration = self?.episodeCellRegistration {
-                return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: item)
+                let cell = collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: item)
+                cell.delegate = self?.returnSelf
+                return cell
             }
             return UICollectionViewCell()
         }, configureSupplementaryView: { [weak self] dataSource, collectionView, kind, indexPath in
@@ -68,6 +87,10 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
             return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: indexPath)
         }
     )
+    
+    var returnSelf: Self {
+        return self
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -144,4 +167,38 @@ extension NovelDetailViewController: NovelDetailViewDelegate {
         print("프로필 뷰 화면전환 클릭")
     }
     
+}
+
+extension NovelDetailViewController: EpisodeCellDelegate {
+    
+    func showIamportAlert(amount: String) {
+        let title = Resource.UIConstants.Text.paymentAlertTitle
+        let message = Resource.UIConstants.Text.paymentAlertMessage
+        showAlert(style: .alert, title: title, message: message) { [weak self] UIAlertAction in
+            self?.callIamportPayment(amount)
+        }
+    }
+    
+    func callIamportPayment(_ amount: String) {
+        let uid = APIKey.payUID.replacing("#0", with: APIKey.sesacKey)
+                               .replacing("#1", with: String(Int(Date().timeIntervalSince1970)))
+        let payment = IamportPayment(
+            pg: PG.html5_inicis.makePgRawName(pgId: APIKey.pgId),
+                merchant_uid: uid,
+                amount: String(amount)).then {
+        $0.pay_method = PayMethod.card.rawValue 
+        $0.name = APIKey.companyName
+        $0.buyer_name = APIKey.paymentTester
+        $0.app_scheme = APIKey.appScheme
+        }
+        
+        Iamport.shared.paymentWebView(
+            webViewMode: wkWebView,
+            userCode: APIKey.iamportCode,
+            payment: payment) { [weak self] iamportResponse in
+                self?.rootView?.makeToast(String(describing: iamportResponse))
+                print(String(describing: iamportResponse))
+            }
+    }
+
 }
