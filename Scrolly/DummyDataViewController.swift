@@ -52,7 +52,7 @@ final class DummyDataViewController: UIViewController {
 //        UIImage(named: coverName)?.jpegData(compressionQuality: 1.0) ?? Data(),
 //    ]
     
-    lazy var signinQuery = SigninQuery(email: self.email, password: self.password, nick: self.nick, phoneNum: self.phoneNum, birthDay: self.birthDay)
+    lazy var signinQuery = SignUpQuery(email: self.email, password: self.password, nick: self.nick, phoneNum: self.phoneNum, birthDay: self.birthDay)
     lazy var emailValidationQuery = EmailValidationQuery(email: self.email)
     lazy var loginQuery = LoginQuery(email: self.email, password: self.password)
     lazy var myProfileQuery = MyProfileQuery(nick: "admin", phoneNum: "01087654321", birthDay: "19951231", profile: dummyProfileData )
@@ -342,7 +342,7 @@ final class DummyDataViewController: UIViewController {
     }
     
     private func signin() {
-        let result = APIManager.shared.callRequestAPI(model: SigninModel.self, router:.signin(signinQuery))
+        let result = APIManager.shared.callRequestAPI(model: SignUpModel.self, router:.signUp(signinQuery))
         testSubscribe(single: result)
     }
     

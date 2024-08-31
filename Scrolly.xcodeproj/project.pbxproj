@@ -76,6 +76,23 @@
 		BC84472F2C82D85E0091B612 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC84472E2C82D85E0091B612 /* SplashViewController.swift */; };
 		BC8447322C82D8AA0091B612 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8447312C82D8AA0091B612 /* SplashView.swift */; };
 		BC8447352C82DC720091B612 /* SplashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8447342C82DC720091B612 /* SplashViewModel.swift */; };
+		BC84473B2C82FCFE0091B612 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC84473A2C82FCFE0091B612 /* SignUpViewController.swift */; };
+		BC84473D2C82FD240091B612 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC84473C2C82FD240091B612 /* SignUpView.swift */; };
+		BC84473F2C8300470091B612 /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC84473E2C8300470091B612 /* SignUpViewModel.swift */; };
+		BC8447432C830EFB0091B612 /* PasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8447422C830EFB0091B612 /* PasswordView.swift */; };
+		BC8447452C830F030091B612 /* PasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8447442C830F030091B612 /* PasswordViewController.swift */; };
+		BC8447472C833FE60091B612 /* PhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8447462C833FE60091B612 /* PhoneViewController.swift */; };
+		BC8447492C8340070091B612 /* NicknameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8447482C8340070091B612 /* NicknameViewController.swift */; };
+		BC84474B2C8340530091B612 /* BirthDayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC84474A2C8340530091B612 /* BirthDayViewController.swift */; };
+		BC84474D2C83408B0091B612 /* BirthDayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC84474C2C83408B0091B612 /* BirthDayViewModel.swift */; };
+		BC84474F2C8340A80091B612 /* PhoneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC84474E2C8340A80091B612 /* PhoneViewModel.swift */; };
+		BC8447522C8345420091B612 /* UserBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8447512C8345420091B612 /* UserBuilder.swift */; };
+		BC8447542C83492F0091B612 /* PasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8447532C83492F0091B612 /* PasswordViewModel.swift */; };
+		BC8447562C834B7E0091B612 /* PhoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8447552C834B7E0091B612 /* PhoneView.swift */; };
+		BC8447582C834FE20091B612 /* NicknameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8447572C834FE20091B612 /* NicknameViewModel.swift */; };
+		BC84475A2C8350620091B612 /* NicknameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8447592C8350620091B612 /* NicknameView.swift */; };
+		BC84475C2C83537C0091B612 /* BirthDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC84475B2C83537C0091B612 /* BirthDayView.swift */; };
+		BC84475E2C835F7F0091B612 /* CustomLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC84475D2C835F7F0091B612 /* CustomLabel.swift */; };
 		BC8F1CD62C6CAE4B005D63CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1CD52C6CAE4B005D63CB /* AppDelegate.swift */; };
 		BC8F1CD82C6CAE4B005D63CB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1CD72C6CAE4B005D63CB /* SceneDelegate.swift */; };
 		BC8F1CDA2C6CAE4B005D63CB /* DummyDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1CD92C6CAE4B005D63CB /* DummyDataViewController.swift */; };
@@ -96,7 +113,7 @@
 		BC8F1D152C6CB3C7005D63CB /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BC8F1D142C6CB3C7005D63CB /* IQKeyboardManagerSwift */; };
 		BC8F1D172C6CB50F005D63CB /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D162C6CB50F005D63CB /* APIError.swift */; };
 		BC8F1D1A2C6CC079005D63CB /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D192C6CC079005D63CB /* UserDefaultsManager.swift */; };
-		BC8F1D1C2C6CF289005D63CB /* SigninQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D1B2C6CF289005D63CB /* SigninQuery.swift */; };
+		BC8F1D1C2C6CF289005D63CB /* SignUpQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D1B2C6CF289005D63CB /* SignUpQuery.swift */; };
 		BC8F1D1E2C6CF609005D63CB /* EmailValidationQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D1D2C6CF609005D63CB /* EmailValidationQuery.swift */; };
 		BC8F1D202C6CF65D005D63CB /* LoginQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D1F2C6CF65D005D63CB /* LoginQuery.swift */; };
 		BC8F1D242C6CF711005D63CB /* UploadFilesQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D232C6CF711005D63CB /* UploadFilesQuery.swift */; };
@@ -108,7 +125,7 @@
 		BC8F1D302C6D1F45005D63CB /* LikedPostsQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D2F2C6D1F45005D63CB /* LikedPostsQuery.swift */; };
 		BC8F1D322C6D1FD3005D63CB /* MyProfileQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D312C6D1FD3005D63CB /* MyProfileQuery.swift */; };
 		BC8F1D342C6D2026005D63CB /* HashTagsQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D332C6D2026005D63CB /* HashTagsQuery.swift */; };
-		BC8F1D362C70A264005D63CB /* SigninModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D352C70A264005D63CB /* SigninModel.swift */; };
+		BC8F1D362C70A264005D63CB /* SignUpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D352C70A264005D63CB /* SignUpModel.swift */; };
 		BC8F1D382C70A85F005D63CB /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D372C70A85F005D63CB /* LoginModel.swift */; };
 		BC8F1D3C2C70B14C005D63CB /* RefreshTokenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D3B2C70B14C005D63CB /* RefreshTokenModel.swift */; };
 		BC8F1D3E2C70B999005D63CB /* WithDrawModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D3D2C70B999005D63CB /* WithDrawModel.swift */; };
@@ -196,6 +213,23 @@
 		BC84472E2C82D85E0091B612 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		BC8447312C82D8AA0091B612 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		BC8447342C82DC720091B612 /* SplashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewModel.swift; sourceTree = "<group>"; };
+		BC84473A2C82FCFE0091B612 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		BC84473C2C82FD240091B612 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		BC84473E2C8300470091B612 /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
+		BC8447422C830EFB0091B612 /* PasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordView.swift; sourceTree = "<group>"; };
+		BC8447442C830F030091B612 /* PasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordViewController.swift; sourceTree = "<group>"; };
+		BC8447462C833FE60091B612 /* PhoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneViewController.swift; sourceTree = "<group>"; };
+		BC8447482C8340070091B612 /* NicknameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameViewController.swift; sourceTree = "<group>"; };
+		BC84474A2C8340530091B612 /* BirthDayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthDayViewController.swift; sourceTree = "<group>"; };
+		BC84474C2C83408B0091B612 /* BirthDayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthDayViewModel.swift; sourceTree = "<group>"; };
+		BC84474E2C8340A80091B612 /* PhoneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneViewModel.swift; sourceTree = "<group>"; };
+		BC8447512C8345420091B612 /* UserBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBuilder.swift; sourceTree = "<group>"; };
+		BC8447532C83492F0091B612 /* PasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordViewModel.swift; sourceTree = "<group>"; };
+		BC8447552C834B7E0091B612 /* PhoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneView.swift; sourceTree = "<group>"; };
+		BC8447572C834FE20091B612 /* NicknameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameViewModel.swift; sourceTree = "<group>"; };
+		BC8447592C8350620091B612 /* NicknameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameView.swift; sourceTree = "<group>"; };
+		BC84475B2C83537C0091B612 /* BirthDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthDayView.swift; sourceTree = "<group>"; };
+		BC84475D2C835F7F0091B612 /* CustomLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLabel.swift; sourceTree = "<group>"; };
 		BC8F1CD22C6CAE4B005D63CB /* Scrolly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Scrolly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC8F1CD52C6CAE4B005D63CB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BC8F1CD72C6CAE4B005D63CB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -211,7 +245,7 @@
 		BC8F1CF42C6CB26F005D63CB /* TargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetType.swift; sourceTree = "<group>"; };
 		BC8F1D162C6CB50F005D63CB /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
 		BC8F1D192C6CC079005D63CB /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
-		BC8F1D1B2C6CF289005D63CB /* SigninQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninQuery.swift; sourceTree = "<group>"; };
+		BC8F1D1B2C6CF289005D63CB /* SignUpQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpQuery.swift; sourceTree = "<group>"; };
 		BC8F1D1D2C6CF609005D63CB /* EmailValidationQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailValidationQuery.swift; sourceTree = "<group>"; };
 		BC8F1D1F2C6CF65D005D63CB /* LoginQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginQuery.swift; sourceTree = "<group>"; };
 		BC8F1D232C6CF711005D63CB /* UploadFilesQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFilesQuery.swift; sourceTree = "<group>"; };
@@ -223,7 +257,7 @@
 		BC8F1D2F2C6D1F45005D63CB /* LikedPostsQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedPostsQuery.swift; sourceTree = "<group>"; };
 		BC8F1D312C6D1FD3005D63CB /* MyProfileQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileQuery.swift; sourceTree = "<group>"; };
 		BC8F1D332C6D2026005D63CB /* HashTagsQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashTagsQuery.swift; sourceTree = "<group>"; };
-		BC8F1D352C70A264005D63CB /* SigninModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninModel.swift; sourceTree = "<group>"; };
+		BC8F1D352C70A264005D63CB /* SignUpModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpModel.swift; sourceTree = "<group>"; };
 		BC8F1D372C70A85F005D63CB /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
 		BC8F1D3B2C70B14C005D63CB /* RefreshTokenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenModel.swift; sourceTree = "<group>"; };
 		BC8F1D3D2C70B999005D63CB /* WithDrawModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithDrawModel.swift; sourceTree = "<group>"; };
@@ -294,6 +328,7 @@
 				BC06E8582C7CEAE400148785 /* Common */,
 				BC84472D2C82D8500091B612 /* Splash */,
 				BC84471D2C82C8090091B612 /* Login */,
+				BC8447372C82FCE40091B612 /* SignUp */,
 				BC097C792C74E0500038A21C /* Main */,
 				BC097C7B2C74E0680038A21C /* NovelDetail */,
 				BC097C6E2C7484D70038A21C /* EpisodeViewer */,
@@ -616,6 +651,53 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		BC8447372C82FCE40091B612 /* SignUp */ = {
+			isa = PBXGroup;
+			children = (
+				BC8447502C8345370091B612 /* Builder */,
+				BC8447382C82FCF00091B612 /* View */,
+				BC8447392C82FCF40091B612 /* ViewModel */,
+			);
+			path = SignUp;
+			sourceTree = "<group>";
+		};
+		BC8447382C82FCF00091B612 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				BC84473C2C82FD240091B612 /* SignUpView.swift */,
+				BC84473A2C82FCFE0091B612 /* SignUpViewController.swift */,
+				BC8447422C830EFB0091B612 /* PasswordView.swift */,
+				BC8447442C830F030091B612 /* PasswordViewController.swift */,
+				BC8447552C834B7E0091B612 /* PhoneView.swift */,
+				BC8447462C833FE60091B612 /* PhoneViewController.swift */,
+				BC84475B2C83537C0091B612 /* BirthDayView.swift */,
+				BC84474A2C8340530091B612 /* BirthDayViewController.swift */,
+				BC8447592C8350620091B612 /* NicknameView.swift */,
+				BC8447482C8340070091B612 /* NicknameViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		BC8447392C82FCF40091B612 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				BC84473E2C8300470091B612 /* SignUpViewModel.swift */,
+				BC8447532C83492F0091B612 /* PasswordViewModel.swift */,
+				BC84474E2C8340A80091B612 /* PhoneViewModel.swift */,
+				BC84474C2C83408B0091B612 /* BirthDayViewModel.swift */,
+				BC8447572C834FE20091B612 /* NicknameViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		BC8447502C8345370091B612 /* Builder */ = {
+			isa = PBXGroup;
+			children = (
+				BC8447512C8345420091B612 /* UserBuilder.swift */,
+			);
+			path = Builder;
+			sourceTree = "<group>";
+		};
 		BC8F1CC92C6CAE4B005D63CB = {
 			isa = PBXGroup;
 			children = (
@@ -665,7 +747,7 @@
 			isa = PBXGroup;
 			children = (
 				BC8F1D3B2C70B14C005D63CB /* RefreshTokenModel.swift */,
-				BC8F1D352C70A264005D63CB /* SigninModel.swift */,
+				BC8F1D352C70A264005D63CB /* SignUpModel.swift */,
 				BC8F1D372C70A85F005D63CB /* LoginModel.swift */,
 				BC8F1D3D2C70B999005D63CB /* WithDrawModel.swift */,
 				BC8F1D3F2C70BC50005D63CB /* MyProfileModel.swift */,
@@ -687,7 +769,7 @@
 				BC8F1D1D2C6CF609005D63CB /* EmailValidationQuery.swift */,
 				BC8F1D1F2C6CF65D005D63CB /* LoginQuery.swift */,
 				BC8F1D232C6CF711005D63CB /* UploadFilesQuery.swift */,
-				BC8F1D1B2C6CF289005D63CB /* SigninQuery.swift */,
+				BC8F1D1B2C6CF289005D63CB /* SignUpQuery.swift */,
 				BC8F1D272C6D17CB005D63CB /* PostsQuery.swift */,
 				BC8F1D292C6D187E005D63CB /* GetPostsQuery.swift */,
 				BC8F1D2B2C6D1CD2005D63CB /* CommentsQuery.swift */,
@@ -763,6 +845,7 @@
 				BC48A9192C7F2674001C9B27 /* EpisodeStatusLabel.swift */,
 				BC8447272C82CA2B0091B612 /* SignTextField.swift */,
 				BC8447292C82CA3A0091B612 /* PointButton.swift */,
+				BC84475D2C835F7F0091B612 /* CustomLabel.swift */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -888,37 +971,48 @@
 				BC097CD02C76249C0038A21C /* BaseCollectionViewController.swift in Sources */,
 				BC8F1CEF2C6CB08F005D63CB /* APIConstants.swift in Sources */,
 				BC8F1CD62C6CAE4B005D63CB /* AppDelegate.swift in Sources */,
+				BC84473B2C82FCFE0091B612 /* SignUpViewController.swift in Sources */,
 				BCCBDA842C78BE3A00073E31 /* CreatorLabelView.swift in Sources */,
 				BC8F1CF52C6CB26F005D63CB /* TargetType.swift in Sources */,
 				BCCBDA802C78887900073E31 /* RecommandCollectionView.swift in Sources */,
 				BC097C642C73583A0038A21C /* PostsModel.swift in Sources */,
+				BC8447472C833FE60091B612 /* PhoneViewController.swift in Sources */,
 				BC48A90A2C7DE4F9001C9B27 /* NovelDetailSection.swift in Sources */,
 				BC8447322C82D8AA0091B612 /* SplashView.swift in Sources */,
 				BC8F1D282C6D17CB005D63CB /* PostsQuery.swift in Sources */,
+				BC84474D2C83408B0091B612 /* BirthDayViewModel.swift in Sources */,
+				BC84473D2C82FD240091B612 /* SignUpView.swift in Sources */,
 				BC097CC52C761E0E0038A21C /* MainView.swift in Sources */,
 				BC48A90E2C7DE99E001C9B27 /* EpisodeCell.swift in Sources */,
 				BC097C992C74F7C20038A21C /* BaseModel.swift in Sources */,
 				BC8F1D3E2C70B999005D63CB /* WithDrawModel.swift in Sources */,
+				BC8447562C834B7E0091B612 /* PhoneView.swift in Sources */,
 				BC670AA02C7B0A90006FB171 /* RomanceSection.swift in Sources */,
 				BC8F1D3C2C70B14C005D63CB /* RefreshTokenModel.swift in Sources */,
 				BC06E8682C7DBAD100148785 /* CustomButton.swift in Sources */,
 				BC097C782C74C37E0038A21C /* UIView+Extension.swift in Sources */,
 				BC06E86D2C7DD49B00148785 /* HashTagListCell.swift in Sources */,
+				BC84474F2C8340A80091B612 /* PhoneViewModel.swift in Sources */,
 				BC097C912C74E3590038A21C /* Resource.swift in Sources */,
 				BC84472C2C82CB4F0091B612 /* String+Extension.swift in Sources */,
+				BC84475A2C8350620091B612 /* NicknameView.swift in Sources */,
 				BC8F1D342C6D2026005D63CB /* HashTagsQuery.swift in Sources */,
+				BC84474B2C8340530091B612 /* BirthDayViewController.swift in Sources */,
 				BC097C6A2C739C3A0038A21C /* GetPostsModel.swift in Sources */,
 				BC48A91D2C7F4A04001C9B27 /* DateFormatter.swift in Sources */,
 				BC097CDA2C76B6F80038A21C /* HashTagSection.swift in Sources */,
 				BC097C9B2C7500F80038A21C /* CommentsModel.swift in Sources */,
 				BCCBDA672C7739AD00073E31 /* UIImage+Extension.swift in Sources */,
+				BC84473F2C8300470091B612 /* SignUpViewModel.swift in Sources */,
 				BC8447232C82C8740091B612 /* LoginView.swift in Sources */,
 				BCCBDA8A2C7A1BC400073E31 /* UIViewController+Extension.swift in Sources */,
 				BC670A9E2C7B0A81006FB171 /* FantasySection.swift in Sources */,
 				BC097CD82C76370D0038A21C /* HashTagCollectionViewCell.swift in Sources */,
 				BC06E86A2C7DD14B00148785 /* NovelDetailCollectionView.swift in Sources */,
 				BC48A9442C81B263001C9B27 /* PaymentViewController.swift in Sources */,
+				BC84475C2C83537C0091B612 /* BirthDayView.swift in Sources */,
 				BC8F1CED2C6CB083005D63CB /* APIKey.swift in Sources */,
+				BC8447522C8345420091B612 /* UserBuilder.swift in Sources */,
 				BCCBDA772C78651400073E31 /* WaitingFreeImageView.swift in Sources */,
 				BC84472F2C82D85E0091B612 /* SplashViewController.swift in Sources */,
 				BC097C622C7330120038A21C /* RetryInterceptor.swift in Sources */,
@@ -936,11 +1030,15 @@
 				BC06E84D2C7CC80200148785 /* ViewTransitaion.swift in Sources */,
 				BC8F1D4A2C717864005D63CB /* KingfisherManager+Extension.swift in Sources */,
 				BC06E8532C7CCB9B00148785 /* ViewControllerProvider.swift in Sources */,
+				BC8447432C830EFB0091B612 /* PasswordView.swift in Sources */,
 				BC8F1D402C70BC50005D63CB /* MyProfileModel.swift in Sources */,
 				BC48A9412C81AF0C001C9B27 /* PaymentListModel.swift in Sources */,
 				BCCBDA712C78515200073E31 /* ReusableIdentifier.swift in Sources */,
+				BC84475E2C835F7F0091B612 /* CustomLabel.swift in Sources */,
+				BC8447582C834FE20091B612 /* NicknameViewModel.swift in Sources */,
 				BC8447282C82CA2B0091B612 /* SignTextField.swift in Sources */,
 				BC48A90C2C7DE96F001C9B27 /* DescriptionCell.swift in Sources */,
+				BC8447452C830F030091B612 /* PasswordViewController.swift in Sources */,
 				BCCBDA882C79BCB000073E31 /* RecentlyCollectionViewCell.swift in Sources */,
 				BC48A9262C7F8975001C9B27 /* EpisodeViewerView.swift in Sources */,
 				BC48A9312C803814001C9B27 /* PDFView+Extension.swift in Sources */,
@@ -948,6 +1046,7 @@
 				BC097C8E2C74E2CB0038A21C /* BaseCollectionViewCell.swift in Sources */,
 				BCCBDA6E2C784B2C00073E31 /* collectionViewHeaderView.swift in Sources */,
 				BC48A91A2C7F2674001C9B27 /* EpisodeStatusLabel.swift in Sources */,
+				BC8447492C8340070091B612 /* NicknameViewController.swift in Sources */,
 				BC8447252C82C87E0091B612 /* LoginViewModel.swift in Sources */,
 				BC06E84F2C7CC83800148785 /* NovelDetailViewModel.swift in Sources */,
 				BC48A94D2C81F8F4001C9B27 /* PaymentStatus.swift in Sources */,
@@ -960,6 +1059,7 @@
 				BC097CC32C761E020038A21C /* MainViewController.swift in Sources */,
 				BC670A9C2C7B0A6E006FB171 /* FemaleSection.swift in Sources */,
 				BC8F1D242C6CF711005D63CB /* UploadFilesQuery.swift in Sources */,
+				BC8447542C83492F0091B612 /* PasswordViewModel.swift in Sources */,
 				BC8F1D2E2C6D1DE1005D63CB /* LikeQuery.swift in Sources */,
 				BC097CBF2C761CB40038A21C /* BaseViewModel.swift in Sources */,
 				BC84472A2C82CA3A0091B612 /* PointButton.swift in Sources */,
@@ -967,7 +1067,7 @@
 				BC8F1CF32C6CB267005D63CB /* APIManager.swift in Sources */,
 				BCCBDA6C2C7837EE00073E31 /* RecommandCollectionViewCell.swift in Sources */,
 				BC48A9332C8058AA001C9B27 /* InfoCell.swift in Sources */,
-				BC8F1D1C2C6CF289005D63CB /* SigninQuery.swift in Sources */,
+				BC8F1D1C2C6CF289005D63CB /* SignUpQuery.swift in Sources */,
 				BC097C952C74E3C80038A21C /* UIColor+Extension.swift in Sources */,
 				BC8F1D322C6D1FD3005D63CB /* MyProfileQuery.swift in Sources */,
 				BC8F1D1E2C6CF609005D63CB /* EmailValidationQuery.swift in Sources */,
@@ -976,7 +1076,7 @@
 				BC8F1D302C6D1F45005D63CB /* LikedPostsQuery.swift in Sources */,
 				BC8447352C82DC720091B612 /* SplashViewModel.swift in Sources */,
 				BC48A93D2C81ACA6001C9B27 /* PaymentValidationQuery.swift in Sources */,
-				BC8F1D362C70A264005D63CB /* SigninModel.swift in Sources */,
+				BC8F1D362C70A264005D63CB /* SignUpModel.swift in Sources */,
 				BC670AA22C7B0A96006FB171 /* DateSection.swift in Sources */,
 				BC097CC12C761DA90038A21C /* MainViewModel.swift in Sources */,
 			);

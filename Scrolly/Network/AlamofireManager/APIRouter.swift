@@ -9,7 +9,7 @@ import Foundation
 import Alamofire
 
 enum APIRouter {
-    case signin(_ query: SigninQuery)
+    case signUp(_ query: SignUpQuery)
     case emailValidation(_ query: EmailValidationQuery)
     case login(_ query: LoginQuery)
     case refreshAccessToken
@@ -80,7 +80,7 @@ extension APIRouter: TargetType {
     
     var method: HTTPMethod {
         switch self {
-        case .signin, .emailValidation, .login, .uploadFiles, .uploadPosts, .uploadComments, .likePostsToggle, .likePostsToggleSub, .paymentValidation:
+        case .signUp, .emailValidation, .login, .uploadFiles, .uploadPosts, .uploadComments, .likePostsToggle, .likePostsToggleSub, .paymentValidation:
             return .post
         case .refreshAccessToken, .withdraw, .getPosts, .getPostsImage, .queryOnePosts, .getLikedPosts, .getLikedPostsSub, .getMyProfile, .searchHashTags, .paymentedList:
             return .get
@@ -101,7 +101,7 @@ extension APIRouter: TargetType {
             return HeadersOption.tokenAndRefresh.combineHeaders
         case .withdraw, .getPosts, .getPostsImage, .queryOnePosts, .deletePosts, .deleteComments, .getLikedPosts, .getLikedPostsSub, .getMyProfile, .searchHashTags:
             return HeadersOption.token.combineHeaders
-        case .signin, .emailValidation, .login:
+        case .signUp, .emailValidation, .login:
             return HeadersOption.json.combineHeaders
         case .uploadFiles, .updateMyProfile:
             return HeadersOption.tokenAndMulipart.combineHeaders
@@ -116,7 +116,7 @@ extension APIRouter: TargetType {
     
     var body: Data? {
         return switch self {
-        case .signin(let query): 
+        case .signUp(let query): 
             encodeQuery(query)
         case .emailValidation(let query): 
             encodeQuery(query)
@@ -153,7 +153,7 @@ extension APIRouter: TargetType {
     
     var description: String {
         switch self {
-        case .signin: "signin"
+        case .signUp: "signin"
         case .emailValidation: "emailValidation"
         case .login: "login"
         case .refreshAccessToken: "refreshAccessToken"

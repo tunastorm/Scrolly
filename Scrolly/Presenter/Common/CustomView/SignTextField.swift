@@ -9,7 +9,7 @@ import UIKit
 
 class SignTextField: UITextField {
     
-    init(placeholderText: String) {
+    init(placeholderText: String, color: UIColor = Resource.Asset.CIColor.textBlack) {
         super.init(frame: .zero)
         
         textColor = Resource.Asset.CIColor.textBlack
@@ -18,8 +18,7 @@ class SignTextField: UITextField {
         borderStyle = .none
         layer.cornerRadius = 10
         layer.borderWidth = 1
-        layer.borderColor = Resource.Asset.CIColor.textBlack.cgColor
-        
+        layer.borderColor = color.cgColor
     }
     
     @available(*, unavailable)

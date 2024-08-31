@@ -13,9 +13,16 @@ final class LoginView: BaseView {
     
     private let disposeBag = DisposeBag()
     
+    private let appTitle = UILabel().then {
+        $0.text = Resource.UIConstants.Text.appTitle
+        $0.textColor = Resource.Asset.CIColor.blue
+        $0.textAlignment = .center
+        $0.font = .boldSystemFont(ofSize: 70)
+    }
+
     private let emailTextField = SignTextField(placeholderText: "이메일을 입력해주세요")
     private let passwordTextField = SignTextField(placeholderText: "비밀번호를 입력해주세요")
-    let signInButton = PointButton(title: "로그인")
+    let signInButton = PointButton(title: "로그인", bgColor: Resource.Asset.CIColor.blue)
     let signUpButton = PointButton(title: "회원가입")
     
     let input = Input(validation: PublishRelay<Bool>())
@@ -25,6 +32,7 @@ final class LoginView: BaseView {
     }
     
     override func configHierarchy() {
+        addSubview(appTitle)
         addSubview(emailTextField)
         addSubview(passwordTextField)
         addSubview(signInButton)
@@ -32,9 +40,14 @@ final class LoginView: BaseView {
     }
     
     override func configLayout() {
+        appTitle.snp.makeConstraints { make in
+            make.height.equalTo(80)
+            make.top.equalTo(safeAreaLayoutGuide).offset(80)
+            make.centerX.equalToSuperview()
+        }
         emailTextField.snp.makeConstraints { make in
             make.height.equalTo(50)
-            make.top.equalTo(safeAreaLayoutGuide).offset(200)
+            make.top.equalTo(appTitle.snp.bottom).offset(120)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
         }
         

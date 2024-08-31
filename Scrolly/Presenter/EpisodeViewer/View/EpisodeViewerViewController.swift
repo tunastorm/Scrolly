@@ -26,8 +26,8 @@ final class EpisodeViewerViewController: BaseViewController<EpisodeViewerView> {
         rootView?.configInteractionWithViewController(viewController: self)
     }
     
-    override func configNavigationbar(backgroundColor: UIColor, backButton: Bool, shadowImage: Bool, foregroundColor: UIColor, barbuttonColor: UIColor, titlePosition: TitlePosition) {
-        
+    override func configNavigationbar(backgroundColor: UIColor, backButton: Bool = true, shadowImage: Bool, foregroundColor: UIColor = .black, barbuttonColor: UIColor = .black, showProfileButton: Bool = true, titlePosition: TitlePosition = .center) {
+        super.configNavigationbar(backgroundColor: Resource.Asset.CIColor.white, backButton: true, shadowImage: false)
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black,
                               NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14)]
         let appearance = UINavigationBarAppearance()

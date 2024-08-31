@@ -15,13 +15,13 @@ final class SplashViewController: BaseViewController<SplashView> {
     
     private var nextView: UIViewController?
     
+    override func configNavigationbar(backgroundColor: UIColor, backButton: Bool = true, shadowImage: Bool, foregroundColor: UIColor = .black, barbuttonColor: UIColor = .black, showProfileButton: Bool = true, titlePosition: TitlePosition = .center) {
+        navigationController?.navigationBar.isHidden = true
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         rootView?.layoutIfNeeded()
-    }
-    
-    override func configNavigationbar(backgroundColor: UIColor, backButton: Bool = true, shadowImage: Bool, foregroundColor: UIColor = .clear, barbuttonColor: UIColor = .clear, titlePosition: TitlePosition = .center) {
-         
     }
     
     override func bindData() {

@@ -17,8 +17,8 @@ final class LoginViewController: BaseViewController<LoginView> {
         
     }
     
-    override func configNavigationbar(backgroundColor: UIColor, backButton: Bool = true, shadowImage: Bool, foregroundColor: UIColor = .black, barbuttonColor: UIColor = .black, titlePosition: TitlePosition = .center) {
-        
+    override func configNavigationbar(backgroundColor: UIColor, backButton: Bool = true, shadowImage: Bool, foregroundColor: UIColor = .black, barbuttonColor: UIColor = .black, showProfileButton: Bool = true, titlePosition: TitlePosition = .center) {
+        super.configNavigationbar(backgroundColor: Resource.Asset.CIColor.viewWhite, backButton: true, shadowImage: false, showProfileButton: false)
     }
     
     override func bindData() {
@@ -31,6 +31,13 @@ final class LoginViewController: BaseViewController<LoginView> {
                 }
                 return LoginQuery(email: info.0, password: info.1)
             }.bind(to: input.loginTap)
+        
+       rootView?.signUpButton.rx.tap
+            .bind(with: self, onNext: { owner, _ in
+                let vc = SignUpViewController(view: SignUpView(), viewModel: SignUpViewModel())
+                owner.pushAfterView(view: vc, backButton: true, animated: true)
+            })
+            .disposed(by: disposeBag)
         
         guard let rootView,
               let viewModel = viewModel as? LoginViewModel,

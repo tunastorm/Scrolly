@@ -46,7 +46,7 @@ class BaseViewController<View: BaseView>: UIViewController, UIViewControllerProv
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configNavigationbar(backgroundColor: .clear, shadowImage: false)
+        configNavigationbar()
     }
     
     func bindData() {
@@ -57,13 +57,15 @@ class BaseViewController<View: BaseView>: UIViewController, UIViewControllerProv
         
     }
     
-    func configNavigationbar(backgroundColor: UIColor, backButton: Bool = true, shadowImage: Bool, foregroundColor: UIColor = .black, barbuttonColor: UIColor = .black, titlePosition: TitlePosition = .center) {
+    func configNavigationbar(backgroundColor: UIColor = .clear, backButton: Bool = true, shadowImage: Bool = false, foregroundColor: UIColor = .black, barbuttonColor: UIColor = .black, showProfileButton: Bool = true, titlePosition: TitlePosition = .center) {
         navigationItem.backButtonTitle = ""
         navigationItem.backBarButtonItem?.isHidden = !backButton
-//        let searchButton = UIBarButtonItem(image: Resource.Asset.SystemImage.magnifyingGlass, style: .plain, target: self, action: #selector(searchButtonClicked))
-        let profileButton = UIBarButtonItem(image: Resource.Asset.SystemImage.lineThreeHorizontal, style: .plain, target: self, action: #selector(profileButtonClicked))
-//        searchButton.tintColor = barbuttonColor
-        profileButton.tintColor = barbuttonColor
+        
+        if showProfileButton {
+            let profileButton = UIBarButtonItem(image: Resource.Asset.SystemImage.lineThreeHorizontal, style: .plain, target: self, action: #selector(profileButtonClicked))
+            profileButton.tintColor = barbuttonColor
+            navigationItem.rightBarButtonItems = [profileButton]
+        }
         
         let textAttributes = [
             NSAttributedString.Key.foregroundColor : foregroundColor,
@@ -86,7 +88,6 @@ class BaseViewController<View: BaseView>: UIViewController, UIViewControllerProv
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
         self.navigationController?.navigationBar.tintColor = .black
         
-        navigationItem.rightBarButtonItems = [profileButton]
     }
     
     func injectModelToView() {

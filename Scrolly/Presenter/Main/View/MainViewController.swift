@@ -55,7 +55,7 @@ final class MainViewController: BaseViewController<MainView> {
         navigationItem.backBarButtonItem?.isEnabled = false
     }
     
-    override func configNavigationbar(backgroundColor: UIColor, backButton: Bool = true, shadowImage: Bool, foregroundColor: UIColor = .black, barbuttonColor: UIColor = .black, titlePosition: TitlePosition = .center) {
+    override func configNavigationbar(backgroundColor: UIColor, backButton: Bool = true, shadowImage: Bool, foregroundColor: UIColor = .black, barbuttonColor: UIColor = .black, showProfileButton: Bool = true, titlePosition: TitlePosition = .center) {
         super.configNavigationbar(backgroundColor: .white, shadowImage: false, foregroundColor: Resource.Asset.CIColor.blue, titlePosition: .left)
         navigationItem.title = Resource.UIConstants.Text.appTitle
         navigationItem.rightBarButtonItem?.isEnabled = true

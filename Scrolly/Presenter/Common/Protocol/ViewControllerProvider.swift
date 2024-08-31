@@ -11,6 +11,6 @@ protocol UIViewControllerProvider: UIViewController {
         
     func bindData()
     func configInteraction()
-    func configNavigationbar(backgroundColor: UIColor, backButton: Bool, shadowImage: Bool, foregroundColor: UIColor, barbuttonColor: UIColor, titlePosition: TitlePosition)
+    func configNavigationbar(backgroundColor: UIColor, backButton: Bool, shadowImage: Bool, foregroundColor: UIColor, barbuttonColor: UIColor, showProfileButton: Bool, titlePosition: TitlePosition)
     
 }
