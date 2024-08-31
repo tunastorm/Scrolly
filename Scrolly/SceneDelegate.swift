@@ -22,8 +22,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
    
 //        let mainViewController = DummyDataViewController()
 //        let mainViewController = EpisodeViewerViewController()
-        let mainViewController = MainViewController(view: MainView(), viewModel: MainViewModel())
+//        let mainViewController = MainViewController(view: MainView(), viewModel: MainViewModel())
+        let mainViewController = SplashViewController(view: SplashView(), viewModel: SplashViewModel())
         let navigationController = UINavigationController(rootViewController: mainViewController)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshTokenExpired), name: NSNotification.Name(RefreshTokenNotification.expired), object: nil)
+        
         window?.rootViewController = navigationController// sb entrypoint
         window?.makeKeyAndVisible() // show the rootViewController to display
     }
@@ -55,7 +59,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-
+    
+    func changeRootVC(_ vc: UIViewController, animated: Bool) {
+        guard let window = self.window else { return }
+        window.rootViewController = vc
+        
+        UIView.transition(with: window, duration: 2.0, options: [.transitionCrossDissolve], animations: nil, completion: nil)
+    }
+    
+    func changeRootVCWithNavi(_ vc: UIViewController, animated: Bool) {
+        guard let window = self.window else { return }
+        let nav = UINavigationController(rootViewController: vc)
+        window.rootViewController = nav
+        
+        UIView.transition(with: window, duration: 2.0, options: [.transitionCrossDissolve], animations: nil, completion: nil)
+    }
+    
+    @objc func refreshTokenExpired() {
+       let vc = SplashViewController(view: SplashView(), viewModel: SplashViewModel())
+       changeRootVCWithNavi(vc, animated: true)
+    }
 
 }
 

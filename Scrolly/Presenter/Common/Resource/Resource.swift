@@ -35,8 +35,6 @@ enum Resource {
         
         enum Text {
             static let appTitle = "Scrolly"
-            static let paymentAlertMessage = "유료 회차입니다.\n100원 결제를 진행하시겠습니까?"
-            static let paymentAlertTitle = "결제하기"
             static let alertOK = "확인"
             static let alertCancle = "취소"
             static let startButton = "시작하기"
@@ -88,6 +86,11 @@ enum Resource {
         
         enum NamedImage {
             static let gradationCover = UIImage(named: "background")
+            
+            static var splashImage: UIImage {
+                let random = [1,2,5,6,7,8,13,14,15,19].randomElement() ?? 1
+                return UIImage(named: "dummyImage_\(random)")!
+            }
         }
         
         enum Font {
@@ -122,7 +125,9 @@ enum Resource {
             static let darkGray = UIColor(hexCode: "4D5652", alpha: Resource.UIConstants.Alpha.full)
             static let black = UIColor(hexCode: "000000", alpha: Resource.UIConstants.Alpha.full)
             static let red = UIColor(hexCode: "F04452", alpha: Resource.UIConstants.Alpha.full)
-//            static let yellow = UIColor.systemYellow
+            static let textBlack = UIColor.textPoint
+            static let viewWhite = UIColor.viewPoint
         }
+        
     }
 }

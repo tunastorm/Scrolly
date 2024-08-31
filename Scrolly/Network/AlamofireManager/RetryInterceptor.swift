@@ -28,8 +28,9 @@ final class RetryInterceptor: RetryPolicy {
                 }
                 return
             }
-            if let error { print(error) }
-            // NotificationCentor를 이용해 login 화면으로 이동구현 필요
+            if let error {
+                NotificationCenter.default.post(name: NSNotification.Name(RefreshTokenNotification.expired), object: nil, userInfo: nil)
+            }
             completion(.doNotRetry)
         }
     }

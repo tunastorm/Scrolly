@@ -101,7 +101,7 @@ struct PostsModel: Decodable, Hashable, IdentifiableType {
         var category = ""
         if hashTags.count >= 3 {
             let tagString = hashTags[2...3].joined(separator: "﹒")
-            category = "\(tagString)﹒"
+            category = "\(tagString)"
         }
         return category
     }

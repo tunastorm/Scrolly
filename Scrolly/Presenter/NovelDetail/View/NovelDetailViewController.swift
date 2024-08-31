@@ -37,6 +37,10 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
     typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<CollectionViewHeaderView>
     typealias CellRegistration<T: BaseCollectionViewCell> = UICollectionView.CellRegistration<T, PostsModel>
     
+    private var returnSelf: Self {
+        return self
+    }
+    
     private let disposeBag = DisposeBag()
     
     private let descriptionCellRegistration = CellRegistration<DescriptionCell> { cell, indexPath, itemIdentifier in
@@ -81,10 +85,9 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
             return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: indexPath)
         }
     )
+
     
-    var returnSelf: Self {
-        return self
-    }
+    private let input = NovelDetailViewModel.Input(viewedNovel: PublishSubject<PostsModel>())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,7 +102,6 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
         guard let detailViewModel = viewModel as? NovelDetailViewModel, let rootView else {
             return
         }
-        let input = NovelDetailViewModel.Input()
         guard let output = detailViewModel.transform(input: input) else {
             return
         }
@@ -159,8 +161,8 @@ extension NovelDetailViewController: NovelDetailViewDelegate {
 extension NovelDetailViewController: EpisodeCellDelegate {
     
     func showIamportAlert(_ indexPath: IndexPath) {
-        let title = Resource.UIConstants.Text.paymentAlertTitle
-        let message = Resource.UIConstants.Text.paymentAlertMessage
+        let title = PaymentStatus.AlertTitle
+        let message = PaymentStatus.AlertMessage
         showAlert(style: .alert, title: title, message: message) { [weak self] UIAlertAction in
             self?.pushToPaymentView(indexPath)
         }
@@ -171,6 +173,7 @@ extension NovelDetailViewController: EpisodeCellDelegate {
             guard let model = try detailDataSource.model(at: indexPath) as? PostsModel else {
                 return
             }
+            input.viewedNovel.onNext(model)
             let vc = EpisodeViewerViewController(view: EpisodeViewerView(), viewModel: EpisodeViewerViewModel(novel: model))
             pushAfterView(view: vc, backButton: true, animated: true)
         } catch {
@@ -187,6 +190,7 @@ extension NovelDetailViewController: EpisodeCellDelegate {
             let vc = PaymentViewController(view: PaymentView())
             vc.model = model
             vc.complitionHandler = { [weak self] in
+                self?.input.viewedNovel.onNext(model)
                 self?.popBeforeView(animated: false)
                 let viewer = EpisodeViewerViewController(view: EpisodeViewerView(), viewModel: EpisodeViewerViewModel(novel: model))
                 self?.pushAfterView(view: viewer, backButton: true, animated: true)

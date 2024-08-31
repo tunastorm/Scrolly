@@ -54,7 +54,7 @@ final class APIManager: APIManagerProvider {
             KingfisherManager.shared.setHeaders()
             completion(.success(model))
         } failure: { error in
-            print(#function, "refreshTokenError: ", error)
+            
             completion(.failure(error))
         }
     }
@@ -87,6 +87,8 @@ final class APIManager: APIManagerProvider {
             let loginModel = model as! LoginModel
             UserDefaultsManager.token = loginModel.accessToken
             UserDefaultsManager.refresh = loginModel.refreshToken
+            UserDefaultsManager.user = loginModel.nick
+            UserDefaultsManager.profile = loginModel.profileImage ?? "default"
             KingfisherManager.shared.setHeaders()
         })
         .debug(router.description)

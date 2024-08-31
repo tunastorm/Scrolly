@@ -9,6 +9,7 @@ import UIKit
 import Kingfisher
 import PDFKit
 
+// 더미 PDF파일 및 이미지 업로드용
 
 enum FileType {
     case image

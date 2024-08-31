@@ -16,13 +16,13 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
     private let disposeBag = DisposeBag()
     
     private var detailInfo: PostsModel?
-    
-    private var price: String?
-    
+
     internal var model: PostsModel? {
         get { detailInfo }
         set { detailInfo = newValue }
     }
+    
+    private var cursur: String?
     
     init(detailInfo: PostsModel? = nil) {
         super.init()
@@ -38,17 +38,15 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
     
     private let output = Output(fetchedModel: PublishSubject<PostsModel>(),
                                 description: PublishSubject<PostsModel>(),
-                                hashtag: PublishSubject<PostsModel>(),
                                 episodes: PublishSubject<GetPostsModelResult>())
 
     struct Input {
-        
+        let viewedNovel: PublishSubject<PostsModel>
     }
     
     struct Output {
         var fetchedModel: PublishSubject<PostsModel>
         let description: PublishSubject<PostsModel>
-        let hashtag: PublishSubject<PostsModel>
         let episodes: PublishSubject<GetPostsModelResult>
     }
     
@@ -63,12 +61,24 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
             .map { HashTagsQuery(next: nil, limit: "50", productId: APIConstants.ProductId.novelEpisode, hashTag: $0) }
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags($0)) }
         
+        let viewedList = PublishSubject<Void>()
+            .map{ [weak self] _ in LikedPostsQuery(next: self?.cursur, limit: "50") }
+            .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getLikedPostsSub($0)) }
+        
         BehaviorSubject.zip(novelInfo, episoeds)
             .bind(with: self) { owner, results in
                 let episodes = results.1
                 owner.output.fetchedModel.onNext(results.0)
                 owner.output.episodes.onNext(results.1)
                 owner.output.episodes.onCompleted()
+            }
+            .disposed(by: disposeBag)
+        
+        input.viewedNovel
+            .map{($0.postId, LikeQuery(likeStatus: true))}
+            .flatMap { APIManager.shared.callRequestAPI(model: LikeModel.self, router: .likePostsToggleSub($0.0, $0.1)) }
+            .bind(with: self) { owner, model in
+                
             }
             .disposed(by: disposeBag)
         
@@ -89,5 +99,5 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
             }
             .disposed(by: disposeBag)
     }
-        
+    
 }

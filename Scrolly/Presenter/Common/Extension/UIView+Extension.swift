@@ -9,6 +9,14 @@ import UIKit
 
 extension UIView {
     
+    func screen() -> UIScreen? {
+        guard let window = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
+            return window?.windowScene?.screen
+        }
+        
+        return window.screen
+    }
+    
     func setHidden(_ isHidden: Bool, animated: Bool) {
         if animated {
             let startAlpha: CGFloat = isHidden ? 1 : 0

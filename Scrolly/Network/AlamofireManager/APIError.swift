@@ -67,7 +67,7 @@ enum APIError: Error {
         case .invalidRequest: "잘못된 요청입니다"
         case .invalidToken: "인증할 수 없는 엑세스 토큰입니다."
         case .accessForbidden: "접근 권한이 없는 요청입니다."
-        case .expiredRefreshToken: "리프레시 토큰이 만료되었습니다. 다시 로그인 해주세요."
+        case .expiredRefreshToken: "인증기간이 만료되었습니다. 다시 로그인 해주세요."
         case .expiredToken: "엑세스 토큰이 만료되었습니다."
         case .validationFaild: "사용이 불가한 이메일입니다."
         case .taskFailed: "을 찾을 수 없습니다" // 댓글 생성 실패시 분기처리 필요
