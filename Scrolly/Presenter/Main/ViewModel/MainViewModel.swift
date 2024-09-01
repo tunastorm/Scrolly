@@ -25,7 +25,7 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
     private var femaleResults: [Int : PublishSubject<HashTagsQuery>] = [:]
     private var fantasyResults: [Int : PublishSubject<HashTagsQuery>] = [:]
     private var romanceResults: [Int : PublishSubject<HashTagsQuery>] = [:]
-    private var dateResults: [Int : PublishSubject<HashTagsQuery>] = [:]
+//    private var dateResults: [Int : PublishSubject<HashTagsQuery>] = [:]
 
     private var output = Output(filterList: BehaviorSubject<[HashTagSection.HashTag]>(value: HashTagSection.HashTag.allCases),
                                 recommandDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
@@ -33,7 +33,7 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
                                 femaleDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
                                 fantasyDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
                                 romanceDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
-                                dateDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
+//                                dateDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
                                 recommandCellTap: PublishSubject<PostsModel>())
     
     private let disposeBag = DisposeBag()
@@ -51,7 +51,7 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
         let femaleDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>
         let fantasyDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>
         let romanceDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>
-        let dateDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>
+//        let dateDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>
         let recommandCellTap: PublishSubject<PostsModel>
     }
     
@@ -71,7 +71,7 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
         PublishSubject.combineLatest(recommandResults.sorted { $0.key < $1.key }.map{ $0.value })
             .bind(with: self) { owner, results in
                 owner.output.recommandDatas.onNext(results)
-                owner.output.dateDatas.onNext(results)
+//                owner.output.dateDatas.onNext(results)
             }
             .disposed(by: disposeBag)
         
@@ -101,7 +101,7 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
             case .female: results = femaleResults
             case .fantasy: results = fantasyResults
             case .romance: results = romanceResults
-            case .day: results = dateResults
+//            case .day: results = dateResults
             default: return
             }
             novelInfoResults[section.rawValue] = results.sorted { $0.key < $1.key }.map{ $0.value }.map { results in
@@ -145,8 +145,8 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
         (0...FantasySection.allCases.count-1).forEach { fantasyResults[$0] = PublishSubject<HashTagsQuery>() }
         //MARK: - 로맨스
         (0...RomanceSection.allCases.count-1).forEach { romanceResults[$0] = PublishSubject<HashTagsQuery>() }
-        //MARK: - 요일
-        (0...DateSection.allCases.count-1).forEach { dateResults[$0] = PublishSubject<HashTagsQuery>() }
+//        //MARK: - 요일
+//        (0...DateSection.allCases.count-1).forEach { dateResults[$0] = PublishSubject<HashTagsQuery>() }
     }
     
     private func callDataRouter(_ indexPath: IndexPath) {
@@ -155,7 +155,7 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
         case .female: callDatas(for: FemaleSection.allCases)
         case .fantasy: callDatas(for: FantasySection.allCases)
         case .romance: callDatas(for: RomanceSection.allCases)
-        case .day: callRecommandDatas()
+//        case .day: callRecommandDatas()
         default: return
         }
     }
@@ -167,7 +167,7 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
         case is [FemaleSection]: results = femaleResults
         case is [FantasySection]: results = fantasyResults
         case is [RomanceSection]: results = romanceResults
-        case is [DateSection]: results = dateResults
+//        case is [DateSection]: results = dateResults
         default: return
         }
         

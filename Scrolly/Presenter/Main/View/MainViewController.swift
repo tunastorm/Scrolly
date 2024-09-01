@@ -124,11 +124,11 @@ final class MainViewController: BaseViewController<MainView> {
             }
             .disposed(by: disposeBag)
         
-        output.dateDatas
-            .bind(with: self) { owner, resultList in
-                owner.fetchDatas(sections: DateSection.allCases, resultList: resultList)
-            }
-            .disposed(by: disposeBag)
+//        output.dateDatas
+//            .bind(with: self) { owner, resultList in
+//                owner.fetchDatas(sections: DateSection.allCases, resultList: resultList)
+//            }
+//            .disposed(by: disposeBag)
     }
     
     @objc private func novelViewed() {
@@ -175,7 +175,7 @@ final class MainViewController: BaseViewController<MainView> {
         case .female: post = femaleDataSource!.itemIdentifier(for: indexPath)
         case .fantasy: post = fantasyDataSource!.itemIdentifier(for: indexPath)
         case .romance: post = romanceDataSource!.itemIdentifier(for: indexPath)
-        case .day: post = dateDataSource!.itemIdentifier(for: indexPath)
+//        case .day: post = dateDataSource!.itemIdentifier(for: indexPath)
         }
         return post
     }
@@ -242,7 +242,7 @@ final class MainViewController: BaseViewController<MainView> {
         case is [FemaleSection]: configFemaleDataSource(collectionView, headerRegistration)
         case is [FantasySection]: configFantasyDataSource(collectionView, headerRegistration)
         case is [RomanceSection]: configRomanceDataSource(collectionView, headerRegistration)
-        case is [DateSection]: configDateDataSource(collectionView, headerRegistration)
+//        case is [DateSection]: configDateDataSource(collectionView, headerRegistration)
         default: break
         }
     }
@@ -357,27 +357,27 @@ final class MainViewController: BaseViewController<MainView> {
         }
     }
     
-    private func configDateDataSource(_ collectionView: BaseCollectionViewController, _ headerRegistration: HeaderRegistration) {
-        dateDataSource = UICollectionViewDiffableDataSource<DateSection, PostsModel>(collectionView: collectionView, cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
-            let section = DateSection.allCases[indexPath.section]
-            guard let bannerCellRegistration = self?.bannerCellRegistration,
-                  let recommandCellRegistration = self?.recommandCellRegistration,
-                    let recentlyCellRegistration = self?.recentlyCellRegistration else {
-                return UICollectionViewCell()
-            }
-            switch section {
-            case .banner:
-                return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
-            case .popular, .newWaitingFree:
-                return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
-            case .recently:
-                return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
-            }
-        })
-        dateDataSource?.supplementaryViewProvider = { [weak self] (view, kind, index) in
-            return self?.rootView?.dateView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
-        }
-    }
+//    private func configDateDataSource(_ collectionView: BaseCollectionViewController, _ headerRegistration: HeaderRegistration) {
+//        dateDataSource = UICollectionViewDiffableDataSource<DateSection, PostsModel>(collectionView: collectionView, cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
+//            let section = DateSection.allCases[indexPath.section]
+//            guard let bannerCellRegistration = self?.bannerCellRegistration,
+//                  let recommandCellRegistration = self?.recommandCellRegistration,
+//                    let recentlyCellRegistration = self?.recentlyCellRegistration else {
+//                return UICollectionViewCell()
+//            }
+//            switch section {
+//            case .banner:
+//                return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
+//            case .popular, .newWaitingFree:
+//                return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
+//            case .recently:
+//                return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
+//            }
+//        })
+//        dateDataSource?.supplementaryViewProvider = { [weak self] (view, kind, index) in
+//            return self?.rootView?.dateView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
+//        }
+//    }
 
     private func updateSnapShot<T: MainSection>(sections: [T], _ modelDict: [String:[PostsModel]]) {
         switch sections {
