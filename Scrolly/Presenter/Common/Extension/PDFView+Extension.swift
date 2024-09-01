@@ -26,7 +26,6 @@ extension PDFView {
                 }
             }
         }
-        
         print("Unable to find a scrollView subview on a PDFView.")
         return nil
     }

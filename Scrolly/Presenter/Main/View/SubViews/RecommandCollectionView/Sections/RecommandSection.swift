@@ -47,10 +47,8 @@ enum RecommandSection: String, MainSection {
     }
     
     func convertData(_ section: RecommandSection, _ model: [PostsModel]) -> [PostsModel] {
-        print(#function, section)
         switch section {
         case .banner:
-            print(#function, "banner: ", model.count)
             return model.shuffled()
         case .popular:
             let sortedModel = model.sorted(by: { left, right in
@@ -60,7 +58,6 @@ enum RecommandSection: String, MainSection {
                 }
                 return leftViewed > rightViewd
             })
-            print(#function, "popular: ", sortedModel.count)
             return Array<PostsModel>(sortedModel.prefix(6))
         case .recently:
             return setViewedNovel(model)

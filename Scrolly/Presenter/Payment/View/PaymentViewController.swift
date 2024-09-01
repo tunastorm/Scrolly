@@ -23,6 +23,12 @@ final class PaymentViewController: BaseViewController<PaymentView> {
         showPaymentPage()
     }
     
+    override func configNavigationbar(backgroundColor: UIColor = .clear, backButton: Bool = true, shadowImage: Bool = false, foregroundColor: UIColor = .black, barbuttonColor: UIColor = .black, showProfileButton: Bool = true, titlePosition: TitlePosition = .center) {
+        super.configNavigationbar(backgroundColor: Resource.Asset.CIColor.white, foregroundColor: Resource.Asset.CIColor.white, showProfileButton: false)
+        navigationItem.title = "결제하기"
+    }
+    
+    
     private func showPaymentPage() {
         guard let webView = rootView?.wkWebView, let price = model?.price, let complitionHandler else {
             return

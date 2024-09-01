@@ -24,22 +24,28 @@ final class MainView: BaseView {
     
     // MARK: - CollectionViews
     let hashTagView = HashTagCollectionView(frame: .zero, collectionViewLayout: HashTagCollectionView.createLayout())
-    let recommandView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
-    let maleView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
-    let femaleView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
-    let fantasyView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
-    let romanceView = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
-    let dateView
-    = RecommandCollectionView(frame: .zero, collectionViewLayout: RecommandCollectionView.createLayout())
+    let recommandView = MainCollectionView(frame: .zero, 
+                                           collectionViewLayout: MainCollectionView.createLayout(RecommandSection.allCases))
+    let maleView = MainCollectionView(frame: .zero,
+                                      collectionViewLayout: MainCollectionView.createLayout(MaleSection.allCases))
+    let femaleView = MainCollectionView(frame: .zero,
+                                        collectionViewLayout: MainCollectionView.createLayout(FemaleSection.allCases))
+    let fantasyView = MainCollectionView(frame: .zero,
+                                         collectionViewLayout: MainCollectionView.createLayout(FantasySection.allCases))
+    let romanceView = MainCollectionView(frame: .zero,
+                                         collectionViewLayout: MainCollectionView.createLayout(RomanceSection.allCases))
+    let dateView = MainCollectionView(frame: .zero,
+                         collectionViewLayout: MainCollectionView.createLayout(DateSection.allCases))
     
     lazy var collectionViewList = [ recommandView, maleView, femaleView, fantasyView, romanceView, dateView ]
     
-    private let bannerPageLabel = UILabel().then {
-        $0.font = Resource.Asset.Font.boldSystem13
-        $0.textColor = Resource.Asset.CIColor.white
-        $0.textAlignment = .right
-        $0.text = "1/"
-    }
+//    private let bannerPageLabel = UILabel().then {
+//        $0.font = Resource.Asset.Font.boldSystem13
+//        $0.textColor = Resource.Asset.CIColor.white
+//        $0.textAlignment = .right
+//        $0.text = "1/"
+//    }
+    
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let pageControl = UIPageControl()
@@ -130,7 +136,6 @@ final class MainView: BaseView {
             return
         }
         hashTagView.delegate = mainVC
-        print(#function, "하이")
     }
 
 }

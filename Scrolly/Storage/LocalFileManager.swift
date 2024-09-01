@@ -82,8 +82,7 @@ final class LocalFileManager: FileManager {
         guard let assetDirectory else { return nil }
         
         let fileURL = assetDirectory.appendingPathComponent("/\(filename).imageset/\(filename).pdf")
-        print(#function, "fileURL: ", fileURL)
-        
+    
         var path: String?
         if #available(iOS 16.0, *) {
             path = fileURL.path()

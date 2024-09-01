@@ -28,15 +28,12 @@ final class BirthdayViewController: BaseViewController<BirthDayView> {
         }
          
         output.pickedDate
-            .debug("output-pickedDate")
             .bind(to: rootView.pickedDateLabel.rx.text)
             .disposed(by: disposeBag)
        
        
         output.isValid
-            .debug("output-isValid")
             .drive(with: self) { owner, isValid in
-                print(#function, "왜 안되냐1")
                 owner.rootView?.descriptionLabel.text = isValid ? "가입가능한 나이입니다." : "17세 이상만 가입가능"
                 owner.rootView?.descriptionLabel.textColor = isValid ? .blue : .red
                 owner.rootView?.nextButton.backgroundColor = isValid ? Resource.Asset.CIColor.blue : Resource.Asset.CIColor.textBlack
@@ -45,9 +42,7 @@ final class BirthdayViewController: BaseViewController<BirthDayView> {
             .disposed(by: disposeBag)
        
         output.nextTap
-            .debug("output-nextTap")
             .bind(with: self) { owner, _ in
-                print(#function, "왜 안되냐2")
                 guard let viewModel = owner.viewModel as? BirthDayViewModel else {
                     return
                 }

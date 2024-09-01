@@ -105,8 +105,6 @@
 		BC8F1CF32C6CB267005D63CB /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1CF22C6CB267005D63CB /* APIManager.swift */; };
 		BC8F1CF52C6CB26F005D63CB /* TargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1CF42C6CB26F005D63CB /* TargetType.swift */; };
 		BC8F1CFC2C6CB37C005D63CB /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = BC8F1CFB2C6CB37C005D63CB /* Alamofire */; };
-		BC8F1CFF2C6CB38A005D63CB /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = BC8F1CFE2C6CB38A005D63CB /* RxCocoa */; };
-		BC8F1D012C6CB38A005D63CB /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BC8F1D002C6CB38A005D63CB /* RxSwift */; };
 		BC8F1D042C6CB396005D63CB /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = BC8F1D032C6CB396005D63CB /* Kingfisher */; };
 		BC8F1D072C6CB3A0005D63CB /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = BC8F1D062C6CB3A0005D63CB /* Toast */; };
 		BC8F1D0F2C6CB3B4005D63CB /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = BC8F1D0E2C6CB3B4005D63CB /* SnapKit */; };
@@ -140,7 +138,7 @@
 		BCCBDA712C78515200073E31 /* ReusableIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCBDA702C78515200073E31 /* ReusableIdentifier.swift */; };
 		BCCBDA772C78651400073E31 /* WaitingFreeImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCBDA762C78651400073E31 /* WaitingFreeImageView.swift */; };
 		BCCBDA792C78660000073E31 /* WaitingFreeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCBDA782C78660000073E31 /* WaitingFreeLabel.swift */; };
-		BCCBDA802C78887900073E31 /* RecommandCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCBDA7F2C78887900073E31 /* RecommandCollectionView.swift */; };
+		BCCBDA802C78887900073E31 /* MainCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCBDA7F2C78887900073E31 /* MainCollectionView.swift */; };
 		BCCBDA822C7888E900073E31 /* RecommandSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCBDA812C7888E900073E31 /* RecommandSection.swift */; };
 		BCCBDA842C78BE3A00073E31 /* CreatorLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCBDA832C78BE3A00073E31 /* CreatorLabelView.swift */; };
 		BCCBDA882C79BCB000073E31 /* RecentlyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCBDA872C79BCB000073E31 /* RecentlyCollectionViewCell.swift */; };
@@ -272,7 +270,7 @@
 		BCCBDA702C78515200073E31 /* ReusableIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableIdentifier.swift; sourceTree = "<group>"; };
 		BCCBDA762C78651400073E31 /* WaitingFreeImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingFreeImageView.swift; sourceTree = "<group>"; };
 		BCCBDA782C78660000073E31 /* WaitingFreeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingFreeLabel.swift; sourceTree = "<group>"; };
-		BCCBDA7F2C78887900073E31 /* RecommandCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommandCollectionView.swift; sourceTree = "<group>"; };
+		BCCBDA7F2C78887900073E31 /* MainCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCollectionView.swift; sourceTree = "<group>"; };
 		BCCBDA812C7888E900073E31 /* RecommandSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommandSection.swift; sourceTree = "<group>"; };
 		BCCBDA832C78BE3A00073E31 /* CreatorLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatorLabelView.swift; sourceTree = "<group>"; };
 		BCCBDA872C79BCB000073E31 /* RecentlyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -287,9 +285,7 @@
 				BC8F1D042C6CB396005D63CB /* Kingfisher in Frameworks */,
 				BC8F1D152C6CB3C7005D63CB /* IQKeyboardManagerSwift in Frameworks */,
 				BC48A93B2C8170DF001C9B27 /* Then in Frameworks */,
-				BC8F1D012C6CB38A005D63CB /* RxSwift in Frameworks */,
 				BC48A9222C7F73BB001C9B27 /* RxDataSources in Frameworks */,
-				BC8F1CFF2C6CB38A005D63CB /* RxCocoa in Frameworks */,
 				BC48A9382C8170A9001C9B27 /* iamport-ios in Frameworks */,
 				BC8F1D0F2C6CB3B4005D63CB /* SnapKit in Frameworks */,
 				BC8F1D072C6CB3A0005D63CB /* Toast in Frameworks */,
@@ -853,7 +849,7 @@
 		BCCBDA7E2C78886400073E31 /* RecommandCollectionView */ = {
 			isa = PBXGroup;
 			children = (
-				BCCBDA7F2C78887900073E31 /* RecommandCollectionView.swift */,
+				BCCBDA7F2C78887900073E31 /* MainCollectionView.swift */,
 				BC670A982C7B0A1F006FB171 /* Sections */,
 				BC670A972C7B09E6006FB171 /* Cell */,
 			);
@@ -878,8 +874,6 @@
 			name = Scrolly;
 			packageProductDependencies = (
 				BC8F1CFB2C6CB37C005D63CB /* Alamofire */,
-				BC8F1CFE2C6CB38A005D63CB /* RxCocoa */,
-				BC8F1D002C6CB38A005D63CB /* RxSwift */,
 				BC8F1D032C6CB396005D63CB /* Kingfisher */,
 				BC8F1D062C6CB3A0005D63CB /* Toast */,
 				BC8F1D0E2C6CB3B4005D63CB /* SnapKit */,
@@ -919,7 +913,6 @@
 			mainGroup = BC8F1CC92C6CAE4B005D63CB;
 			packageReferences = (
 				BC8F1CFA2C6CB37C005D63CB /* XCRemoteSwiftPackageReference "Alamofire" */,
-				BC8F1CFD2C6CB38A005D63CB /* XCRemoteSwiftPackageReference "RxSwift" */,
 				BC8F1D022C6CB396005D63CB /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				BC8F1D052C6CB3A0005D63CB /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 				BC8F1D0D2C6CB3B4005D63CB /* XCRemoteSwiftPackageReference "SnapKit" */,
@@ -974,7 +967,7 @@
 				BC84473B2C82FCFE0091B612 /* SignUpViewController.swift in Sources */,
 				BCCBDA842C78BE3A00073E31 /* CreatorLabelView.swift in Sources */,
 				BC8F1CF52C6CB26F005D63CB /* TargetType.swift in Sources */,
-				BCCBDA802C78887900073E31 /* RecommandCollectionView.swift in Sources */,
+				BCCBDA802C78887900073E31 /* MainCollectionView.swift in Sources */,
 				BC097C642C73583A0038A21C /* PostsModel.swift in Sources */,
 				BC8447472C833FE60091B612 /* PhoneViewController.swift in Sources */,
 				BC48A90A2C7DE4F9001C9B27 /* NovelDetailSection.swift in Sources */,
@@ -1335,14 +1328,6 @@
 				minimumVersion = 5.9.1;
 			};
 		};
-		BC8F1CFD2C6CB38A005D63CB /* XCRemoteSwiftPackageReference "RxSwift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.7.1;
-			};
-		};
 		BC8F1D022C6CB396005D63CB /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -1402,16 +1387,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BC8F1CFA2C6CB37C005D63CB /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
-		};
-		BC8F1CFE2C6CB38A005D63CB /* RxCocoa */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = BC8F1CFD2C6CB38A005D63CB /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxCocoa;
-		};
-		BC8F1D002C6CB38A005D63CB /* RxSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = BC8F1CFD2C6CB38A005D63CB /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxSwift;
 		};
 		BC8F1D032C6CB396005D63CB /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -66,9 +66,9 @@ final class EpisodeViewerViewController: BaseViewController<EpisodeViewerView> {
                     }
                     document.delegate = self
                     owner.rootView?.configPDFView(document)
-//                    owner.pdfView.document = document
                 case .failure(let error):
-                    print(#function, "error: ", error)
+                    owner.showToastToView(error)
+                    owner.popBeforeView(animated: true)
                 }
             }
             .disposed(by: disposeBag)

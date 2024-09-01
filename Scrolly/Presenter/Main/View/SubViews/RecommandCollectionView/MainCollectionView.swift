@@ -8,7 +8,7 @@
 import UIKit
 
 
-final class RecommandCollectionView: BaseCollectionViewController {
+final class MainCollectionView: BaseCollectionViewController {
     
     private static var screenSize: CGRect?
     
@@ -23,26 +23,80 @@ final class RecommandCollectionView: BaseCollectionViewController {
         screenSize = window.screen.bounds
     }
     
-    static func createLayout() -> UICollectionViewCompositionalLayout  {
+    static func createLayout<T: MainSection>(_ sections: [T]) -> UICollectionViewCompositionalLayout  {
         setScreenSize()
         let layout = UICollectionViewCompositionalLayout { (sectionIndex,_) -> NSCollectionLayoutSection? in
-            return self.createSection(for: RecommandSection.allCases[sectionIndex])
+            return self.createSection(for: sections[sectionIndex])
         }
         return layout
     }
 
-    private static func createSection(for section: RecommandSection) -> NSCollectionLayoutSection {
+    private static func createSection<T: MainSection>(for section: T) -> NSCollectionLayoutSection {
         switch section {
-        case .banner:
-            let height = (screenSize?.width ?? 350) - 40
-            return createSingleColumnSection(height)
-        case .popular, .newWaitingFree:
-            return createThreeXTwoSection(for: section)
-        case .recently:
+        case is RecommandSection:
+            let section = section as! RecommandSection
+            switch section {
+            case .banner:
+                let height = (screenSize?.width ?? 350) - 40
+                return createSingleColumnSection(height)
+            case .popular, .newWaitingFree:
+                return createThreeXTwoSection(for: section)
+            case .recently:
+                return createOneRowSection(for: section)
+            }
+        case is MaleSection:
+            let section = section as! MaleSection
+            switch section {
+            case .banner:
+                let height = (screenSize?.width ?? 350) - 40
+                return createSingleColumnSection(height)
+            case .popular, .newWaitingFree:
+                return createThreeXTwoSection(for: section)
+            }
+        case is FemaleSection:
+            let section = section as! FemaleSection
+            switch section {
+            case .banner:
+                let height = (screenSize?.width ?? 350) - 40
+                return createSingleColumnSection(height)
+            case .popular, .newWaitingFree:
+                return createThreeXTwoSection(for: section)
+            }
+        case is FantasySection:
+            let section = section as! FantasySection
+            switch section {
+            case .banner:
+                let height = (screenSize?.width ?? 350) - 40
+                return createSingleColumnSection(height)
+            case .popular, .newWaitingFree:
+                return createThreeXTwoSection(for: section)
+            }
+        case is RomanceSection:
+            let section = section as! RomanceSection
+            switch section {
+            case .banner:
+                let height = (screenSize?.width ?? 350) - 40
+                return createSingleColumnSection(height)
+            case .popular, .newWaitingFree:
+                return createThreeXTwoSection(for: section)
+            }
+        case is DateSection:
+            let section = section as! DateSection
+            switch section {
+            case .banner:
+                let height = (screenSize?.width ?? 350) - 40
+                return createSingleColumnSection(height)
+            case .popular, .newWaitingFree:
+                return createThreeXTwoSection(for: section)
+            case .recently:
+                return createOneRowSection(for: section)
+            }
+        default:
+            let section = RecommandSection.popular
             return createOneRowSection(for: section)
         }
     }
-    
+
     private static func createSingleColumnSection(_ height: CGFloat) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -54,7 +108,7 @@ final class RecommandCollectionView: BaseCollectionViewController {
         return section
     }
     
-    private static func createThreeXTwoSection(for sectionInfo: RecommandSection) -> NSCollectionLayoutSection {
+    private static func createThreeXTwoSection<T: MainSection>(for sectionInfo: T) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(230))
@@ -73,7 +127,7 @@ final class RecommandCollectionView: BaseCollectionViewController {
         return section
     }
     
-    private static func createOneRowSection(for sectionInfo: RecommandSection) -> NSCollectionLayoutSection {
+    private static func createOneRowSection<T: MainSection> (for sectionInfo: T) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.25), heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(200))

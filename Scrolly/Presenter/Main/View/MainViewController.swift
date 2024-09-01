@@ -44,6 +44,8 @@ final class MainViewController: BaseViewController<MainView> {
     
     private let scrollViewPaging = PublishRelay<IndexPath>()
     
+    private let callRecommandData = PublishSubject<Void>()
+    
     override func loadView() {
         super.loadView()
         rootView?.delegate = self
@@ -76,10 +78,12 @@ final class MainViewController: BaseViewController<MainView> {
             rxPushToDetailViewController(dataSource: idx, from: collectionView)
         }
         
-        let input = MainViewModel.Input(hashTagCellTap: rootView.hashTagView.rx.itemSelected, srollViewPaging: scrollViewPaging)
+        let input = MainViewModel.Input(callRecommandDatas: callRecommandData, hashTagCellTap: rootView.hashTagView.rx.itemSelected, srollViewPaging: scrollViewPaging)
         guard let output = mainViewModel.transform(input: input) else {
             return
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(novelViewed), name: Notification.Name(NovelViewedNotification.viewed), object: nil)
         
         output.filterList
             .bind(with: self) { owner, values in
@@ -125,7 +129,14 @@ final class MainViewController: BaseViewController<MainView> {
             .disposed(by: disposeBag)
     }
     
+    @objc private func novelViewed() {
+        print(#function, "최근 본작품 추가 이벤트 수신 처리")
+        callRecommandData.onNext(())
+    }
+    
     private func fetchDatas<T: MainSection>(sections: [T], resultList: [APIManager.ModelResult<GetPostsModel>]) {
+        print(#function, "sections: ", sections)
+        print(#function, "resultList: ", resultList.count)
         var dataDict: [String:[PostsModel]] = [:]
         var noDataSection: T?
         resultList.enumerated().forEach { idx, result in
@@ -272,8 +283,8 @@ final class MainViewController: BaseViewController<MainView> {
                 return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
             case .popular, .newWaitingFree:
                 return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
-            case .recently:
-                return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
+//            case .recently:
+//                return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
             }
         })
         maleDataSource?.supplementaryViewProvider = { [weak self] (view, kind, index) in
@@ -294,8 +305,8 @@ final class MainViewController: BaseViewController<MainView> {
                 return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
             case .popular, .newWaitingFree:
                 return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
-            case .recently:
-                return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
+//            case .recently:
+//                return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
             }
         })
         femaleDataSource?.supplementaryViewProvider = { [weak self] (view, kind, index) in
@@ -316,8 +327,8 @@ final class MainViewController: BaseViewController<MainView> {
                 return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
             case .popular, .newWaitingFree:
                 return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
-            case .recently:
-                return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
+//            case .recently:
+//                return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
             }
         })
         fantasyDataSource?.supplementaryViewProvider = { [weak self] (view, kind, index) in
@@ -338,8 +349,8 @@ final class MainViewController: BaseViewController<MainView> {
                 return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
             case .popular, .newWaitingFree:
                 return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
-            case .recently:
-                return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
+//            case .recently:
+//                return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
             }
         })
         romanceDataSource?.supplementaryViewProvider = { [weak self] (view, kind, index) in

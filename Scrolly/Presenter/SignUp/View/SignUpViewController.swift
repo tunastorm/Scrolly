@@ -26,13 +26,12 @@ final class SignUpViewController: BaseViewController<SignUpView> {
         guard let rootView, let viewModel = viewModel as? SignUpViewModel else {
             return
         }
-        
-        print(#function, "왜 안됨_1")
+    
         let input = SignUpViewModel.Input(validation: PublishRelay<String>())
         guard let output = viewModel.transform(input: input) else {
             return
         }
-        print(#function, "왜 안됨_2")
+      
         rootView.emailTextField.rx.text.orEmpty
             .map { [weak self] text in self?.emailPredicate.evaluate(with: text) }
             .bind(with: self) { owner, value in

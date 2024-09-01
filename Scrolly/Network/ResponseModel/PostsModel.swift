@@ -20,7 +20,7 @@ struct PostsModel: Decodable, Hashable, IdentifiableType {
     let content1: String?
     let content2: String?
     let content3: String?
-    let content4: String?
+    var content4: String?
     let content5: String?
     let createdAt: String
     let creator: Creator

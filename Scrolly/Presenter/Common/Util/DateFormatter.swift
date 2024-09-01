@@ -13,7 +13,7 @@ enum DateFormat {
     
     var formatString: String {
         return switch self {
-        case .dateAndTimeWithTimezone: "yyyy-MM-ddEEEEEHH-mm-ssZ"
+        case .dateAndTimeWithTimezone: "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         case .dotSperatedyyyMMdd:  "yyyy.MM.dd"
         }
     }
@@ -36,7 +36,6 @@ final class DateFormatManager: DateFormatterProvider {
 
     func stringToformattedString(value: String, before: DateFormat, after: DateFormat) -> String {
         worker.dateFormat = before.formatString
-        print("date: ", worker.date(from: value))
         guard let beforeDate = worker.date(from: value) else {
             return ""
         }

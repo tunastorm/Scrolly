@@ -106,15 +106,8 @@ final class NovelDetailView: BaseView {
             make.top.equalToSuperview().inset(50)
             make.trailing.equalToSuperview().inset(10)
         }
-        continueBar.snp.makeConstraints { make in
-            make.height.equalTo(80)
-            make.horizontalEdges.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
         collectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.horizontalEdges.equalToSuperview()
-            make.bottom.equalTo(continueBar.snp.top).offset(6)
+            make.edges.equalToSuperview()
         }
     }
     

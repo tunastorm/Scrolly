@@ -27,7 +27,6 @@ extension TargetType {
             request.httpBody = body
         }
         let combinedRequest = try parameters.map { try encoder.encode($0, into: request) } ?? request
-        print(#function, "urlRequest: ", combinedRequest)
         return combinedRequest
     }
 

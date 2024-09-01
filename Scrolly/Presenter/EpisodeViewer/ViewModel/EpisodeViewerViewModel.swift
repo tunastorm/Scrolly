@@ -45,8 +45,6 @@ final class EpisodeViewerViewModel: BaseViewModel, ViewModelProvider {
     
     func transform(input: Input) -> Output? {
         
-        print(#function, "pdf 경로: ", model?.files[1])
-        
         let title = Observable.just(model?.title)
         
         let file = BehaviorSubject(value: model)

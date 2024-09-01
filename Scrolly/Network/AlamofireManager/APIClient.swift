@@ -105,7 +105,6 @@ final class APIClient {
     
     private static func responseErrorHandler<T: Decodable>(_ response: AFDataResponse<T>) -> APIError? {
         if let statusCode = response.response?.statusCode, let statusError = convertResponseStatus(statusCode) {
-            print("statusCode: ", statusCode)
             return statusError
         }
         guard let decodedData = response.value else {

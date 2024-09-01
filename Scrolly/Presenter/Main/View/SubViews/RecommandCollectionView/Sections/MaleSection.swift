@@ -10,7 +10,7 @@ import Foundation
 enum MaleSection: String, MainSection {
     case banner
     case popular
-    case recently
+//    case recently
     case newWaitingFree
     
     var value: String {
@@ -21,15 +21,15 @@ enum MaleSection: String, MainSection {
         return switch self {
         case .banner: 0
         case .popular: 1
-        case .recently: 2
-        case .newWaitingFree: 3
+//        case .recently: 2
+        case .newWaitingFree: 2
         }
     }
     
     var header: String? {
         return switch self {
         case .newWaitingFree: "기다무 신작"
-        case .recently: "최근 본 작품"
+//        case .recently: "최근 본 작품"
         default: nil
         }
     }
@@ -42,14 +42,12 @@ enum MaleSection: String, MainSection {
         return switch self {
         case .banner, .popular, .newWaitingFree:
             HashTagsQuery(next: nil, limit: "10", productId: APIConstants.ProductId.novelInfo, hashTag: APIConstants.SearchKeyword.male)
-        case .recently:
-            HashTagsQuery(next: nil, limit: "10", productId: APIConstants.ProductId.novelEpisode, hashTag: APIConstants.SearchKeyword.male)
+//        case .recently:
+//            HashTagsQuery(next: nil, limit: "10", productId: APIConstants.ProductId.novelEpisode, hashTag: APIConstants.SearchKeyword.male)
         }
     }
     
     func convertData(_ section: MaleSection, _ model: [PostsModel]) -> [PostsModel] {
-        print(self.self, #function, "section: ", section)
-        print(self.self, #function, "model: ", model.count)
         switch section {
         case .banner:
             return model.shuffled()
@@ -64,8 +62,8 @@ enum MaleSection: String, MainSection {
             return Array<PostsModel>(sortedModel.prefix(6))
         case .newWaitingFree:
             return model.filter{($0.content1 ?? "false").contains("true") }
-        case .recently:
-            return setViewedNovel(model)
+//        case .recently:
+//            return setViewedNovel(model)
         }
         
     }

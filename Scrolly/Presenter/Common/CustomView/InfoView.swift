@@ -81,7 +81,7 @@ final class InfoView: BaseView {
         guard let post = model as? PostsModel else {
             return
         }
-        infoLabel.text = post.categorys + post.uploadDays
+        infoLabel.text = post.categorys + "﹒" + post.uploadDays
         viewedLabel.text = post.viewed
         let averateRate = post.content4?.split(separator: ",").first
         averageRateLabel.text = String(averateRate ?? "0.0")

@@ -10,7 +10,7 @@ import Foundation
 enum FemaleSection: String, MainSection {
     case banner
     case popular
-    case recently
+//    case recently
     case newWaitingFree
    
     
@@ -22,15 +22,15 @@ enum FemaleSection: String, MainSection {
         return switch self {
         case .banner: 0
         case .popular: 1
-        case .recently: 2
-        case .newWaitingFree: 3
+//        case .recently: 2
+        case .newWaitingFree: 2
         }
     }
     
     var header: String? {
         return switch self {
         case .newWaitingFree: "기다무 신작"
-        case .recently: "최근 본 작품"
+//        case .recently: "최근 본 작품"
         default: nil
         }
     }
@@ -43,8 +43,8 @@ enum FemaleSection: String, MainSection {
         return switch self {
         case .banner, .popular, .newWaitingFree:
             HashTagsQuery(next: nil, limit: "10", productId: APIConstants.ProductId.novelInfo, hashTag: APIConstants.SearchKeyword.female)
-        case .recently:
-            HashTagsQuery(next: nil, limit: "10", productId: APIConstants.ProductId.novelEpisode, hashTag: APIConstants.SearchKeyword.female)
+//        case .recently:
+//            HashTagsQuery(next: nil, limit: "10", productId: APIConstants.ProductId.novelEpisode, hashTag: APIConstants.SearchKeyword.female)
         }
     }
     
@@ -63,8 +63,8 @@ enum FemaleSection: String, MainSection {
             return Array<PostsModel>(sortedModel.prefix(6))
         case .newWaitingFree:
             return model.filter{($0.content1 ?? "false").contains("true") }
-        case .recently:
-            return setViewedNovel(model)
+//        case .recently:
+//            return setViewedNovel(model)
         }
         
     }

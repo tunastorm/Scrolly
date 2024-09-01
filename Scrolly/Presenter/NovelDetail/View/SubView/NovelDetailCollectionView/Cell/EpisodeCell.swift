@@ -49,6 +49,8 @@ final class EpisodeCell: BaseCollectionViewCell {
     
     private var price: Int?
     
+    private var viewed = false
+    
     private var indexPath: IndexPath?
     
     override func configHierarchy() {
@@ -110,7 +112,10 @@ final class EpisodeCell: BaseCollectionViewCell {
                 let status = owner.statusLabel.status
                 switch status {
                 case .none,.upload,.waitingFree:
-                    print("상태: ", status)
+                    guard !owner.viewed else {
+                        owner.delegate?.pushToViewer(indexPath)
+                        return
+                    }
                     owner.delegate?.showIamportAlert(indexPath)
                 default: owner.delegate?.pushToViewer(indexPath)
                 }
@@ -144,8 +149,12 @@ final class EpisodeCell: BaseCollectionViewCell {
         titleLabel.text = title
         self.indexPath = indexPath
         price = identifier.price
+        backgroundColor = identifier.content4 == "true" ? Resource.Asset.CIColor.lightGray : .clear
+        viewed = identifier.content4 == "true"
         let date = DateFormatManager.shared.stringToformattedString(value: identifier.createdAt, before: .dateAndTimeWithTimezone, after: .dotSperatedyyyMMdd)
         uploadDateLabel.text = date
+        
+       
         
         var isShow = true
         switch (identifier.content2, identifier.content3) {
@@ -163,7 +172,6 @@ final class EpisodeCell: BaseCollectionViewCell {
             isShow = false
         default: break
         }
-        print(#function, "상태 설정 후: ", statusLabel.status)
         statusLabelLayoutToggle(isShow)
     }
     

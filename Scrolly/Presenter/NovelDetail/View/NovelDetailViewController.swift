@@ -12,6 +12,11 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
+enum NovelViewedNotification {
+    static let viewed = "NovelViewed"
+}
+
+
 protocol NovelDetailViewDelegate {
     
     func getModel() -> PostsModel?
@@ -87,7 +92,7 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
     )
 
     
-    private let input = NovelDetailViewModel.Input(viewedNovel: PublishSubject<PostsModel>())
+    private let input = NovelDetailViewModel.Input(viewedNovel: PublishSubject<PostsModel>(), viewedList: PublishSubject(value: ()))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,6 +104,7 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
     }
 
     override func bindData() {
+        
         guard let detailViewModel = viewModel as? NovelDetailViewModel, let rootView else {
             return
         }
@@ -107,37 +113,58 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
         }
     
         PublishSubject<[NovelDetailSectionModel]>
-            .zip(output.fetchedModel, output.episodes) { [weak self] novel, episodes in
+            .combineLatest(output.fetchedModel, output.episodes, output.viewesList) { [weak self] novel, episodes, viewedList in
                 let headerView = CollectionViewHeaderView()
                 var sectionList = [
                     NovelDetailSectionModel(header: headerView, items: []),
                     NovelDetailSectionModel(header: headerView, items: [])
                 ]
-                switch episodes {
-                case .success(let model):
-                    guard let data = self?.sortingEpiosdes(list: model.data) else {
-                        return sectionList
-                    }
-                    self?.headerRegistration = self?.collectionViewHeaderRegestration(sectionList)
-                    sectionList[0].items = [novel]
-                    sectionList[1].items = data
-                    return sectionList
-                case .failure(let error):
-                    self?.showToastToView(error)
+                guard let episodes = self?.fetchPostsModelList(episodes),
+                      let viewedList = self?.fetchPostsModelList(viewedList) else {
                     return sectionList
                 }
+                guard let fetchedEpisodes = self?.fetchViewedListToEpisode(episodes, viewedList) else {
+                    return sectionList
+                }
+                self?.headerRegistration = self?.collectionViewHeaderRegestration(sectionList)
+                sectionList[0].items = [novel]
+                sectionList[1].items = fetchedEpisodes
+                return sectionList
             }
             .bind(to: rootView.collectionView.rx.items(dataSource: detailDataSource))
             .disposed(by: disposeBag)
     }
     
-    private func sortingEpiosdes(list: [PostsModel], accending: Bool = false) -> [PostsModel] {
+    private func fetchPostsModelList(_ episodes: APIManager.ModelResult<GetPostsModel>) -> [PostsModel] {
+        var list: [PostsModel] = []
+        switch episodes {
+        case .success(let model):
+            list = sortingPostsModels(list: model.data)
+        case .failure(let error):
+            showToastToView(error)
+            return list
+        }
+        return list
+    }
+    
+    private func sortingPostsModels(list: [PostsModel], accending: Bool = false) -> [PostsModel] {
         return list.sorted {
             if let left = Int($0.content1 ?? ""), let right = Int($1.content1  ?? "") {
                 return accending == true ? left < right : left > right
             }
             return false
         }
+    }
+    
+    private func fetchViewedListToEpisode(_ episodeList: [PostsModel], _ viewedList: [PostsModel]) -> [PostsModel] {
+        var fetchedList = episodeList
+        let viewedIds = viewedList.map { $0.postId }
+        episodeList.enumerated().forEach { idx, episode in
+            if viewedIds.contains(episode.postId) {
+                fetchedList[idx].content4 = "true"
+            }
+        }
+        return fetchedList
     }
 
 }
@@ -174,6 +201,8 @@ extension NovelDetailViewController: EpisodeCellDelegate {
                 return
             }
             input.viewedNovel.onNext(model)
+            input.viewedList.onNext(())
+            NotificationCenter.default.post(name: NSNotification.Name(NovelViewedNotification.viewed), object: nil, userInfo: nil)
             let vc = EpisodeViewerViewController(view: EpisodeViewerView(), viewModel: EpisodeViewerViewModel(novel: model))
             pushAfterView(view: vc, backButton: true, animated: true)
         } catch {
