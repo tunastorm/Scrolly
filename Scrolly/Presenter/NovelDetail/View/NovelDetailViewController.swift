@@ -113,7 +113,7 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
         }
     
         PublishSubject<[NovelDetailSectionModel]>
-            .combineLatest(output.fetchedModel, output.episodes, output.viewesList) { [weak self] novel, episodes, viewedList in
+            .combineLatest(output.fetchedModel, output.episodes, output.viewedList) { [weak self] novel, episodes, viewedList in
                 let headerView = CollectionViewHeaderView()
                 var sectionList = [
                     NovelDetailSectionModel(header: headerView, items: []),
@@ -166,6 +166,39 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
         }
         return fetchedList
     }
+    
+//    private func configToolbar() {
+//        let appearance = UIToolbarAppearance()
+//        appearance.backgroundColor = Resource.Asset.CIColor.white
+//        appearance.shadowImage = UIImage()
+//        appearance.shadowColor = .clear
+//        navigationController?.toolbar.scrollEdgeAppearance = appearance
+//        
+//        let likeButton = UIBarButtonItem(image: Resource.Asset.SystemImage.heart, style: .plain, target: self, action: #selector(likeButtonTapped))
+//        likeButton.tintColor = Resource.Asset.CIColor.black
+//        
+//        let commentButton = UIBarButtonItem(image: Resource.Asset.SystemImage.message, style: .plain, target: self, action: #selector(commentsButtonTapped))
+//        commentButton.tintColor = Resource.Asset.CIColor.black
+//        
+//        let nextButton = UIBarButtonItem(image: Resource.Asset.SystemImage.chevronRight, style: .plain, target: self, action: #selector(nextButtonTapped))
+//        
+//        nextButton.tintColor = Resource.Asset.CIColor.black
+//        
+//        navigationController?.toolbarItems = [ nextButton, likeButton, commentButton ]
+//    }
+//    
+//    @objc private func likeButtonTapped() {
+//        print("좋아요 클릭됨")
+//    }
+//    
+//    @objc private func commentsButtonTapped() {
+//        print("댓글 클릭됨")
+//    }
+//    
+//    @objc private func nextButtonTapped() {
+//        let vc = EpisodeEndViewController(view: EpisodeEndView(), viewModel: EpisodeEndViewModel())
+//        pushAfterView(view: vc, backButton: true, animated: true)
+//    }
 
 }
 
@@ -203,6 +236,7 @@ extension NovelDetailViewController: EpisodeCellDelegate {
             input.viewedNovel.onNext(model)
             input.viewedList.onNext(())
             NotificationCenter.default.post(name: NSNotification.Name(NovelViewedNotification.viewed), object: nil, userInfo: nil)
+//            configToolbar()
             let vc = EpisodeViewerViewController(view: EpisodeViewerView(), viewModel: EpisodeViewerViewModel(novel: model))
             pushAfterView(view: vc, backButton: true, animated: true)
         } catch {

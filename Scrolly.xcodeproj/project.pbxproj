@@ -46,6 +46,9 @@
 		BC1277ED2C844CA300A056F3 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BC1277EC2C844CA300A056F3 /* RxSwift */; };
 		BC1277F02C844CD300A056F3 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = BC1277EF2C844CD300A056F3 /* Differentiator */; };
 		BC1277F22C844CD300A056F3 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = BC1277F12C844CD300A056F3 /* RxDataSources */; };
+		BC1277F42C848D7900A056F3 /* EpisodeEndViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1277F32C848D7900A056F3 /* EpisodeEndViewController.swift */; };
+		BC1277F62C848D8300A056F3 /* EpisodeEndView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1277F52C848D8300A056F3 /* EpisodeEndView.swift */; };
+		BC1277F82C848D8F00A056F3 /* EpisodeEndViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1277F72C848D8F00A056F3 /* EpisodeEndViewModel.swift */; };
 		BC48A90A2C7DE4F9001C9B27 /* NovelDetailSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC48A9092C7DE4F9001C9B27 /* NovelDetailSection.swift */; };
 		BC48A90C2C7DE96F001C9B27 /* DescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC48A90B2C7DE96F001C9B27 /* DescriptionCell.swift */; };
 		BC48A90E2C7DE99E001C9B27 /* EpisodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC48A90D2C7DE99E001C9B27 /* EpisodeCell.swift */; };
@@ -183,6 +186,9 @@
 		BC097CCF2C76249C0038A21C /* BaseCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewController.swift; sourceTree = "<group>"; };
 		BC097CD72C76370D0038A21C /* HashTagCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashTagCollectionViewCell.swift; sourceTree = "<group>"; };
 		BC097CD92C76B6F80038A21C /* HashTagSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashTagSection.swift; sourceTree = "<group>"; };
+		BC1277F32C848D7900A056F3 /* EpisodeEndViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeEndViewController.swift; sourceTree = "<group>"; };
+		BC1277F52C848D8300A056F3 /* EpisodeEndView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeEndView.swift; sourceTree = "<group>"; };
+		BC1277F72C848D8F00A056F3 /* EpisodeEndViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeEndViewModel.swift; sourceTree = "<group>"; };
 		BC48A9092C7DE4F9001C9B27 /* NovelDetailSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovelDetailSection.swift; sourceTree = "<group>"; };
 		BC48A90B2C7DE96F001C9B27 /* DescriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionCell.swift; sourceTree = "<group>"; };
 		BC48A90D2C7DE99E001C9B27 /* EpisodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeCell.swift; sourceTree = "<group>"; };
@@ -466,6 +472,7 @@
 		BC097CBB2C7619C80038A21C /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				BC1277F72C848D8F00A056F3 /* EpisodeEndViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -473,6 +480,8 @@
 		BC097CBC2C7619D00038A21C /* View */ = {
 			isa = PBXGroup;
 			children = (
+				BC1277F52C848D8300A056F3 /* EpisodeEndView.swift */,
+				BC1277F32C848D7900A056F3 /* EpisodeEndViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -961,6 +970,7 @@
 				BC8F1D2A2C6D187E005D63CB /* GetPostsQuery.swift in Sources */,
 				BCCBDA792C78660000073E31 /* WaitingFreeLabel.swift in Sources */,
 				BC8F1D422C70C406005D63CB /* UploadFilesModel.swift in Sources */,
+				BC1277F62C848D8300A056F3 /* EpisodeEndView.swift in Sources */,
 				BC06E8572C7CE03400148785 /* InfoView.swift in Sources */,
 				BC097CCA2C7622160038A21C /* HashTagCollectionView.swift in Sources */,
 				BC06E8492C7C8B7700148785 /* NovelDetailViewController.swift in Sources */,
@@ -996,6 +1006,7 @@
 				BC097C912C74E3590038A21C /* Resource.swift in Sources */,
 				BC84472C2C82CB4F0091B612 /* String+Extension.swift in Sources */,
 				BC84475A2C8350620091B612 /* NicknameView.swift in Sources */,
+				BC1277F42C848D7900A056F3 /* EpisodeEndViewController.swift in Sources */,
 				BC8F1D342C6D2026005D63CB /* HashTagsQuery.swift in Sources */,
 				BC84474B2C8340530091B612 /* BirthDayViewController.swift in Sources */,
 				BC097C6A2C739C3A0038A21C /* GetPostsModel.swift in Sources */,
@@ -1028,6 +1039,7 @@
 				BC8F1D442C70C4C8005D63CB /* LocalFileManager.swift in Sources */,
 				BC8F1D2C2C6D1CD2005D63CB /* CommentsQuery.swift in Sources */,
 				BC06E84D2C7CC80200148785 /* ViewTransitaion.swift in Sources */,
+				BC1277F82C848D8F00A056F3 /* EpisodeEndViewModel.swift in Sources */,
 				BC8F1D4A2C717864005D63CB /* KingfisherManager+Extension.swift in Sources */,
 				BC06E8532C7CCB9B00148785 /* ViewControllerProvider.swift in Sources */,
 				BC8447432C830EFB0091B612 /* PasswordView.swift in Sources */,

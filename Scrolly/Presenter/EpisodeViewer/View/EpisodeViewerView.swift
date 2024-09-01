@@ -10,7 +10,9 @@ import PDFKit
 import SnapKit
 import Then
 
-final class EpisodeViewerView: BaseView, PDFViewDelegate {
+final class EpisodeViewerView: BaseView {
+    
+    var delegate: EpisodeViewerViewDelegate?
     
     private let pdfView = {
         let view = PDFView()
@@ -23,6 +25,8 @@ final class EpisodeViewerView: BaseView, PDFViewDelegate {
         view.minScaleFactor = 1.0
         return view
     }()
+    
+    private var pageDict: [String:Int] = [:]
     
     override func configHierarchy() {
         addSubview(pdfView)
@@ -39,37 +43,37 @@ final class EpisodeViewerView: BaseView, PDFViewDelegate {
     
     override func configView() {
         super.configView()
-    }
-    
-    override func configInteractionWithViewController<T>(viewController: T) where T : UIViewController {
-        guard let vc = viewController as? EpisodeViewerViewController else {
-            return
-        }
+        
+        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(swipeAtLastPage))
+        addGestureRecognizer(swipe)
         
     }
     
     func configPDFView(_ document: PDFDocument) {
-        pdfView.delegate = self
+        pageDict["maxPage"] = document.pageCount
         pdfView.document = document
-        let test = pdfView.onScrollOffsetChange { scrollView in
-            print(#function, "움직이니?")
+//        NotificationCenter.default.addObserver (self, selector: #selector(pageChanged), name: Notification.Name.PDFViewPageChanged, object: nil)
+    }
+    
+//    @objc private func pageChanged() {
+//        guard let current = pdfView.currentPage else {
+//            return
+//        }
+//        let currentPage = current.pageRef?.pageNumber
+//        pageDict["currentPage"] = currentPage
+//    }
+//    
+    @objc private func swipeAtLastPage(_ sender: UISwipeGestureRecognizer) {
+        if sender.state == .ended {
+            print(#function, "스와이프 됨")
+            guard let last = pageDict["lastPage"], let current = pageDict["currentPage"] else {
+                return
+            }
+            if current == last {
+                print(#function, "가즈아!")
+                delegate?.pushToEpisodeEndViewController()
+            }
         }
     }
     
 }
-
-
-extension EpisodeViewerViewController: PDFDocumentDelegate {
-    
-    func documentDidEndPageFind(_ notification: Notification) {
-
-    }
-   
-}
-
-extension EpisodeViewerViewController: PDFViewDelegate {
-    
-
-
-}
-

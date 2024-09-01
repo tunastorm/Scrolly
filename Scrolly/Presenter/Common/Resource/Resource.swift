@@ -35,6 +35,7 @@ enum Resource {
         
         enum Text {
             static let appTitle = "Scrolly"
+            static let appSubTitle = "Scroll your stories"
             static let alertOK = "확인"
             static let alertCancle = "취소"
             static let startButton = "시작하기"
@@ -70,9 +71,11 @@ enum Resource {
             static let starFill = UIImage(systemName: "star.fill")?.withTintColor(.systemYellow, renderingMode: .alwaysTemplate)
             static let personCropCircle = UIImage(systemName: "person.crop.circle")
             static let chevronLeft = UIImage(systemName: "chevron.left")
+            static let chevronRight = UIImage(systemName: "chevron.right")
             static let arrowDownToLine = UIImage(systemName: "arrow.down.to.line")
             static let xmark = UIImage(systemName: "xmark")
-//            static let heart = UIImage(systemName: "heart")
+            static let heart = UIImage(systemName: "heart")
+            static let message = UIImage(systemName: "message")
 //            static let cameraFill = UIImage(systemName: "camera.fill")
            
 //            static let timerSquare = UIImage(systemName: "timer.square")

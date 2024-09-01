@@ -132,13 +132,10 @@ final class MainViewController: BaseViewController<MainView> {
     }
     
     @objc private func novelViewed() {
-        print(#function, "최근 본작품 추가 이벤트 수신 처리")
         callRecommandData.onNext(())
     }
     
     private func fetchDatas<T: MainSection>(sections: [T], resultList: [APIManager.ModelResult<GetPostsModel>]) {
-        print(#function, "sections: ", sections)
-        print(#function, "resultList: ", resultList.count)
         var dataDict: [String:[PostsModel]] = [:]
         var noDataSection: T?
         resultList.enumerated().forEach { idx, result in

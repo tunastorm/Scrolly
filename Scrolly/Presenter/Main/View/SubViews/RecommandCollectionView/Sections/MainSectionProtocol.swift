@@ -59,7 +59,17 @@ extension MainSection {
     
     func setViewedNovel(_ postList: [PostsModel]) -> [PostsModel] {
         var viewed: [PostsModel] = []
-        postList.forEach { post in
+        var sortedList = postList.sorted {
+            guard let left = DateFormatManager.shared.stringToDate(value: $0.content4 ?? ""),
+                  let right = DateFormatManager.shared.stringToDate(value: $1.content4 ?? "") else {
+                return false
+            }
+            print(#function, "left: ", left)
+            print(#function, "right: ", right)
+            return left > right
+        }
+//        print(#function, "sortedList: ", sortedList)
+        sortedList.forEach { post in
             if viewed.last?.hashTags.first == post.hashTags.first {
                 return
             }

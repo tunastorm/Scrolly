@@ -80,13 +80,15 @@ class BaseViewController<View: BaseView>: UIViewController, UIViewControllerProv
             appearance.titlePositionAdjustment = UIOffset(horizontal: -(view.frame.width/2),
                                                           vertical: 0)
         }
+        
 //        if backgroundColor == .clear {
 //            self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
 //            self.navigationController?.navigationBar.isTranslucent = false
 //        }
-        self.navigationController?.navigationBar.standardAppearance = appearance
-        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        self.navigationController?.navigationBar.tintColor = .black
+        navigationController?.isToolbarHidden = true
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.tintColor = .black
         
     }
     

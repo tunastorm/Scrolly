@@ -43,4 +43,15 @@ final class DateFormatManager: DateFormatterProvider {
         return worker.string(from: beforeDate)
     }
     
+    func nowString() -> String {
+        worker.dateFormat = DateFormat.dateAndTimeWithTimezone.formatString
+        let now = worker.string(from: Date())
+        return now
+    }
+    
+    func stringToDate(value: String) -> Date? {
+        worker.dateFormat = DateFormat.dateAndTimeWithTimezone.formatString
+        return worker.date(from: value)
+    }
+    
 }

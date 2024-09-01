@@ -59,8 +59,8 @@ final class DummyDataViewController: UIViewController {
     lazy var getPostsQuery = GetPostsQuery(next: cursor, limit: "50", productId: self.productId)
 //    lazy var getPostsQuery = GetPostsQuery(next: nil, limit: "50", productId: nil)
     lazy var commentsQuery = CommentsQuery(content: "테스트 댓글3")
-    lazy var likeQuery = LikeQuery(likeStatus: true)
-    lazy var likedPostsQuery = LikedPostsQuery(next: nil, limit: "10")
+    lazy var likeQuery = LikeQuery(likeStatus: false)
+    lazy var likedPostsQuery = LikedPostsQuery(next: nil, limit: "50")
     lazy var hashTagsQuery = HashTagsQuery(next: nil, limit: "50", productId: APIConstants.ProductId.novelEpisode, hashTag: "탐식의_재림")
     
     override func viewDidLoad() {
@@ -83,7 +83,7 @@ final class DummyDataViewController: UIViewController {
 //        likePostsToggle(postId: "66c42b6a97d02bf91e201935")
 //        likePostsToggleSub(postId: "66c42b6a97d02bf91e201935")
 //        likedPosts()
-//        likedPostsSub()
+        likedPostsSub()
 //        updateMyProfile()
 //        searchHashTag()
 //        let vc = MainViewController(view: MainView(), viewModel: MainViewModel())
@@ -165,8 +165,9 @@ final class DummyDataViewController: UIViewController {
                     let count = getPostsModel.data.count
                     getPostsModel.data.enumerated().forEach { idx, model in
 //                        owner.deletePosts(postId: model.postId)
-                        owner.updateEpisode(count: count, model: model)
-//                        owner.printEpisode(model: model)
+//                        owner.updateEpisode(count: count, model: model)
+                        owner.printEpisode(model: model)
+//                        owner.likePostsToggleSub(postId: model.postId)
                         
                         print("-[\(idx)]-----------------------------------------------------")
 //
@@ -258,6 +259,7 @@ final class DummyDataViewController: UIViewController {
         print("회차: ", model.content1)
         print("유료: ", model.content2)
         print("기다무: ", model.content3)
+        print("좋아요 한 날짜: ", model.content4)
         print("가격: ", model.price)
         print("작성자:", model.creator)
     }

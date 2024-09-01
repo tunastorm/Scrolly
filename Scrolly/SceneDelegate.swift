@@ -21,8 +21,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: scene)
    
 //        let mainViewController = DummyDataViewController()
-//        let mainViewController = EpisodeViewerViewController()
-//        let mainViewController = MainViewController(view: MainView(), viewModel: MainViewModel())
         let mainViewController = SplashViewController(view: SplashView(), viewModel: SplashViewModel())
         let navigationController = UINavigationController(rootViewController: mainViewController)
         

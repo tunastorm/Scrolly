@@ -18,19 +18,27 @@ final class SplashView: BaseView {
         $0.textAlignment = .center
     }
     
+    private let subtitleLabel = UILabel().then {
+        $0.text = Resource.UIConstants.Text.appSubTitle
+        $0.textAlignment = .right
+        $0.textColor = Resource.Asset.CIColor.white
+        $0.font = Resource.Asset.Font.system20
+    }
+    
     private let imageView = UIImageView().then {
         $0.contentMode = .top
     }
     
     private let coverView = UIView().then {
         $0.backgroundColor = Resource.Asset.CIColor.blue
-        $0.alpha = 0.75
+        $0.alpha = 0.85
     }
     
     override func configHierarchy() {
         addSubview(imageView)
         addSubview(coverView)
         addSubview(titleLabel)
+        addSubview(subtitleLabel)
     }
     
     override func configLayout() {
@@ -43,6 +51,12 @@ final class SplashView: BaseView {
         titleLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.height.equalTo(100)
+            make.trailing.equalToSuperview().inset(20)
+        }
+        subtitleLabel.snp.makeConstraints { make in
+            make.height.equalTo(20)
+            make.width.equalTo(300)
+            make.top.equalTo(titleLabel.snp.bottom).offset(6)
             make.trailing.equalToSuperview().inset(20)
         }
     }
