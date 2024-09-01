@@ -42,13 +42,15 @@
 		BC097CD02C76249C0038A21C /* BaseCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC097CCF2C76249C0038A21C /* BaseCollectionViewController.swift */; };
 		BC097CD82C76370D0038A21C /* HashTagCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC097CD72C76370D0038A21C /* HashTagCollectionViewCell.swift */; };
 		BC097CDA2C76B6F80038A21C /* HashTagSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC097CD92C76B6F80038A21C /* HashTagSection.swift */; };
+		BC1277EB2C844CA300A056F3 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = BC1277EA2C844CA300A056F3 /* RxCocoa */; };
+		BC1277ED2C844CA300A056F3 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BC1277EC2C844CA300A056F3 /* RxSwift */; };
+		BC1277F02C844CD300A056F3 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = BC1277EF2C844CD300A056F3 /* Differentiator */; };
+		BC1277F22C844CD300A056F3 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = BC1277F12C844CD300A056F3 /* RxDataSources */; };
 		BC48A90A2C7DE4F9001C9B27 /* NovelDetailSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC48A9092C7DE4F9001C9B27 /* NovelDetailSection.swift */; };
 		BC48A90C2C7DE96F001C9B27 /* DescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC48A90B2C7DE96F001C9B27 /* DescriptionCell.swift */; };
 		BC48A90E2C7DE99E001C9B27 /* EpisodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC48A90D2C7DE99E001C9B27 /* EpisodeCell.swift */; };
 		BC48A91A2C7F2674001C9B27 /* EpisodeStatusLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC48A9192C7F2674001C9B27 /* EpisodeStatusLabel.swift */; };
 		BC48A91D2C7F4A04001C9B27 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC48A91C2C7F4A04001C9B27 /* DateFormatter.swift */; };
-		BC48A9202C7F73BB001C9B27 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = BC48A91F2C7F73BB001C9B27 /* Differentiator */; };
-		BC48A9222C7F73BB001C9B27 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = BC48A9212C7F73BB001C9B27 /* RxDataSources */; };
 		BC48A9242C7F741F001C9B27 /* NovelDetailSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC48A9232C7F741F001C9B27 /* NovelDetailSectionModel.swift */; };
 		BC48A9262C7F8975001C9B27 /* EpisodeViewerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC48A9252C7F8975001C9B27 /* EpisodeViewerView.swift */; };
 		BC48A9312C803814001C9B27 /* PDFView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC48A9302C803814001C9B27 /* PDFView+Extension.swift */; };
@@ -282,14 +284,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC1277ED2C844CA300A056F3 /* RxSwift in Frameworks */,
 				BC8F1D042C6CB396005D63CB /* Kingfisher in Frameworks */,
 				BC8F1D152C6CB3C7005D63CB /* IQKeyboardManagerSwift in Frameworks */,
 				BC48A93B2C8170DF001C9B27 /* Then in Frameworks */,
-				BC48A9222C7F73BB001C9B27 /* RxDataSources in Frameworks */,
 				BC48A9382C8170A9001C9B27 /* iamport-ios in Frameworks */,
+				BC1277F22C844CD300A056F3 /* RxDataSources in Frameworks */,
 				BC8F1D0F2C6CB3B4005D63CB /* SnapKit in Frameworks */,
+				BC1277F02C844CD300A056F3 /* Differentiator in Frameworks */,
 				BC8F1D072C6CB3A0005D63CB /* Toast in Frameworks */,
-				BC48A9202C7F73BB001C9B27 /* Differentiator in Frameworks */,
+				BC1277EB2C844CA300A056F3 /* RxCocoa in Frameworks */,
 				BC8F1CFC2C6CB37C005D63CB /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -878,10 +882,12 @@
 				BC8F1D062C6CB3A0005D63CB /* Toast */,
 				BC8F1D0E2C6CB3B4005D63CB /* SnapKit */,
 				BC8F1D142C6CB3C7005D63CB /* IQKeyboardManagerSwift */,
-				BC48A91F2C7F73BB001C9B27 /* Differentiator */,
-				BC48A9212C7F73BB001C9B27 /* RxDataSources */,
 				BC48A9372C8170A9001C9B27 /* iamport-ios */,
 				BC48A93A2C8170DF001C9B27 /* Then */,
+				BC1277EA2C844CA300A056F3 /* RxCocoa */,
+				BC1277EC2C844CA300A056F3 /* RxSwift */,
+				BC1277EF2C844CD300A056F3 /* Differentiator */,
+				BC1277F12C844CD300A056F3 /* RxDataSources */,
 			);
 			productName = Scrolly;
 			productReference = BC8F1CD22C6CAE4B005D63CB /* Scrolly.app */;
@@ -917,9 +923,10 @@
 				BC8F1D052C6CB3A0005D63CB /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 				BC8F1D0D2C6CB3B4005D63CB /* XCRemoteSwiftPackageReference "SnapKit" */,
 				BC8F1D132C6CB3C7005D63CB /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
-				BC48A91E2C7F73BB001C9B27 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				BC48A9362C8170A9001C9B27 /* XCRemoteSwiftPackageReference "iamport-ios" */,
 				BC48A9392C8170DF001C9B27 /* XCRemoteSwiftPackageReference "Then" */,
+				BC1277E92C844CA300A056F3 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				BC1277EE2C844CD300A056F3 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 			);
 			productRefGroup = BC8F1CD32C6CAE4B005D63CB /* Products */;
 			projectDirPath = "";
@@ -1296,7 +1303,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		BC48A91E2C7F73BB001C9B27 /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
+		BC1277E92C844CA300A056F3 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.7.1;
+			};
+		};
+		BC1277EE2C844CD300A056F3 /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources.git";
 			requirement = {
@@ -1363,14 +1378,24 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		BC48A91F2C7F73BB001C9B27 /* Differentiator */ = {
+		BC1277EA2C844CA300A056F3 /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = BC48A91E2C7F73BB001C9B27 /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			package = BC1277E92C844CA300A056F3 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		BC1277EC2C844CA300A056F3 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BC1277E92C844CA300A056F3 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+		BC1277EF2C844CD300A056F3 /* Differentiator */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BC1277EE2C844CD300A056F3 /* XCRemoteSwiftPackageReference "RxDataSources" */;
 			productName = Differentiator;
 		};
-		BC48A9212C7F73BB001C9B27 /* RxDataSources */ = {
+		BC1277F12C844CD300A056F3 /* RxDataSources */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = BC48A91E2C7F73BB001C9B27 /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			package = BC1277EE2C844CD300A056F3 /* XCRemoteSwiftPackageReference "RxDataSources" */;
 			productName = RxDataSources;
 		};
 		BC48A9372C8170A9001C9B27 /* iamport-ios */ = {

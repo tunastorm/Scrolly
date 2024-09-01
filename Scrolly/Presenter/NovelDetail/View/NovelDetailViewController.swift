@@ -92,7 +92,7 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
     )
 
     
-    private let input = NovelDetailViewModel.Input(viewedNovel: PublishSubject<PostsModel>(), viewedList: PublishSubject(value: ()))
+    private let input = NovelDetailViewModel.Input(viewedNovel: PublishSubject<PostsModel>(), viewedList: BehaviorSubject(value: ()))
     
     override func viewDidLoad() {
         super.viewDidLoad()

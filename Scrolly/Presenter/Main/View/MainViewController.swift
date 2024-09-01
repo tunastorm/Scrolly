@@ -78,10 +78,12 @@ final class MainViewController: BaseViewController<MainView> {
             rxPushToDetailViewController(dataSource: idx, from: collectionView)
         }
         
-        let input = MainViewModel.Input(callRecommandDatas: callRecommandData, hashTagCellTap: rootView.hashTagView.rx.itemSelected, srollViewPaging: scrollViewPaging)
+        let input = MainViewModel.Input(callRecommandData: callRecommandData, hashTagCellTap: rootView.hashTagView.rx.itemSelected, srollViewPaging: scrollViewPaging)
         guard let output = mainViewModel.transform(input: input) else {
             return
         }
+        
+        input.callRecommandData.onNext(())
         
         NotificationCenter.default.addObserver(self, selector: #selector(novelViewed), name: Notification.Name(NovelViewedNotification.viewed), object: nil)
         

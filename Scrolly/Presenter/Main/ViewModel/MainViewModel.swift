@@ -13,15 +13,13 @@ import RxCocoa
 final class MainViewModel: BaseViewModel, ViewModelProvider {
     
     typealias PostListResults = Observable<PrimitiveSequence<SingleTrait, Result<GetPostsModel, APIError>>.Element>
-//    typealias PostResults = Observable<PrimitiveSequence<SingleTrait, Result<PostsModel, APIError>>.Element>
-    
-//    private var apiProvider: APIManagerProvide
     
     var model: PostsModel? {
         get { return nil }
         set { }
     }
     
+    private var recommandCall: [PublishSubject<Void>] = []
     private var recommandResults: [Int : PostListResults] = [:]
     private var maleResults: [Int : PublishSubject<HashTagsQuery>] = [:]
     private var femaleResults: [Int : PublishSubject<HashTagsQuery>] = [:]
@@ -41,6 +39,7 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
     private let disposeBag = DisposeBag()
     
     struct Input {
+        let callRecommandData: PublishSubject<Void>
         let hashTagCellTap: ControlEvent<IndexPath>
         let srollViewPaging: PublishRelay<IndexPath>
     }
@@ -60,10 +59,16 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
       
         var novelInfoResults: [String : [PostListResults]] = [:]
         
-        callRecommandDatas()
         setAllSubjects()
+        callRecommandDatas()
         
-        PublishSubject.zip(recommandResults.sorted { $0.key < $1.key }.map{ $0.value })
+        input.callRecommandData
+            .bind(with: self) { owner, _ in
+                owner.recommandCall.forEach { $0.onNext(()) }
+            }
+            .disposed(by: disposeBag)
+        
+        PublishSubject.combineLatest(recommandResults.sorted { $0.key < $1.key }.map{ $0.value })
             .bind(with: self) { owner, results in
                 owner.output.recommandDatas.onNext(results)
                 owner.output.dateDatas.onNext(results)
@@ -131,6 +136,7 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
     }
 
     private func setAllSubjects() {
+        (0...RecommandSection.allCases.count-1).forEach { _ in recommandCall.append(PublishSubject<Void>()) }
         //MARK: - 남성인기
         (0...MaleSection.allCases.count-1).forEach { maleResults[$0] = PublishSubject<HashTagsQuery>() }
         //MARK: - 여성인기
@@ -175,20 +181,20 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
     }
     
     private func callRecommandDatas() {
-        guard recommandResults.values.isEmpty else {
-            return
-        }
-        recommandResults[RecommandSection.banner.index] = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "\(Int.random(in: 10...20))", productId: APIConstants.ProductId.novelInfo))
+        recommandResults[RecommandSection.banner.index] = recommandCall[0]
+            .map { GetPostsQuery(next: nil, limit: "\(Int.random(in: 10...20))", productId: APIConstants.ProductId.novelInfo) }
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
         
-        recommandResults[RecommandSection.popular.index] = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "20", productId: APIConstants.ProductId.novelInfo))
+        recommandResults[RecommandSection.popular.index] = recommandCall[1]
+            .map { GetPostsQuery(next: nil, limit: "20", productId: APIConstants.ProductId.novelInfo) }
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
       
-
-        recommandResults[RecommandSection.recently.index] = BehaviorSubject(value: GetPostsQuery(next: nil, limit: "50", productId: APIConstants.ProductId.novelEpisode))
-            .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
+        recommandResults[RecommandSection.recently.index] = recommandCall[2]
+            .map { LikedPostsQuery(next: nil, limit: "50") }
+            .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getLikedPostsSub($0)) }
         
-        recommandResults[RecommandSection.newWaitingFree.index] = BehaviorSubject(value: RecommandSection.newWaitingFree.query)
+        recommandResults[RecommandSection.newWaitingFree.index] = recommandCall[3]
+            .map { RecommandSection.newWaitingFree.query }
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags($0)) }
     }
     

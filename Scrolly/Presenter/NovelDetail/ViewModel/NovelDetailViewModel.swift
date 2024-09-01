@@ -43,7 +43,7 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
 
     struct Input {
         let viewedNovel: PublishSubject<PostsModel>
-        let viewedList: PublishSubject<Void>
+        let viewedList: BehaviorSubject<Void>
 
     }
     
@@ -61,7 +61,7 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
         
         let novelInfo = Observable.just(model)
        
-        let episoeds = PublishSubject(value: model.hashTags.first)
+        let episoeds = BehaviorSubject(value: model.hashTags.first)
             .map { HashTagsQuery(next: nil, limit: "50", productId: APIConstants.ProductId.novelEpisode, hashTag: $0) }
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags($0)) }
         
@@ -90,7 +90,7 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
     }
     
     private func callNovelInfoFromEpisode(postId: String) {
-        PublishSubject(value: postId)
+        BehaviorSubject(value: postId)
             .flatMap { _ in APIManager.shared.callRequestAPI(model: PostsModel.self, router: .queryOnePosts(postId)) }
             .bind(with: self) { owner, result in
                 switch result {
