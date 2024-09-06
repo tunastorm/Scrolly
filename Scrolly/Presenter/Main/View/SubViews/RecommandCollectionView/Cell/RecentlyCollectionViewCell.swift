@@ -87,11 +87,14 @@ final class RecentlyCollectionViewCell: BaseCollectionViewCell {
         imageView.kf.setImage(with: url)
         titleLabel.text = identifier.hashTags.first?.replacing("_", with: " ")
         categoryLabel.text = identifier.hashTags[1]
-        let isHidden = identifier.content1 == "false"
+        print(#function, "isWaitingFreeSet: ", identifier.content3)
+        let isHidden = identifier.content3?.split(separator: ",")[0] == "false"
+        print(#function, "title: ", identifier.title)
         waitingFreeToggle(isHidden)
     }
     
     private func waitingFreeToggle(_ isHidden: Bool) {
+        print(#function, "isHidden: ", isHidden)
         waitingFreeImageView.isHidden = isHidden
         waitingFreeLabel.isHidden = isHidden
     }

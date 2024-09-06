@@ -6,15 +6,38 @@
 //
 
 import UIKit
+import Cosmos
 import SnapKit
 import Then
 
 final class EpisodeEndView: BaseView {
     
-    private let bannerView = UIImageView().then {
-        $0.contentMode = .bottom
-        $0.layer.cornerRadius = 10
-        $0.layer.masksToBounds = true
+    private let starRateView = UIView()
+    
+    private let myRateLabel = UILabel().then {
+        $0.text = "내가 남긴 별점"
+        $0.textColor = Resource.Asset.CIColor.gray
+        $0.textAlignment = .center
+        $0.font = Resource.Asset.Font.system15
+    }
+    
+    private let starRateLabel = UILabel().then {
+        $0.text = "5.0"
+        $0.textColor = Resource.Asset.CIColor.blue
+        $0.textAlignment = .center
+        $0.font = Resource.Asset.Font.system15
+    }
+    
+    private let cosmosView = CosmosView().then {
+        $0.rating = 5
+        $0.settings.totalStars = 5
+        $0.settings.fillMode = .half
+        $0.settings.updateOnTouch = true
+        $0.settings.starSize = 30
+        $0.settings.filledColor = Resource.Asset.CIColor.blue
+        $0.settings.filledBorderColor = Resource.Asset.CIColor.blue
+        $0.settings.emptyColor = Resource.Asset.CIColor.lightGray
+        $0.settings.emptyBorderColor = Resource.Asset.CIColor.lightGray
     }
     
     private let titleLabel = UILabel().then {
@@ -128,7 +151,10 @@ final class EpisodeEndView: BaseView {
     }
     
     override func configHierarchy() {
-        addSubview(bannerView)
+        addSubview(starRateView)
+        starRateView.addSubview(myRateLabel)
+        starRateView.addSubview(starRateLabel)
+        addSubview(cosmosView)
         addSubview(titleLabel)
         addSubview(likeButton)
         addSubview(creatorLabel)
@@ -150,19 +176,36 @@ final class EpisodeEndView: BaseView {
     }
     
     override func configLayout() {
-        bannerView.snp.makeConstraints { make in
-            make.height.equalTo(200)
-            make.top.equalTo(safeAreaLayoutGuide).inset(40)
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(10)
+        starRateView.snp.makeConstraints { make in
+            make.height.equalTo(16)
+            make.width.equalTo(130)
+            make.top.equalTo(safeAreaLayoutGuide).offset(40)
+            make.centerX.equalTo(safeAreaLayoutGuide)
+        }
+        myRateLabel.snp.makeConstraints { make in
+            make.width.equalTo(100)
+            make.verticalEdges.equalToSuperview()
+            make.leading.equalToSuperview()
+        }
+        starRateLabel.snp.makeConstraints { make in
+            make.width.equalTo(30)
+            make.verticalEdges.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.leading.equalTo(myRateLabel.snp.trailing)
+        }
+        cosmosView.snp.makeConstraints { make in
+            make.height.equalTo(50)
+            make.top.equalTo(starRateView.snp.bottom).offset(6)
+            make.centerX.equalTo(safeAreaLayoutGuide)
         }
         titleLabel.snp.makeConstraints { make in
             make.height.equalTo(20)
-            make.top.equalTo(bannerView.snp.bottom).offset(20)
+            make.top.equalTo(cosmosView.snp.bottom).offset(40)
             make.leading.equalTo(safeAreaLayoutGuide).inset(10)
         }
         likeButton.snp.makeConstraints { make in
-            make.size.equalTo(40)
-            make.top.equalTo(bannerView.snp.bottom).offset(20)
+            make.size.equalTo(30)
+            make.top.equalTo(cosmosView.snp.bottom).offset(50)
             make.trailing.equalTo(safeAreaLayoutGuide).inset(20)
             make.leading.equalTo(titleLabel.snp.trailing).offset(10)
         }
@@ -257,7 +300,6 @@ final class EpisodeEndView: BaseView {
     
     override func configView() {
         super.configView()
-        bannerView.image = Resource.Asset.NamedImage.splashImage
         titleLabel.text = "멸망한 세계의 4급 인간"
         creatorLabel.text = "외투"
         averageRateLabel.text = "9.8"
@@ -266,6 +308,12 @@ final class EpisodeEndView: BaseView {
         commentLabel.text = "ㅋㅋㅋ 말로는 형제들이라면서 속마음은 외계에서온 외노자취급하넼ㅋㅋㅋ"
         nextEpisodeImageView.image = UIImage(named: "dummyImage_1")
         nextEpisodeLabel.text = "멸망한 세계의 4급 인간 283화"
+        cosmosView.didTouchCosmos = { [weak self] rating in
+            self?.starRateLabel.text = String(rating)
+        }
+        cosmosView.didFinishTouchingCosmos = { [weak self] rating in
+            
+        }
     }
     
 }

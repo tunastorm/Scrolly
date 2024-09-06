@@ -117,7 +117,7 @@ final class EpisodeViewerViewController: BaseViewController<EpisodeViewerView> {
     }
     
     @objc private func nextButtonTapped() {
-        let vc = EpisodeEndViewController(view: EpisodeEndView(), viewModel: EpisodeEndViewModel())
+        let vc = EpisodeEndViewController(view: EpisodeEndView(), viewModel: EpisodeEndViewModel(model: viewModel?.model))
         pushAfterView(view: vc, backButton: true, animated: true)
     }
     

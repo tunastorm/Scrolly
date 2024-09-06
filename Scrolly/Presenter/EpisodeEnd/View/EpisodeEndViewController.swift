@@ -15,6 +15,14 @@ final class EpisodeEndViewController: BaseViewController<EpisodeEndView> {
     }
     
     override func bindData() {
+        guard let viewModel = viewModel as? EpisodeEndViewModel else {
+            return
+        }
+        let input = EpisodeEndViewModel.Input()
+        guard let output = viewModel.transform(input: input) else {
+            return
+        }
+        
         
     }
     

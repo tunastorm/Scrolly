@@ -154,10 +154,10 @@ final class EpisodeCell: BaseCollectionViewCell {
         let date = DateFormatManager.shared.stringToformattedString(value: identifier.createdAt, before: .dateAndTimeWithTimezone, after: .dotSperatedyyyMMdd)
         uploadDateLabel.text = date
         
-       
-        
         var isShow = true
-        switch (identifier.content2, identifier.content3) {
+        
+        
+        switch (identifier.content2, identifier.content3?.split(separator: ",")[1]) {
         case ("false", "false"):
             self.statusLabel.toggleShowingView(view: .freelabel)
         case ("true", "true"): 

@@ -49,6 +49,7 @@
 		BC1277F42C848D7900A056F3 /* EpisodeEndViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1277F32C848D7900A056F3 /* EpisodeEndViewController.swift */; };
 		BC1277F62C848D8300A056F3 /* EpisodeEndView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1277F52C848D8300A056F3 /* EpisodeEndView.swift */; };
 		BC1277F82C848D8F00A056F3 /* EpisodeEndViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1277F72C848D8F00A056F3 /* EpisodeEndViewModel.swift */; };
+		BC404B6D2C8B1B04001BA269 /* Cosmos in Frameworks */ = {isa = PBXBuildFile; productRef = BC404B6C2C8B1B04001BA269 /* Cosmos */; };
 		BC48A90A2C7DE4F9001C9B27 /* NovelDetailSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC48A9092C7DE4F9001C9B27 /* NovelDetailSection.swift */; };
 		BC48A90C2C7DE96F001C9B27 /* DescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC48A90B2C7DE96F001C9B27 /* DescriptionCell.swift */; };
 		BC48A90E2C7DE99E001C9B27 /* EpisodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC48A90D2C7DE99E001C9B27 /* EpisodeCell.swift */; };
@@ -296,6 +297,7 @@
 				BC48A93B2C8170DF001C9B27 /* Then in Frameworks */,
 				BC48A9382C8170A9001C9B27 /* iamport-ios in Frameworks */,
 				BC1277F22C844CD300A056F3 /* RxDataSources in Frameworks */,
+				BC404B6D2C8B1B04001BA269 /* Cosmos in Frameworks */,
 				BC8F1D0F2C6CB3B4005D63CB /* SnapKit in Frameworks */,
 				BC1277F02C844CD300A056F3 /* Differentiator in Frameworks */,
 				BC8F1D072C6CB3A0005D63CB /* Toast in Frameworks */,
@@ -897,6 +899,7 @@
 				BC1277EC2C844CA300A056F3 /* RxSwift */,
 				BC1277EF2C844CD300A056F3 /* Differentiator */,
 				BC1277F12C844CD300A056F3 /* RxDataSources */,
+				BC404B6C2C8B1B04001BA269 /* Cosmos */,
 			);
 			productName = Scrolly;
 			productReference = BC8F1CD22C6CAE4B005D63CB /* Scrolly.app */;
@@ -936,6 +939,7 @@
 				BC48A9392C8170DF001C9B27 /* XCRemoteSwiftPackageReference "Then" */,
 				BC1277E92C844CA300A056F3 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				BC1277EE2C844CD300A056F3 /* XCRemoteSwiftPackageReference "RxDataSources" */,
+				BC404B6B2C8B1B04001BA269 /* XCRemoteSwiftPackageReference "Cosmos" */,
 			);
 			productRefGroup = BC8F1CD32C6CAE4B005D63CB /* Products */;
 			projectDirPath = "";
@@ -1331,6 +1335,14 @@
 				minimumVersion = 5.0.2;
 			};
 		};
+		BC404B6B2C8B1B04001BA269 /* XCRemoteSwiftPackageReference "Cosmos" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/Cosmos.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 25.0.1;
+			};
+		};
 		BC48A9362C8170A9001C9B27 /* XCRemoteSwiftPackageReference "iamport-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/iamport/iamport-ios.git";
@@ -1409,6 +1421,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BC1277EE2C844CD300A056F3 /* XCRemoteSwiftPackageReference "RxDataSources" */;
 			productName = RxDataSources;
+		};
+		BC404B6C2C8B1B04001BA269 /* Cosmos */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BC404B6B2C8B1B04001BA269 /* XCRemoteSwiftPackageReference "Cosmos" */;
+			productName = Cosmos;
 		};
 		BC48A9372C8170A9001C9B27 /* iamport-ios */ = {
 			isa = XCSwiftPackageProductDependency;

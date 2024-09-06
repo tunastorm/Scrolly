@@ -15,6 +15,16 @@ final class EpisodeEndViewModel: BaseViewModel, ViewModelProvider {
     
     private var output = Output()
     
+    init(model: PostsModel? = nil, output: Output = Output()) {
+        super.init()
+        self.model = model
+        self.output = output
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     struct Input {
         
     }

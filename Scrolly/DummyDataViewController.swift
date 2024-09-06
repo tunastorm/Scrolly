@@ -17,26 +17,26 @@ final class DummyDataViewController: UIViewController {
 //    let email = "scrollyTest@Scrolly.com"
 //    let password = "123456"
     
-    let email = "test@tuna.com"
-    let password = "1234"
+    private let email = "test@tuna.com"
+    private let password = "1234"
     
-    let nick = "tester"
-    let phoneNum = "01012345678"
-    let birthDay = "19930101"
-    let coverName = "dummyImage_17"
-    let episodeName = "novel_m2"
+    private let nick = "tester"
+    private let phoneNum = "01012345678"
+    private let birthDay = "19930101"
+    private let coverName = "dummyImage_17"
+    private let episodeName = "novel_m2"
     
-    let dummyTitle = "언니 그놈이랑 결혼하지 마요"
-    let content = "남주가 다 해먹는 무협지 속, 남주의 먼 조상님으로 빙의했다.\n\n남주를 든든히 뒷받침해 주는 역할에 충실하기 위해 뼈가 으스러져라 일해서 최고의 가문을 세웠다.\n\n 그 후, 마음 편히 눈을 감았었는데.\n\n”뭐? 내 가문이 망했다고?!”\n\n다시 눈을 떠 보니 300년 후. #무협지_남주의_어린_아내가_되어_버렸다 #Rana #여성향 #로판 "
-    let creator = "Rana"
-    let uploadDates = "[1,1,1,1,1,1,1]"
-    let viewCount = "4626000"
-    let averageRate = "9.6,3500"
-    let waiting = "true"
+    private let dummyTitle = "언니 그놈이랑 결혼하지 마요"
+    private let content = "남주가 다 해먹는 무협지 속, 남주의 먼 조상님으로 빙의했다.\n\n남주를 든든히 뒷받침해 주는 역할에 충실하기 위해 뼈가 으스러져라 일해서 최고의 가문을 세웠다.\n\n 그 후, 마음 편히 눈을 감았었는데.\n\n”뭐? 내 가문이 망했다고?!”\n\n다시 눈을 떠 보니 300년 후. #무협지_남주의_어린_아내가_되어_버렸다 #Rana #여성향 #로판 "
+    private let creator = "Rana"
+    private let uploadDates = "[1,1,1,1,1,1,1]"
+    private let viewCount = "4626000"
+    private let averageRate = "9.6,3500"
+    private let waiting = "true"
     
-    let productId = APIConstants.ProductId.novelInfo
-    let postId = "66ce15445a9c85013f89d1b4"
-    let pdfFiles = [
+    private let productId = APIConstants.ProductId.novelInfo
+    private let postId = "66ce15445a9c85013f89d1b4"
+    private let pdfFiles = [
         "uploads/posts/novel_m1_1724773384035.pdf",
         "uploads/posts/novel_m2_1724773384575.pdf",
         "uploads/posts/novel_m3_1724773384567.pdf",
@@ -44,57 +44,25 @@ final class DummyDataViewController: UIViewController {
         "uploads/posts/novel_m5_1724773384568.pdf"
     ]
     
-    let cursor: String? = "66ce28f31691d4013e52d23c"
-    
-    lazy var dummyProfileData = UIImage(named: coverName)?.jpegData(compressionQuality: 1.0)
+    private let cursor: String? = "66ce28f31691d4013e52d23c"
+
+    private lazy var dummyProfileData = UIImage(named: coverName)?.jpegData(compressionQuality: 1.0)
     
 //    lazy var files = [
 //        UIImage(named: coverName)?.jpegData(compressionQuality: 1.0) ?? Data(),
 //    ]
     
-    lazy var signinQuery = SignUpQuery(email: self.email, password: self.password, nick: self.nick, phoneNum: self.phoneNum, birthDay: self.birthDay)
-    lazy var emailValidationQuery = EmailValidationQuery(email: self.email)
-    lazy var loginQuery = LoginQuery(email: self.email, password: self.password)
-    lazy var myProfileQuery = MyProfileQuery(nick: "admin", phoneNum: "01087654321", birthDay: "19951231", profile: dummyProfileData )
-    lazy var getPostsQuery = GetPostsQuery(next: cursor, limit: "50", productId: self.productId)
+    private lazy var signinQuery = SignUpQuery(email: self.email, password: self.password, nick: self.nick, phoneNum: self.phoneNum, birthDay: self.birthDay)
+    private lazy var emailValidationQuery = EmailValidationQuery(email: self.email)
+    private lazy var loginQuery = LoginQuery(email: self.email, password: self.password)
+    private lazy var myProfileQuery = MyProfileQuery(nick: "admin", phoneNum: "01087654321", birthDay: "19951231", profile: dummyProfileData )
+    private lazy var getPostsQuery = GetPostsQuery(next: cursor, limit: "50", productId: self.productId)
 //    lazy var getPostsQuery = GetPostsQuery(next: nil, limit: "50", productId: nil)
-    lazy var commentsQuery = CommentsQuery(content: "테스트 댓글3")
-    lazy var likeQuery = LikeQuery(likeStatus: false)
-    lazy var likedPostsQuery = LikedPostsQuery(next: nil, limit: "50")
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-//        validateEmail()
-//        signin()
-//        login()
-//        withDraw()
-//        getMyProfile()
-//        updateMyProfile()
-//        uploadPostImage(isUpdate: false)
-//        uploadPosts()
-//        getPosts()
-//        queryOnePost(postId: "66ce28f45a9c85013f8a18fe")
-//        updatePosts(postId: "66c8ca8c5056517017a45b9b", query:  PostsQuery(productId: nil, title: nil, content: "소설 속 악역으로 빙의했다.\n재능도 없고, 노력도 하지 않는\n찌질한 망나니 빌런으로.\n\n하지만\n\n[검술: F] [창술: S]\n\n…이 정도면 할만한데? #백작가_도련님은_창술천재 #연량 #웹소설 #판타지 #남성향", content1: nil, content2: nil, content3: nil, content4: nil, content5: nil, files: nil))
-//        deletePosts(postId: "66c353dfd22f9bf132291e8e")
-//        uploadComments(postId: "66c42b6a97d02bf91e201935")
-//        updateComments(postId: "66c42b6a97d02bf91e201935", commentId: "66c4cb052701b5f91d1a670d")
-//        deleteComments(postId: "66c42b6a97d02bf91e201935", commentId: "66c4cb052701b5f91d1a670d")
-//        likePostsToggle(postId: "66c42b6a97d02bf91e201935")
-//        likePostsToggleSub(postId: "66c42b6a97d02bf91e201935")
-//        likedPosts()
-//        likedPostsSub()
-//        updateMyProfile()
-//        postIds.keys.forEach { hashtag in
-//            searchHashTag(hashtag: hashtag)
-//        }
-//        searchHashTag(hashtag: "탐식의_재림")
-//        let vc = MainViewController(view: MainView(), viewModel: MainViewModel())
-//        navigationController?.pushViewController(vc, animated: false)
-//        pdfUploader()
-        
-    }
-    
-    let waitingFree = [
+    private lazy var commentsQuery = CommentsQuery(content: "테스트 댓글3")
+    private lazy var likeQuery = LikeQuery(likeStatus: false)
+    private lazy var likedPostsQuery = LikedPostsQuery(next: nil, limit: "50")
+
+    private let waitingFree = [
         "true","true", "false", "true", "false",
         "false", "false", "false", "true", "true",
         "true", "true", "true", "false", "true",
@@ -102,7 +70,7 @@ final class DummyDataViewController: UIViewController {
     ]
     
     
-    let banner = [
+    private let banner = [
         "남주가 다 해먹는 무협지 속, 남주의 먼 조상님으로 빙의했다",
         "아버지는 사실 정령왕이었다. 그런데 이젠 내 차례라고?",
         "내가 설계한 퀘스트가 펼쳐지는 세상",
@@ -125,7 +93,7 @@ final class DummyDataViewController: UIViewController {
         "여주를 소드마스터로 키우면 전부 해결될 줄 알았다",
     ]
     
-    let postIds: [String:String] = [
+    private let postIds: [String:String] = [
         "무협지_남주의_어린_아내가_되어_버렸다": "66c966c7078fb670167c2ec2",
         "헌터_세상의_정령왕" : "66c8cbbf078fb670167c1dcf",
         "설계자의_공략방법" : "66c8cb66078fb670167c1dc2",
@@ -148,6 +116,60 @@ final class DummyDataViewController: UIViewController {
         "전_그냥_여주만_키우려고_했는데요" : "66c8c49d078fb670167c1af6"
     ]
     
+    private var parentIsWaitingFree: [String:String] = [
+        "무협지_남주의_어린_아내가_되어_버렸다": "",
+        "헌터_세상의_정령왕" : "",
+        "설계자의_공략방법" : "",
+        "시스템_에러로_종족초월" : "",
+        "백작가_도련님은_창술천재" : "",
+        "만렙_자캐" : "",
+        "유닛_뽑는_헌터" : "",
+        "라스트_서바이버_:_진화로_살아남아라!" : "",
+        "템빨" : "",
+        "탐식의_재림" : "",
+        "절대자도_아빠는_처음이라" : "",
+        "악녀의_문구점에_오지_마세요" : "",
+        "사랑받는_시집살이" : "",
+        "시한부_엑스트라의_시간" : "",
+        "진짜가_나타나기_전까지만" : "",
+        "언니_그놈이랑_결혼하지_마요" : "",
+        "원작에_없는_인물로_태어났습니다" : "",
+        "본의_아니게_원작_속_남주를_빼앗았다" : "",
+        "살인마_황제님,_이러시면_곤란해요" : "",
+        "전_그냥_여주만_키우려고_했는데요" : "",
+    ]
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+//        validateEmail()
+//        signin()
+//        login()
+//        withDraw()
+//        getMyProfile()
+//        updateMyProfile()
+//        uploadPostImage(isUpdate: false)
+//        uploadPosts()
+        getPosts()
+//        queryOnePost(postId: "66ce28f45a9c85013f8a18fe")
+//        updatePosts(postId: "66c8ca8c5056517017a45b9b", query:  PostsQuery(productId: nil, title: nil, content: "소설 속 악역으로 빙의했다.\n재능도 없고, 노력도 하지 않는\n찌질한 망나니 빌런으로.\n\n하지만\n\n[검술: F] [창술: S]\n\n…이 정도면 할만한데? #백작가_도련님은_창술천재 #연량 #웹소설 #판타지 #남성향", content1: nil, content2: nil, content3: nil, content4: nil, content5: nil, files: nil))
+//        deletePosts(postId: "66c353dfd22f9bf132291e8e")
+//        uploadComments(postId: "66c42b6a97d02bf91e201935")
+//        updateComments(postId: "66c42b6a97d02bf91e201935", commentId: "66c4cb052701b5f91d1a670d")
+//        deleteComments(postId: "66c42b6a97d02bf91e201935", commentId: "66c4cb052701b5f91d1a670d")
+//        likePostsToggle(postId: "66c42b6a97d02bf91e201935")
+//        likePostsToggleSub(postId: "66c42b6a97d02bf91e201935")
+//        likedPosts()
+//        likedPostsSub()
+//        updateMyProfile()
+//        postIds.keys.forEach { hashtag in
+//            searchHashTag(hashtag: hashtag)
+//        }
+//        searchHashTag(hashtag: "시한부_엑스트라의_시간")
+//        let vc = MainViewController(view: MainView(), viewModel: MainViewModel())
+//        navigationController?.pushViewController(vc, animated: false)
+//        pdfUploader()
+        
+    }
     
     private func testSubscribe<T: Decodable>(single: Single<APIManager.ModelResult<T>>, _ isUpdate: Bool = false) {
         single.subscribe(with: self) { owner, result in
@@ -165,16 +187,32 @@ final class DummyDataViewController: UIViewController {
                     let getPostsModel = model as! GetPostsModel
                     print("count: ", getPostsModel.data.count)
 //                    let count = getPostsModel.data.count
-                   
+                    
                     getPostsModel.data.enumerated().forEach { idx, model in
                         print("-[\(idx)]-----------------------------------------------------")
 //                        owner.deletePosts(postId: model.postId)
 //                        owner.updateEpisodeStatus(count: count, model: model)
-                        if let parentId = self.postIds[model.hashTags[0]] {
-                            owner.updateEpisodeParentId(parentId: parentId, model: model)
+                        if model.productId == APIConstants.ProductId.novelInfo, let hashTag = model.hashTags.first {
+//                            print("hashTag: ", hashTag)
+//                            print("parentisWaitingFree", model.content1)
+//                            owner.parentIsWaitingFree[hashTag] = model. content1 ?? "false"
+                            if let isWaitingFree = model.content1, isWaitingFree == "false" {
+                                owner.searchHashTag(hashtag: hashTag)
+                            }
+//                            owner.printNovelInfo(model: model)
                         }
-//                        owner.printEpisode(model: model)
-//                        owner.printNovelInfo(model: model)
+                        
+                        if model.productId == APIConstants.ProductId.novelEpisode, let parentId = self.postIds[model.hashTags[0]] {
+//                            print("유료 여부: ", )model.content2
+//                            print(#function, owner.parentIsWaitingFree[model.hashTags[0]], ",", model.content3)
+//                            owner.updateEpisodeParentId(parentId: parentId, model: model)
+//                            owner.updateEpisodeWaitingFree(model: model, parentWaitingFree: owner.parentIsWaitingFree[model.hashTags[0]] ?? "false")
+//                            owner.updateEpisodeIsFree(model: model)
+                            
+//                            owner.printEpisode(model: model)
+                        }
+                       
+//
 //                        owner.likePostsToggleSub(postId: model.postId)
                         
                    
@@ -318,6 +356,24 @@ final class DummyDataViewController: UIViewController {
         //                            owner.uploadPosts(query: query)
         //                        }
                                 
+    }
+    
+    private func updateEpisodeIsFree(model: PostsModel) {
+        guard model.content2 == "false" else { return }
+//        print(#function, "episodeIsFree: ", model.content2)
+        let query = PostsQuery(productId: nil, title: nil, price: nil, content: nil, content1: nil, content2: "true", content3: nil, content4: nil, content5: nil, files: nil)
+        updatePosts(postId: model.postId, query: query)
+    }
+    
+    private func updateEpisodeWaitingFree(model: PostsModel, parentWaitingFree: String) {
+        if let waitingFree = model.content3?.split(separator: ",").last {
+
+            let waitingFreeSet = parentWaitingFree == "true" ?
+            "\(parentWaitingFree),\(waitingFree)" : "\(parentWaitingFree),\(parentWaitingFree)"
+//            print(#function, "waitingFreeSet: ", waitingFreeSet)
+            let query = PostsQuery(productId: nil, title: nil, price: nil, content: nil, content1: nil, content2: nil, content3: waitingFreeSet, content4: nil, content5: nil, files: nil)
+            updatePosts(postId: model.postId, query: query)
+        }
     }
     
     private func updateEpisodeParentId(parentId: String, model: PostsModel) {
