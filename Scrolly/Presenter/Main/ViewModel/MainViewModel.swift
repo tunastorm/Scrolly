@@ -71,7 +71,6 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
         PublishSubject.combineLatest(recommandResults.sorted { $0.key < $1.key }.map{ $0.value })
             .bind(with: self) { owner, results in
                 owner.output.recommandDatas.onNext(results)
-//                owner.output.dateDatas.onNext(results)
             }
             .disposed(by: disposeBag)
         
@@ -104,6 +103,7 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
 //            case .day: results = dateResults
             default: return
             }
+            
             novelInfoResults[section.rawValue] = results.sorted { $0.key < $1.key }.map{ $0.value }.map { results in
                 results.flatMap{ APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags($0)) }
 //                .debug("\(section.rawValue) 네크워킹")
@@ -136,6 +136,7 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
     }
 
     private func setAllSubjects() {
+        //MARK: - HOT 추천
         (0...RecommandSection.allCases.count-1).forEach { _ in recommandCall.append(PublishSubject<Void>()) }
         //MARK: - 남성인기
         (0...MaleSection.allCases.count-1).forEach { maleResults[$0] = PublishSubject<HashTagsQuery>() }
@@ -192,6 +193,7 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
         recommandResults[RecommandSection.recently.index] = recommandCall[2]
             .map { LikedPostsQuery(next: nil, limit: "50") }
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getLikedPostsSub($0)) }
+//            .debug("likedPostsSub")
         
         recommandResults[RecommandSection.newWaitingFree.index] = recommandCall[3]
             .map { RecommandSection.newWaitingFree.query }

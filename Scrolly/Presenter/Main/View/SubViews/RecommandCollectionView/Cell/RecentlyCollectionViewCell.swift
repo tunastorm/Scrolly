@@ -87,7 +87,7 @@ final class RecentlyCollectionViewCell: BaseCollectionViewCell {
         imageView.kf.setImage(with: url)
         titleLabel.text = identifier.hashTags.first?.replacing("_", with: " ")
         categoryLabel.text = identifier.hashTags[1]
-        let isHidden = identifier.content1 == "true"
+        let isHidden = identifier.content1 == "false"
         waitingFreeToggle(isHidden)
     }
     

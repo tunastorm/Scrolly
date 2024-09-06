@@ -29,6 +29,8 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
     init(detailInfo: PostsModel? = nil) {
         super.init()
         self.detailInfo = detailInfo
+        print(#function, "detailInfo: ", detailInfo?.productId)
+        print(#function, "detailInfo: ", detailInfo?.postId)
         if detailInfo?.productId == APIConstants.ProductId.novelEpisode, let postId = detailInfo?.content5 {
             callNovelInfoFromEpisode(postId: postId)
         }
@@ -75,6 +77,7 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
         let viewedList = input.viewedList
             .map{ [weak self] _ in LikedPostsQuery(next: self?.cursur, limit: "50") }
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getLikedPostsSub($0)) }
+//            .debug("viewedList")
         
 //        let viewedToggle = input.viewedNovel
 //            .map{($0.postId, LikeQuery(likeStatus: true))}
@@ -92,7 +95,7 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
                 return (model.postId, LikeQuery(likeStatus: true))
             }
             .flatMap { APIManager.shared.callRequestAPI(model: LikeModel.self, router: .likePostsToggleSub($0.0, $0.1)) }
-            .debug("input - viewedNovel")
+//            .debug("input - viewedNovel")
             .bind(with: self) { owner, result in
                 switch result {
                 case .success(let model):
@@ -156,6 +159,7 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
     private func callNovelInfoFromEpisode(postId: String) {
         BehaviorSubject(value: postId)
             .flatMap { _ in APIManager.shared.callRequestAPI(model: PostsModel.self, router: .queryOnePosts(postId)) }
+            .debug("callNovelInfoFromEpisode")
             .bind(with: self) { owner, result in
                 switch result {
                 case .success(let model):

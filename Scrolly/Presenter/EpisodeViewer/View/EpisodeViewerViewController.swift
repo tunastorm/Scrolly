@@ -80,7 +80,6 @@ final class EpisodeViewerViewController: BaseViewController<EpisodeViewerView> {
                     owner.rootView?.configPDFView(document)
                 case .failure(let error):
                     owner.showToastToView(error)
-                    owner.popBeforeView(animated: true)
                 }
             }
             .disposed(by: disposeBag)

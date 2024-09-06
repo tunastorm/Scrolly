@@ -236,7 +236,6 @@ extension NovelDetailViewController: EpisodeCellDelegate {
             input.viewedNovel.onNext(model)
             input.viewedList.onNext(())
             NotificationCenter.default.post(name: NSNotification.Name(NovelViewedNotification.viewed), object: nil, userInfo: nil)
-//            configToolbar()
             let vc = EpisodeViewerViewController(view: EpisodeViewerView(), viewModel: EpisodeViewerViewModel(novel: model))
             pushAfterView(view: vc, backButton: true, animated: true)
         } catch {

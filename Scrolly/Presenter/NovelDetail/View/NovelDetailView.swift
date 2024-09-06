@@ -151,7 +151,9 @@ final class NovelDetailView: BaseView {
         }
         
         guard post.productId == APIConstants.ProductId.novelInfo else {
+            print(#function, "소설정보아님", post.productId)
             return
+
         }
         titleLabel.text = post.title
         creatorLabel.text = post.creatorHashTag

@@ -52,9 +52,9 @@ final class EpisodeViewerView: BaseView {
     func configPDFView(_ document: PDFDocument) {
         pageDict["maxPage"] = document.pageCount
         pdfView.document = document
-//        NotificationCenter.default.addObserver (self, selector: #selector(pageChanged), name: Notification.Name.PDFViewPageChanged, object: nil)
     }
     
+    //        NotificationCenter.default.addObserver (self, selector: #selector(pageChanged), name: Notification.Name.PDFViewPageChanged, object: nil)
 //    @objc private func pageChanged() {
 //        guard let current = pdfView.currentPage else {
 //            return

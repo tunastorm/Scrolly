@@ -34,7 +34,7 @@ final class DummyDataViewController: UIViewController {
     let averageRate = "9.6,3500"
     let waiting = "true"
     
-    let productId = APIConstants.ProductId.novelEpisode
+    let productId = APIConstants.ProductId.novelInfo
     let postId = "66ce15445a9c85013f89d1b4"
     let pdfFiles = [
         "uploads/posts/novel_m1_1724773384035.pdf",
@@ -61,7 +61,6 @@ final class DummyDataViewController: UIViewController {
     lazy var commentsQuery = CommentsQuery(content: "테스트 댓글3")
     lazy var likeQuery = LikeQuery(likeStatus: false)
     lazy var likedPostsQuery = LikedPostsQuery(next: nil, limit: "50")
-    lazy var hashTagsQuery = HashTagsQuery(next: nil, limit: "50", productId: APIConstants.ProductId.novelEpisode, hashTag: "탐식의_재림")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,7 +73,7 @@ final class DummyDataViewController: UIViewController {
 //        uploadPostImage(isUpdate: false)
 //        uploadPosts()
 //        getPosts()
-//        queryOnePost(postId: "66c966c7078fb670167c2ec2")
+//        queryOnePost(postId: "66ce28f45a9c85013f8a18fe")
 //        updatePosts(postId: "66c8ca8c5056517017a45b9b", query:  PostsQuery(productId: nil, title: nil, content: "소설 속 악역으로 빙의했다.\n재능도 없고, 노력도 하지 않는\n찌질한 망나니 빌런으로.\n\n하지만\n\n[검술: F] [창술: S]\n\n…이 정도면 할만한데? #백작가_도련님은_창술천재 #연량 #웹소설 #판타지 #남성향", content1: nil, content2: nil, content3: nil, content4: nil, content5: nil, files: nil))
 //        deletePosts(postId: "66c353dfd22f9bf132291e8e")
 //        uploadComments(postId: "66c42b6a97d02bf91e201935")
@@ -83,9 +82,12 @@ final class DummyDataViewController: UIViewController {
 //        likePostsToggle(postId: "66c42b6a97d02bf91e201935")
 //        likePostsToggleSub(postId: "66c42b6a97d02bf91e201935")
 //        likedPosts()
-        likedPostsSub()
+//        likedPostsSub()
 //        updateMyProfile()
-//        searchHashTag()
+//        postIds.keys.forEach { hashtag in
+//            searchHashTag(hashtag: hashtag)
+//        }
+//        searchHashTag(hashtag: "탐식의_재림")
 //        let vc = MainViewController(view: MainView(), viewModel: MainViewModel())
 //        navigationController?.pushViewController(vc, animated: false)
 //        pdfUploader()
@@ -162,14 +164,20 @@ final class DummyDataViewController: UIViewController {
                 if model is GetPostsModel {
                     let getPostsModel = model as! GetPostsModel
                     print("count: ", getPostsModel.data.count)
-                    let count = getPostsModel.data.count
+//                    let count = getPostsModel.data.count
+                   
                     getPostsModel.data.enumerated().forEach { idx, model in
+                        print("-[\(idx)]-----------------------------------------------------")
 //                        owner.deletePosts(postId: model.postId)
-//                        owner.updateEpisode(count: count, model: model)
-                        owner.printEpisode(model: model)
+//                        owner.updateEpisodeStatus(count: count, model: model)
+                        if let parentId = self.postIds[model.hashTags[0]] {
+                            owner.updateEpisodeParentId(parentId: parentId, model: model)
+                        }
+//                        owner.printEpisode(model: model)
+//                        owner.printNovelInfo(model: model)
 //                        owner.likePostsToggleSub(postId: model.postId)
                         
-                        print("-[\(idx)]-----------------------------------------------------")
+                   
 //
 //                        guard let old = model.files.first else {
 //                            return
@@ -260,26 +268,27 @@ final class DummyDataViewController: UIViewController {
         print("유료: ", model.content2)
         print("기다무: ", model.content3)
         print("좋아요 한 날짜: ", model.content4)
+        print("부모 Id: ", model.content5)
         print("가격: ", model.price)
         print("작성자:", model.creator)
     }
     
     private func randomEpisodeUpload() {
-        //                        let random = Int.random(in: 10...100)
-        //                        let nonPay = random > 50 ? Int(random / 10) : 0
-        //                        let waitingFree = Int(Double(random - nonPay) * 0.9)
-        //                        (0..<random).forEach { idx in
-        //                            guard let hashtag = post.hashTags.first else {
-        //                                return
-        //                            }
-        //                            let title = post.title! + " \(idx+1)화"
-        //                            let content = "#\(post.title)"
-        //                            let fileIdx = idx < 5 ? idx : (idx % 5)
-        //                            let files = [owner.pdfFiles[fileIdx]]
-        //                            let isPay = idx > nonPay
-        //                            let isWaitingFree = (isPay == true && idx <= waitingFree)
-        //
-        //                            let query = PostsQuery(productId: APIConstants.ProductId.novelEpisode, title: title, price: 100, content: content, content1: String(idx), content2: String(isPay), content3:  String(isWaitingFree), content4: nil, content5: nil, files: files)
+//                                let random = Int.random(in: 10...100)
+//                                let nonPay = random > 50 ? Int(random / 10) : 0
+//                                let waitingFree = Int(Double(random - nonPay) * 0.9)
+//                                (0..<random).forEach { idx in
+//                                    guard let hashtag = post.hashTags.first else {
+//                                        return
+//                                    }
+//                                    let title = post.title! + " \(idx+1)화"
+//                                    let content = "#\(post.title)"
+//                                    let fileIdx = idx < 5 ? idx : (idx % 5)
+//                                    let files = [owner.pdfFiles[fileIdx]]
+//                                    let isPay = idx > nonPay
+//                                    let isWaitingFree = (isPay == true && idx <= waitingFree)
+//        
+//                                    let query = PostsQuery(productId: APIConstants.ProductId.novelEpisode, title: title, price: 100, content: content, content1: String(idx), content2: String(isPay), content3:  String(isWaitingFree), content4: nil, content5: nil, files: files)
         //                            print("[\(idx)]\n", query)
         //
         //                            if let check = post.content3 {
@@ -311,7 +320,12 @@ final class DummyDataViewController: UIViewController {
                                 
     }
     
-    private func updateEpisode(count: Int, model: PostsModel) {
+    private func updateEpisodeParentId(parentId: String, model: PostsModel) {
+        let query = PostsQuery(productId: nil, title: nil, price: nil, content: nil, content1: nil, content2: nil, content3: nil, content4: nil, content5: parentId, files: nil)
+        updatePosts(postId: model.postId, query: query)
+    }
+    
+    private func updateEpisodeStatus(count: Int, model: PostsModel) {
         guard let raw = model.content1, let numbering = Int(raw) else {
             return
         }
@@ -445,7 +459,8 @@ final class DummyDataViewController: UIViewController {
         testSubscribe(single: result)
     }
     
-    private func searchHashTag() {
+    private func searchHashTag(hashtag: String) {
+        let hashTagsQuery = HashTagsQuery(next: nil, limit: "50", productId: APIConstants.ProductId.novelEpisode, hashTag: hashtag)
         let result = APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags(hashTagsQuery))
         testSubscribe(single: result)
     }

@@ -79,8 +79,12 @@ final class InfoView: BaseView {
     
     override func configData(_ model: some Decodable)  {
         guard let post = model as? PostsModel else {
+            print("post없음")
             return
         }
+        print("InfoVioew_productId: ", post.productId)
+        print("InfoVioew_postId: ", post.postId)
+        print("InfoVioew_post: ", post.title)
         infoLabel.text = post.categorys + "﹒" + post.uploadDays
         viewedLabel.text = post.viewed
         let averateRate = post.content4?.split(separator: ",").first
@@ -88,4 +92,3 @@ final class InfoView: BaseView {
     }
 
 }
-

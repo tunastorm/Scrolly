@@ -96,6 +96,7 @@ final class MainViewController: BaseViewController<MainView> {
     
         output.recommandDatas
             .bind(with: self) { owner, resultList in
+                print(#function, "resultList: ", resultList.count)
                 owner.fetchDatas(sections: RecommandSection.allCases, resultList: resultList)
             }
             .disposed(by: disposeBag)
@@ -147,6 +148,7 @@ final class MainViewController: BaseViewController<MainView> {
                 }
                 let section = sections[idx]
                 dataDict[section.value] = section.callConvertData(section, model.data)
+                print(#function, "정렬됨: ", dataDict[section.value]?.count)
             case .failure(let error):
                showToastToView(error)
             }
@@ -228,7 +230,7 @@ final class MainViewController: BaseViewController<MainView> {
         case is [FemaleSection]: collectionView = rootView?.femaleView
         case is [FantasySection]: collectionView = rootView?.fantasyView
         case is [RomanceSection]: collectionView = rootView?.romanceView
-        case is [DateSection]: collectionView = rootView?.dateView
+//        case is [DateSection]: collectionView = rootView?.dateView
         default: break
         }
         
@@ -340,7 +342,7 @@ final class MainViewController: BaseViewController<MainView> {
             let section = RomanceSection.allCases[indexPath.section]
             guard let bannerCellRegistration = self?.bannerCellRegistration,
                   let recommandCellRegistration = self?.recommandCellRegistration,
-                    let recentlyCellRegistration = self?.recentlyCellRegistration else {
+                  let recentlyCellRegistration = self?.recentlyCellRegistration else {
                 return UICollectionViewCell()
             }
             switch section {
