@@ -40,9 +40,9 @@ final class CommentTableView: BaseCollectionViewController {
     }
     
     private static func createTableViewSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(100))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(160))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(1000))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(160))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         group.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(40))
@@ -50,9 +50,9 @@ final class CommentTableView: BaseCollectionViewController {
             layoutSize: headerSize,
             elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         sectionHeader.pinToVisibleBounds = true /* sticky headerView 구현 프로퍼티*/
-        
         let section = NSCollectionLayoutSection(group: group)
         section.boundarySupplementaryItems = [sectionHeader]
+        section.contentInsets = .init(top: 0, leading: 0, bottom: 80, trailing: 0)
         return section
     }
 }

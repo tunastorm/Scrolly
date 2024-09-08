@@ -42,9 +42,16 @@ final class CommentCell: BaseCollectionViewCell {
     }
     
     override func configLayout() {
+        newLabel.snp.makeConstraints { make in
+            make.height.equalTo(16)
+            make.width.equalTo(44)
+            make.top.equalToSuperview().offset(20)
+            make.leading.equalToSuperview().inset(20)
+        }
         creatorLabel.snp.makeConstraints { make in
-            make.height.equalTo(14)
-            make.top.leading.equalToSuperview().inset(20)
+            make.height.equalTo(16)
+            make.top.equalToSuperview().inset(20)
+            make.leading.equalTo(newLabel.snp.trailing).offset(4)
         }
         dateLabel.snp.makeConstraints { make in
             make.height.equalTo(14)
@@ -52,16 +59,9 @@ final class CommentCell: BaseCollectionViewCell {
             make.leading.equalTo(creatorLabel.snp.trailing).offset(10)
             make.top.equalToSuperview().inset(20)
         }
-        newLabel.snp.makeConstraints { make in
-            make.height.equalTo(16)
-            make.width.equalTo(44)
-            make.top.equalTo(creatorLabel.snp.bottom).offset(10)
-            make.leading.bottom.equalToSuperview().inset(20)
-        }
         contentLabel.snp.makeConstraints { make in
-            make.top.equalTo(creatorLabel.snp.bottom).offset(10)
-            make.leading.equalTo(newLabel.snp.trailing).offset(4)
-            make.bottom.trailing.equalToSuperview().inset(20)
+            make.top.equalTo(newLabel.snp.bottom).offset(10)
+            make.bottom.horizontalEdges.equalToSuperview().inset(20)
         }
     }
     
@@ -85,7 +85,7 @@ final class CommentCell: BaseCollectionViewCell {
         newLabel.snp.updateConstraints { make in
             make.width.equalTo(width)
         }
-        contentLabel.snp.updateConstraints { make in
+        creatorLabel.snp.updateConstraints { make in
             make.leading.equalTo(newLabel.snp.trailing).offset(offset)
         }
         newLabel.isHidden = isHidden
