@@ -361,6 +361,7 @@
 				BC097C6E2C7484D70038A21C /* EpisodeViewer */,
 				BC097CBA2C76151E0038A21C /* EpisodeEnd */,
 				BC48A9422C81B240001C9B27 /* Payment */,
+				BC404B852C8DE0B7001BA269 /* Profile */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -568,6 +569,29 @@
 			isa = PBXGroup;
 			children = (
 				BC404B792C8D5D47001BA269 /* CommentViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		BC404B852C8DE0B7001BA269 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				BC404B862C8DE0C0001BA269 /* View */,
+				BC404B872C8DE0CA001BA269 /* ViewModel */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		BC404B862C8DE0C0001BA269 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		BC404B872C8DE0CA001BA269 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
 			);
 			path = ViewModel;
 			sourceTree = "<group>";

@@ -22,15 +22,13 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
         set { detailInfo = newValue }
     }
     
-    private var cursur: String?
+    private var cursor: [String] = ["0", "0"]
     
 //    private var postId :String?
     
     init(detailInfo: PostsModel? = nil) {
         super.init()
         self.detailInfo = detailInfo
-        print(#function, "detailInfo: ", detailInfo?.productId)
-        print(#function, "detailInfo: ", detailInfo?.postId)
         if detailInfo?.productId == APIConstants.ProductId.novelEpisode, let postId = detailInfo?.content5 {
             callNovelInfoFromEpisode(postId: postId)
         }
@@ -48,7 +46,8 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
     struct Input {
         let viewedNovel: PublishSubject<PostsModel>
         let viewedList: BehaviorSubject<Void>
-
+        let nextCursor: PublishSubject<[String]>
+        let prefetchItems: PublishSubject<[IndexPath]>
     }
     
     struct Output {
@@ -67,16 +66,23 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
         let updateLikedTime = PublishSubject<String>()
         let updateEpisode = PublishSubject<String>()
         
+        input.nextCursor
+            .bind(with: self) { owner, cursours in
+                owner.cursor = cursours
+            }
+            .disposed(by: disposeBag)
+        
         let episoeds = BehaviorSubject(value: model.hashTags.first)
-            .map { HashTagsQuery(next: nil, limit: "50", productId: APIConstants.ProductId.novelEpisode, hashTag: $0) }
+            .map { [weak self] in HashTagsQuery(next: self?.cursor[0], limit: "50", productId: APIConstants.ProductId.novelEpisode, hashTag: $0) }
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags($0)) }
         
 //        let inputViewedNovel = input.viewedNovel
 //            .asDriver(onErrorJustReturn: PostsModel())
         
         let viewedList = input.viewedList
-            .map{ [weak self] _ in LikedPostsQuery(next: self?.cursur, limit: "50") }
+            .map{ [weak self] _ in LikedPostsQuery(next: self?.cursor[1], limit: "50") }
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getLikedPostsSub($0)) }
+        
 //            .debug("viewedList")
         
 //        let viewedToggle = input.viewedNovel
