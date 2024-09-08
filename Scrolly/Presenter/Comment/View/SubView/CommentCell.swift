@@ -29,17 +29,16 @@ final class CommentCell: BaseCollectionViewCell {
         $0.font = Resource.Asset.Font.boldSystem10
     }
     
-    private let updateButton = UIButton().then {
-        $0.setTitle("수정", for: .normal)
-        $0.setTitleColor(Resource.Asset.CIColor.gray, for: .normal)
-        $0.titleLabel?.font = Resource.Asset.Font.boldSystem10
-        $0.addTarget(self, action: #selector(updateButtonTapped), for: .touchUpInside)
-    }
-    
+//    private let updateButton = UIButton().then {
+//        $0.setTitle("수정", for: .normal)
+//        $0.setTitleColor(Resource.Asset.CIColor.gray, for: .normal)
+//        $0.titleLabel?.font = Resource.Asset.Font.boldSystem10
+//        $0.addTarget(self, action: #selector(updateButtonTapped), for: .touchUpInside)
+//    }
+//    
     private let deleteButton = UIButton().then {
-        $0.setTitle("삭제", for: .normal)
-        $0.setTitleColor(Resource.Asset.CIColor.gray, for: .normal)
-        $0.titleLabel?.font = Resource.Asset.Font.boldSystem10
+        $0.setImage(Resource.Asset.SystemImage.xmark, for: .normal)
+        $0.tintColor = Resource.Asset.CIColor.gray
         $0.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
     }
    
@@ -54,7 +53,7 @@ final class CommentCell: BaseCollectionViewCell {
         contentView.addSubview(newLabel)
         contentView.addSubview(creatorLabel)
         contentView.addSubview(dateLabel)
-        contentView.addSubview(updateButton)
+//        contentView.addSubview(updateButton)
         contentView.addSubview(deleteButton)
         contentView.addSubview(contentLabel)
     }
@@ -71,12 +70,12 @@ final class CommentCell: BaseCollectionViewCell {
             make.width.equalTo(24)
             make.top.trailing.equalToSuperview().inset(20)
         }
-        updateButton.snp.makeConstraints { make in
-            make.height.equalTo(14)
-            make.width.equalTo(24)
-            make.top.equalToSuperview().inset(20)
-            make.trailing.equalTo(deleteButton.snp.leading).offset(-10)
-        }
+//        updateButton.snp.makeConstraints { make in
+//            make.height.equalTo(14)
+//            make.width.equalTo(24)
+//            make.top.equalToSuperview().inset(20)
+//            make.trailing.equalTo(deleteButton.snp.leading).offset(-10)
+//        }
         creatorLabel.snp.makeConstraints { make in
             make.height.equalTo(16)
             make.top.equalToSuperview().inset(20)
@@ -86,7 +85,7 @@ final class CommentCell: BaseCollectionViewCell {
             make.height.equalTo(14)
             make.width.equalTo(120)
             make.leading.equalTo(creatorLabel.snp.trailing).offset(10)
-            make.trailing.lessThanOrEqualTo(updateButton.snp.leading).offset(-10)
+            make.trailing.lessThanOrEqualTo(deleteButton.snp.leading).offset(-10)
             make.top.equalToSuperview().inset(20)
         }
         contentLabel.snp.makeConstraints { make in
@@ -110,7 +109,7 @@ final class CommentCell: BaseCollectionViewCell {
         print(#function, "creator: ", comment.creator.userId)
         print(#function, "user: ", UserDefaultsManager.user)
         
-        updateDeleteButtonToggle(!(comment.creator.userId == UserDefaultsManager.user))
+        deleteButtonToggle(!(comment.creator.userId == UserDefaultsManager.user))
         contentLabel.text = comment.content
     }
     
@@ -126,8 +125,8 @@ final class CommentCell: BaseCollectionViewCell {
         newLabel.isHidden = isHidden
     }
     
-    private func updateDeleteButtonToggle(_ isHidden: Bool) {
-        updateButton.isHidden = isHidden
+    private func deleteButtonToggle(_ isHidden: Bool) {
+//        updateButton.isHidden = isHidden
         deleteButton.isHidden = isHidden
     }
     

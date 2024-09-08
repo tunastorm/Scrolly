@@ -94,7 +94,8 @@ final class CommentView: BaseView {
             make.bottom.equalToSuperview().inset(25)
         }
         commentTextView.snp.makeConstraints { make in
-            make.leading.verticalEdges.equalToSuperview().inset(20)
+            make.top.equalToSuperview().inset(10)
+            make.leading.bottom.equalToSuperview().inset(20)
             make.trailing.equalTo(submitButton.snp.leading).offset(6)
         }
     }
@@ -141,14 +142,14 @@ extension CommentView: UITextViewDelegate {
         let size = CGSize(width: frame.width, height: .infinity)
         let estimatedSize = textView.sizeThatFits(size)
            
-        if estimatedSize.height > 40 {
+        if estimatedSize.height > 50 {
             toolBarView.snp.updateConstraints { make in
-                make.height.equalTo(40 + estimatedSize.height)
+                make.height.equalTo(50 + estimatedSize.height)
             }
             return
         }
         
-        if  estimatedSize.height <= 40 {
+        if  estimatedSize.height <= 50 {
             toolBarView.snp.updateConstraints { make in
                 make.height.equalTo(80)
             }
