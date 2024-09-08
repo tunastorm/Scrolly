@@ -15,6 +15,7 @@ protocol APIManagerProvider {
     
     typealias ModelResult<T> = Result<T, APIError>
     typealias DataResult = Result<Data, APIError>
+    typealias VoidResult = Result<Void, APIError>
     typealias TokenHandler = (Decodable) -> Void
     
     func callRequestAPI<T: Decodable>(model: T.Type, router: APIRouter, tokenHandler: TokenHandler?) -> Single<ModelResult<T>>
@@ -81,13 +82,25 @@ final class APIManager: APIManagerProvider {
 
     }
     
+    func callRequestDelete(_ router:APIRouter) -> Single<VoidResult> {
+        return Single.create { single in
+            APIClient.requestDelete(router: router) { data in
+                single(.success(.success(())))
+            } failure: { error in
+                single(.success(.failure(error)))
+            }
+            return Disposables.create()
+        }.debug(router.description)
+    }
+    
     func callRequestLogin(_ router: APIRouter) -> Single<ModelResult<LoginModel>> {
         return callRequestAPI(model: LoginModel.self, router: router, tokenHandler: { model in
             let loginModel = model as! LoginModel
             UserDefaultsManager.token = loginModel.accessToken
             UserDefaultsManager.refresh = loginModel.refreshToken
             UserDefaultsManager.nick = loginModel.nick
-            UserDefaultsManager.user = loginModel.email
+            UserDefaultsManager.email = loginModel.email
+            UserDefaultsManager.user = loginModel.userId
             UserDefaultsManager.profile = loginModel.profileImage ?? "default"
             KingfisherManager.shared.setHeaders()
         })

@@ -119,11 +119,7 @@ final class NovelDetailView: BaseView {
         let profileButtonTap = UITapGestureRecognizer(target: self, action: #selector(profileButtonTapped))
         profileButton.addGestureRecognizer(profileButtonTap)
     }
-    
-    override func configInteractionWithViewController<T>(viewController: T) where T : UIViewController {
-        
-    }
-    
+
     override func configData(_ model: some Decodable) {
         guard let post = model as? PostsModel else {
             return

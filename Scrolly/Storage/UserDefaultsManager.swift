@@ -21,6 +21,9 @@ struct UserDefaultsManager {
     @UserDefaultWrapper(key: APIConstants.user)
     static var user: String
     
+    @UserDefaultWrapper(key: APIConstants.email)
+    static var email: String
+    
     @UserDefaultWrapper(key: APIConstants.profile)
     static var profile: String
 
@@ -30,9 +33,11 @@ struct UserDefaultsManager {
 struct UserDefaultWrapper {
   
     private let key: String
+//    private let defaultValue: T?
     
     init(key: String) {
         self.key = key
+//        self.defaultValue = defaultValue
     }
     
     var wrappedValue: String {
@@ -43,5 +48,23 @@ struct UserDefaultWrapper {
             UserDefaults.standard.setValue(newValue, forKey: key)
         }
     }
+    
+//    var wrappedValue: T? {
+//        get {
+//            if let savedData = UserDefaults.standard.object(forKey: key) as? Data {
+//                let decoder = JSONDecoder()
+//                if let lodedObejct = try? decoder.decode(T.self, from: savedData) {
+//                    return lodedObejct
+//                }
+//            }
+//            return defaultValue
+//        }
+//        set {
+//            let encoder = JSONEncoder()
+//            if let encoded = try? encoder.encode(newValue) {
+//                UserDefaults.standard.setValue(encoded, forKey: key)
+//            }
+//        }
+//    }
 }
 

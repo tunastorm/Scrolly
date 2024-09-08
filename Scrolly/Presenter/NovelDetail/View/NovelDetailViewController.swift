@@ -133,6 +133,7 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
             }
             .bind(to: rootView.collectionView.rx.items(dataSource: detailDataSource))
             .disposed(by: disposeBag)
+
     }
     
     private func fetchPostsModelList(_ episodes: APIManager.ModelResult<GetPostsModel>) -> [PostsModel] {

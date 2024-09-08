@@ -16,11 +16,13 @@ protocol CommentViewDelegate {
     func dissmissCommentView()
     
     func uploadComment(_ comment: String)
-    
+
 }
 
 
 protocol CommentCellDelegate {
+    
+    func deleteComment(_ commentId: String)
     
 }
 
@@ -73,7 +75,7 @@ final class CommentViewController: BaseViewController<CommentView> {
         }
     )
     
-    private let input = CommentViewModel.Input(comment: PublishSubject<String>(), newModel: PublishSubject<Void>())
+    private let input = CommentViewModel.Input(uploadComment: PublishSubject<String>(), deleteComment: PublishSubject<String>(), newModel: PublishSubject<Void>())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -113,22 +115,38 @@ final class CommentViewController: BaseViewController<CommentView> {
             .bind(to: rootView.collectionView.rx.items(dataSource: commentDataSource))
             .disposed(by: disposeBag)
             
+        output.deleteComment
+            .bind(with: self) { owner, result in
+                switch result {
+                case .success():
+                    owner.rootView?.makeToast("댓글이 삭제 되었습니다", duration: 3.0, position: .bottom)
+                    owner.input.newModel.onNext(())
+                case .failure(let error):
+                    owner.showToastToView(error)
+                }
+            }
+            .disposed(by: disposeBag)
+        
     }
     
 }
 
 extension CommentViewController: CommentViewDelegate {
-  
+    
     func dissmissCommentView() {
         dismiss(animated: true)
     }
 
     func uploadComment(_ comment: String) {
-        input.comment.onNext(comment)
+        input.uploadComment.onNext(comment)
     }
     
 }
 
 extension CommentViewController: CommentCellDelegate {
+    
+    func deleteComment(_ commentId: String) {
+        input.deleteComment.onNext(commentId)
+    }
     
 }

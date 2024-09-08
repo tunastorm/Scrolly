@@ -9,14 +9,18 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-final class CommentViewModel: BaseViewModel, ViewModelProvider {
 
+final class CommentViewModel: BaseViewModel, ViewModelProvider {
+    
+    typealias VoidResult = APIManager.VoidResult
+    
     var model: PostsModel?
     
     private let disposeBag = DisposeBag()
     
     private let output = Output(title: BehaviorSubject<String>(value: ""),
-                                comments: BehaviorSubject<[Comment]>(value: []))
+                                comments: BehaviorSubject<[Comment]>(value: []),
+                                deleteComment: PublishSubject<VoidResult>())
     
     init(model: PostsModel? = nil) {
         super.init()
@@ -28,13 +32,15 @@ final class CommentViewModel: BaseViewModel, ViewModelProvider {
     }
     
     struct Input {
-        let comment: PublishSubject<String>
+        let uploadComment: PublishSubject<String>
+        let deleteComment: PublishSubject<String>
         let newModel: PublishSubject<Void>
     }
     
     struct Output {
         let title: BehaviorSubject<String>
         let comments: BehaviorSubject<[Comment]>
+        let deleteComment: PublishSubject<VoidResult>
     }
     
     func transform(input: Input) -> Output? {
@@ -43,12 +49,14 @@ final class CommentViewModel: BaseViewModel, ViewModelProvider {
             output.title.onNext(model.title ?? "없음")
             output.comments.onNext(model.comments)
             
-            input.comment
+            input.uploadComment
                 .map { CommentsQuery(content: $0)}
                 .flatMap { APIManager.shared.callRequestAPI(model: CommentsModel.self, router: .uploadComments(model.postId, $0)) }
                 .bind(with: self) { owner, result in
                     switch result {
-                    case .success(let model): input.newModel.onNext(())
+                    case .success(let model): 
+                        input.newModel.onNext(())
+//                        NotificationCenter.default.post(name: Notification.Name(<#T##rawValue: String##String#>), object: <#T##Any?#>)
                     case .failure(let error): return
                     }
                 }
@@ -65,6 +73,12 @@ final class CommentViewModel: BaseViewModel, ViewModelProvider {
                     case .failure(let error): return
                     }
                 }
+                .disposed(by: disposeBag)
+            
+            input.deleteComment
+                .map { (model.postId, $0) }
+                .flatMap { APIManager.shared.callRequestDelete(.deleteComments($0.0, $0.1)) }
+                .bind(to: output.deleteComment)
                 .disposed(by: disposeBag)
         }
         

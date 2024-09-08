@@ -23,7 +23,7 @@ final class APIClient {
                            router: APIRouter,
                            success: @escaping onSuccess<T>,
                            failure: @escaping onFailure) where T:Decodable {
-    
+        
         session.request(router)
             .validate(statusCode: 200...445)
             .responseDecodable(of: object) { response in
@@ -55,12 +55,24 @@ final class APIClient {
     static func requestData (router: APIRouter,
                              success: @escaping (Data) -> Void,
                              failure: @escaping onFailure) {
-    
+        
         session.request(router)
             .validate(statusCode: 200...445)
             .responseData(completionHandler: { response in
                 responseHandler(response, success: success, failure: failure)
             })
+    }
+    
+    static func requestDelete (router: APIRouter,
+                               success: @escaping (Data?) -> Void,
+                               failure: @escaping onFailure) {
+        
+        session.request(router)
+            .validate(statusCode: 200...445)
+            .response { response in
+                dump(response.result)
+                responseHandler(response, success: success, failure: failure)
+            }
     }
     
     private static func setUploadFilesForm(_ multipartFormData: MultipartFormData, _ query: UploadFilesQuery)  {
@@ -105,9 +117,9 @@ final class APIClient {
         if let statusCode = response.response?.statusCode, let statusError = convertResponseStatus(statusCode) {
             return statusError
         }
-        guard let decodedData = response.value else {
-            return .noResponseData
-        }
+//        guard let decodedData = response.value else {
+//            return .noResponseData
+//        }
         return nil
     }
     
