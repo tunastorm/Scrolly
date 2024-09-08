@@ -36,6 +36,7 @@ final class CommentViewController: BaseViewController<CommentView> {
     private let disposeBag = DisposeBag()
     
     private var headerRegistration: HeaderRegistration?
+
     
     private func collectionViewHeaderRegestration(_ sections: [CommentSectionModel]) -> HeaderRegistration {
         HeaderRegistration(elementKind: UICollectionView.elementKindSectionHeader) {
