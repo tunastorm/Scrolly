@@ -31,16 +31,16 @@ final class EpisodeViewerViewModel: BaseViewModel, ViewModelProvider {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private let output = Output(title: PublishSubject<String>(),
-                                model: PublishSubject<DataResult>())
+    private let output = Output(title: PublishRelay<String>(),
+                                model: PublishRelay<DataResult>())
     
     struct Input {
         
     }
     
     struct Output {
-        let title: PublishSubject<String>
-        let model: PublishSubject<DataResult>
+        let title: PublishRelay<String>
+        let model: PublishRelay<DataResult>
     }
     
     func transform(input: Input) -> Output? {
@@ -51,21 +51,19 @@ final class EpisodeViewerViewModel: BaseViewModel, ViewModelProvider {
             .map{ $0?.files[1] ?? "" }
             .flatMap{ APIManager.shared.callRequestData(.getPostsImage($0)) }
            
-        
-        BehaviorSubject.zip(title, file)
+        BehaviorSubject.combineLatest(title, file)
             .bind(with: self) { owner, results in
                 guard let title = results.0 else {
+                    print(#function, "타이틀 없음")
                     return
                 }
-                owner.output.title.onNext(title)
-                owner.output.title.onCompleted()
-                owner.output.model.onNext(results.1)
-                owner.output.model.onCompleted()
+                owner.output.title.accept(title)
+                owner.output.model.accept(results.1)
+//                owner.output.model.onCompleted()
             }
             .disposed(by: disposeBag)
         
         return output
     }
-
     
 }

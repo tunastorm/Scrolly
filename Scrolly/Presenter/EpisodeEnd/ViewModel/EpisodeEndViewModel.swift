@@ -13,12 +13,11 @@ final class EpisodeEndViewModel: BaseViewModel, ViewModelProvider {
     
     var model: PostsModel?
     
-    private var output = Output()
+    private var output = Output(episodeInfo: BehaviorSubject<PostsModel>(value: PostsModel()))
     
-    init(model: PostsModel? = nil, output: Output = Output()) {
+    init(model: PostsModel? = nil) {
         super.init()
         self.model = model
-        self.output = output
     }
     
     required init?(coder: NSCoder) {
@@ -26,14 +25,21 @@ final class EpisodeEndViewModel: BaseViewModel, ViewModelProvider {
     }
     
     struct Input {
-        
+        // cosmosView
+        // nextEpisodeButtonClicked
     }
     
     struct Output {
-        
+        let episodeInfo: BehaviorSubject<PostsModel>
     }
     
     func transform(input: Input) -> Output? {
+        
+        if let model {
+            print(#function, "model: ", model)
+            output.episodeInfo.onNext(model)
+        }
+        
         return output
     }
     

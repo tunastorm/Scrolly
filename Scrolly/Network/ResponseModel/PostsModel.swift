@@ -220,7 +220,8 @@ struct Creator: Decodable, Hashable {
     }
 }
 
-struct Comment: Decodable, Hashable {
+struct Comment: Decodable, Hashable, IdentifiableType {
+    let identity = UUID()
     let commentId: String
     let content: String
     let createdAt: String

@@ -69,7 +69,6 @@ final class DummyDataViewController: UIViewController {
         "true", "false", "false", "false", "true"
     ]
     
-    
     private let banner = [
         "남주가 다 해먹는 무협지 속, 남주의 먼 조상님으로 빙의했다",
         "아버지는 사실 정령왕이었다. 그런데 이젠 내 차례라고?",

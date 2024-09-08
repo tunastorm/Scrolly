@@ -30,4 +30,16 @@ final class CollectionViewHeaderView: BaseCollectionResuableView {
     override func configView() {
         backgroundColor = .clear
     }
+    
+    func commentCellLayout() {
+        backgroundColor = Resource.Asset.CIColor.white
+        titleLabel.snp.removeConstraints()
+        titleLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(10)
+            make.verticalEdges.equalToSuperview()
+            make.trailing.equalToSuperview().inset(10)
+        }
+        
+    }
+    
 }

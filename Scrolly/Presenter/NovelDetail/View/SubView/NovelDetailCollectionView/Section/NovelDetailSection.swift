@@ -20,7 +20,6 @@ enum NovelDetailSection: CaseIterable {
 //        case .description: "줄거리"
 //        case .hashTag: "키워드"
         case .episode: "전체 " // 테스트 용도
-        default: ""
         }
     }
 

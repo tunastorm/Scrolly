@@ -48,9 +48,18 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
     
     private let disposeBag = DisposeBag()
     
-    private let descriptionCellRegistration = CellRegistration<DescriptionCell> { cell, indexPath, itemIdentifier in
-        cell.configCell(itemIdentifier)
+    private var headerRegistration: HeaderRegistration?
+    
+    private func collectionViewHeaderRegestration(_ sections: [NovelDetailSectionModel]) -> HeaderRegistration {
+        HeaderRegistration(elementKind: UICollectionView.elementKindSectionHeader) {
+            (supplementaryView, string, indexPath) in
+            
+        }
     }
+    
+//    private let descriptionCellRegistration = CellRegistration<DescriptionCell> { cell, indexPath, itemIdentifier in
+//        cell.configCell(itemIdentifier)
+//    }
     
     private let infoCellRegistration = CellRegistration<InfoCell> { cell, indexPath, itemIdentifier in
         cell.configCell(itemIdentifier)
@@ -58,15 +67,6 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
     
     private let episodeCellRegistration = CellRegistration<EpisodeCell> { cell, indexPath, itemIdentifier in
         cell.configCell(itemIdentifier, indexPath: indexPath)
-    }
-    
-    private var headerRegistration: HeaderRegistration?
-   
-    private func collectionViewHeaderRegestration(_ sections: [NovelDetailSectionModel]) -> HeaderRegistration {
-        HeaderRegistration(elementKind: UICollectionView.elementKindSectionHeader) {
-            (supplementaryView, string, indexPath) in
-          
-        }
     }
 
     lazy var detailDataSource = RxCollectionViewSectionedAnimatedDataSource<NovelDetailSectionModel> (
@@ -90,7 +90,6 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
             return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: indexPath)
         }
     )
-
     
     private let input = NovelDetailViewModel.Input(viewedNovel: PublishSubject<PostsModel>(), viewedList: BehaviorSubject(value: ()))
     
@@ -126,6 +125,7 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
                 guard let fetchedEpisodes = self?.fetchViewedListToEpisode(episodes, viewedList) else {
                     return sectionList
                 }
+                
                 self?.headerRegistration = self?.collectionViewHeaderRegestration(sectionList)
                 sectionList[0].items = [novel]
                 sectionList[1].items = fetchedEpisodes

@@ -28,7 +28,6 @@ final class PaymentViewController: BaseViewController<PaymentView> {
         navigationItem.title = "결제하기"
     }
     
-    
     private func showPaymentPage() {
         guard let webView = rootView?.wkWebView, let price = model?.price, let complitionHandler else {
             return
@@ -38,10 +37,10 @@ final class PaymentViewController: BaseViewController<PaymentView> {
             pg: PG.html5_inicis.makePgRawName(pgId: APIKey.pgId),
             merchant_uid: APIKey.merchantUid + String(Int(Date().timeIntervalSince1970)),
             amount: String(price)).then {
-        $0.pay_method = PayMethod.card.rawValue
-        $0.name = APIKey.companyName
-        $0.buyer_name = APIKey.paymentTester
-        $0.app_scheme = APIKey.appScheme
+            $0.pay_method = PayMethod.card.rawValue
+            $0.name = APIKey.companyName
+            $0.buyer_name = APIKey.paymentTester
+            $0.app_scheme = APIKey.appScheme
         }
         
         Iamport.shared.paymentWebView(

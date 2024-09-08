@@ -12,11 +12,9 @@ import UIKit
 
 
 struct NovelDetailSectionModel {
-    
     var identity = UUID()
     var header: UICollectionReusableView
     var items: [Item]
-    
 }
 
 extension NovelDetailSectionModel: AnimatableSectionModelType {

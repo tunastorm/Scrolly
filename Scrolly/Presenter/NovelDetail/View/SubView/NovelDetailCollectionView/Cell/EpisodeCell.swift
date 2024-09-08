@@ -125,7 +125,7 @@ final class EpisodeCell: BaseCollectionViewCell {
     
     private func statusLabelLayoutToggle(_ isShow: Bool) {
         let height = isShow ? 15 : 0
-        self.statusLabel.snp.updateConstraints { make in
+        statusLabel.snp.updateConstraints { make in
             make.height.equalTo(height)
         }
     }

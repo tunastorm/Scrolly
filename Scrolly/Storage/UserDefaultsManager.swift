@@ -15,6 +15,9 @@ struct UserDefaultsManager {
     @UserDefaultWrapper(key: APIConstants.refresh)
     static var refresh: String
     
+    @UserDefaultWrapper(key: APIConstants.nickname)
+    static var nick: String
+    
     @UserDefaultWrapper(key: APIConstants.user)
     static var user: String
     

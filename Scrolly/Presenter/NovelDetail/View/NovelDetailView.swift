@@ -79,7 +79,7 @@ final class NovelDetailView: BaseView {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
-    let collectionView = NovelDetailCollectionView(frame: .zero, collectionViewLayout: NovelDetailCollectionView.createLayout())
+    let collectionView = NovelDetailTableView(frame: .zero, collectionViewLayout: NovelDetailTableView.createLayout())
     
     override func layoutIfNeeded() {
         super.layoutIfNeeded()

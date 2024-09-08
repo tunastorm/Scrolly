@@ -54,7 +54,6 @@ final class APIManager: APIManagerProvider {
             KingfisherManager.shared.setHeaders()
             completion(.success(model))
         } failure: { error in
-            
             completion(.failure(error))
         }
     }
@@ -87,7 +86,8 @@ final class APIManager: APIManagerProvider {
             let loginModel = model as! LoginModel
             UserDefaultsManager.token = loginModel.accessToken
             UserDefaultsManager.refresh = loginModel.refreshToken
-            UserDefaultsManager.user = loginModel.nick
+            UserDefaultsManager.nick = loginModel.nick
+            UserDefaultsManager.user = loginModel.email
             UserDefaultsManager.profile = loginModel.profileImage ?? "default"
             KingfisherManager.shared.setHeaders()
         })

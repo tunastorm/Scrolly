@@ -44,7 +44,7 @@ final class APIClient {
             case .updateMyProfile: setUpdateMyProfileForm(multipartFormData, query as! MyProfileQuery)
             default: return
             }
-        }, with: router, usingThreshold: UInt64.init())
+        }, with: router)
         .validate(statusCode: 200...419)
         .responseDecodable(of: T.self ) { response in
             responseHandler(response, success: success, failure: failure)
@@ -58,10 +58,9 @@ final class APIClient {
     
         session.request(router)
             .validate(statusCode: 200...445)
-            .response(responseSerializer: .data, completionHandler: { response in
+            .responseData(completionHandler: { response in
                 responseHandler(response, success: success, failure: failure)
             })
-        
     }
     
     private static func setUploadFilesForm(_ multipartFormData: MultipartFormData, _ query: UploadFilesQuery)  {
@@ -87,7 +86,6 @@ final class APIClient {
         if let image = query.profile {
             multipartFormData.append(image, withName: "profile", fileName: "\(query.nick ?? "profile").jpg", mimeType: "image/jpg")
         }
-        
     }
     
     private static func responseHandler<T: Decodable>(_ response: AFDataResponse<T>, success: @escaping (T) -> Void, failure: @escaping onFailure) {

@@ -85,6 +85,7 @@ class BaseViewController<View: BaseView>: UIViewController, UIViewControllerProv
 //            self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
 //            self.navigationController?.navigationBar.isTranslucent = false
 //        }
+        
         navigationController?.isToolbarHidden = true
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance

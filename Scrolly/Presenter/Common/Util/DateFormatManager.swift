@@ -10,11 +10,13 @@ import Foundation
 enum DateFormat {
     case dateAndTimeWithTimezone
     case dotSperatedyyyMMdd
+    case dotSperatedyyyMMddHHmm
     
     var formatString: String {
         return switch self {
         case .dateAndTimeWithTimezone: "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         case .dotSperatedyyyMMdd:  "yyyy.MM.dd"
+        case .dotSperatedyyyMMddHHmm: "yyyy.MM.dd HH:mm"
         }
     }
 }
@@ -52,6 +54,17 @@ final class DateFormatManager: DateFormatterProvider {
     func stringToDate(value: String) -> Date? {
         worker.dateFormat = DateFormat.dateAndTimeWithTimezone.formatString
         return worker.date(from: value)
+    }
+    
+    func dateStringIsNowDate(_ dateString: String) -> Bool {
+        let nowDate = stringToformattedString(value: nowString(), before: .dateAndTimeWithTimezone, after: .dotSperatedyyyMMdd)
+        
+        let createdDate = stringToformattedString(value: dateString, before: .dateAndTimeWithTimezone, after: .dotSperatedyyyMMdd)
+        
+        print(#function, "nowDate: ", nowDate)
+        print(#function, "createdDate: ", createdDate)
+    
+        return nowDate == createdDate
     }
     
 }

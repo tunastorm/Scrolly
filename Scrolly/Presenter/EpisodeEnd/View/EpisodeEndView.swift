@@ -7,10 +7,13 @@
 
 import UIKit
 import Cosmos
+import Kingfisher
 import SnapKit
 import Then
 
 final class EpisodeEndView: BaseView {
+    
+    var delegate: EpisodeEndViewDelegate?
     
     private let starRateView = UIView()
     
@@ -22,18 +25,21 @@ final class EpisodeEndView: BaseView {
     }
     
     private let starRateLabel = UILabel().then {
-        $0.text = "5.0"
+        $0.text = "10"
         $0.textColor = Resource.Asset.CIColor.blue
         $0.textAlignment = .center
-        $0.font = Resource.Asset.Font.system15
+        $0.font = Resource.Asset.Font.boldSystem16
     }
     
     private let cosmosView = CosmosView().then {
         $0.rating = 5
         $0.settings.totalStars = 5
         $0.settings.fillMode = .half
+        $0.settings.minTouchRating = 0.5
         $0.settings.updateOnTouch = true
         $0.settings.starSize = 30
+//        $0.settings.filledImage = Resource.Asset.SystemImage.starFill
+//        $0.settings.emptyImage = Resource.Asset.SystemImage.star
         $0.settings.filledColor = Resource.Asset.CIColor.blue
         $0.settings.filledBorderColor = Resource.Asset.CIColor.blue
         $0.settings.emptyColor = Resource.Asset.CIColor.lightGray
@@ -57,8 +63,8 @@ final class EpisodeEndView: BaseView {
     }
     
     private let starView = UIImageView().then {
-        $0.image = Resource.Asset.SystemImage.star
-        $0.tintColor = Resource.Asset.CIColor.black
+        $0.image = Resource.Asset.SystemImage.starFill
+        $0.tintColor = Resource.Asset.CIColor.blue
         $0.contentMode = .scaleAspectFit
     }
     
@@ -85,6 +91,7 @@ final class EpisodeEndView: BaseView {
     }
     
     private let commentButton = UIButton().then {
+        $0.addTarget(self, action: #selector(commentButtonTapped), for: .touchUpInside)
         $0.setTitle("댓글", for: .normal)
         $0.setImage(Resource.Asset.SystemImage.chevronRight, for: .normal)
         $0.tintColor = Resource.Asset.CIColor.black
@@ -98,15 +105,7 @@ final class EpisodeEndView: BaseView {
         $0.layer.masksToBounds = true
     }
     
-    private let bestCommentLabel = UILabel().then {
-        $0.text = "BEST"
-        $0.font = Resource.Asset.Font.boldSystem14
-        $0.textAlignment = .center
-        $0.textColor = Resource.Asset.CIColor.white
-        $0.layer.cornerRadius = 6
-        $0.layer.masksToBounds = true
-        $0.backgroundColor = Resource.Asset.CIColor.red
-    }
+    private let newCommentLabel = NewLabel()
     
     private let commentCreatorLabel = UILabel().then {
         $0.textAlignment = .left
@@ -115,8 +114,7 @@ final class EpisodeEndView: BaseView {
     
     private let commentLabel = UILabel().then {
         $0.font = Resource.Asset.Font.system13
-        $0.textAlignment = .left
-        $0.numberOfLines = 0
+        $0.numberOfLines = 2
     }
     
     private let nextEpisodeView = UIView().then {
@@ -160,12 +158,12 @@ final class EpisodeEndView: BaseView {
         addSubview(creatorLabel)
         addSubview(starView)
         addSubview(averageRateLabel)
-        addSubview(averageRateButton)
+//        addSubview(averageRateButton)
         addSubview(commentImageView)
         addSubview(commentCountLabel)
         addSubview(commentButton)
         addSubview(commentView)
-        commentView.addSubview(bestCommentLabel)
+        commentView.addSubview(newCommentLabel)
         commentView.addSubview(commentCreatorLabel)
         commentView.addSubview(commentLabel)
         addSubview(nextEpisodeView)
@@ -203,38 +201,38 @@ final class EpisodeEndView: BaseView {
             make.top.equalTo(cosmosView.snp.bottom).offset(40)
             make.leading.equalTo(safeAreaLayoutGuide).inset(10)
         }
+        starView.snp.makeConstraints { make in
+            make.size.equalTo(30)
+            make.top.equalTo(cosmosView.snp.bottom).offset(50)
+            make.leading.equalTo(titleLabel.snp.trailing).offset(10)
+        }
+        averageRateLabel.snp.makeConstraints { make in
+            make.height.equalTo(14)
+            make.width.equalTo(24)
+            make.centerY.equalTo(starView)
+            make.leading.equalTo(starView.snp.trailing)
+        }
         likeButton.snp.makeConstraints { make in
             make.size.equalTo(30)
             make.top.equalTo(cosmosView.snp.bottom).offset(50)
             make.trailing.equalTo(safeAreaLayoutGuide).inset(20)
-            make.leading.equalTo(titleLabel.snp.trailing).offset(10)
+            make.leading.equalTo(averageRateLabel.snp.trailing).offset(4)
         }
         creatorLabel.snp.makeConstraints { make in
             make.height.equalTo(14)
             make.top.equalTo(titleLabel.snp.bottom).offset(6)
             make.leading.equalTo(safeAreaLayoutGuide).inset(10)
-            make.trailing.equalTo(likeButton.snp.leading).offset(10)
+            make.trailing.equalTo(starView.snp.leading).offset(6)
         }
-        starView.snp.makeConstraints { make in
-            make.size.equalTo(30)
-            make.top.equalTo(creatorLabel.snp.bottom).offset(20)
-            make.leading.equalTo(safeAreaLayoutGuide).inset(10)
-        }
-        averageRateLabel.snp.makeConstraints { make in
-            make.height.equalTo(14)
-            make.width.equalTo(40)
-            make.leading.equalTo(starView.snp.trailing).offset(4)
-            make.centerY.equalTo(starView)
-        }
-        averageRateButton.snp.makeConstraints { make in
-            make.size.equalTo(20)
-            make.top.equalTo(likeButton.snp.bottom).offset(20)
-            make.trailing.equalTo(safeAreaLayoutGuide).inset(10)
-            make.centerY.equalTo(averageRateLabel)
-        }
+//        averageRateButton.snp.makeConstraints { make in
+//            make.size.equalTo(20)
+//            make.top.equalTo(likeButton.snp.bottom).offset(20)
+//            make.trailing.equalTo(safeAreaLayoutGuide).inset(10)
+//            make.centerY.equalTo(averageRateLabel)
+//        }
         commentImageView.snp.makeConstraints { make in
             make.size.equalTo(starView)
-            make.top.equalTo(starView.snp.bottom).offset(10)
+            make.top.equalTo(creatorLabel.snp.bottom).offset(10)
             make.leading.equalTo(safeAreaLayoutGuide).inset(10)
         }
         commentCountLabel.snp.makeConstraints { make in
@@ -244,7 +242,7 @@ final class EpisodeEndView: BaseView {
             make.centerY.equalTo(commentImageView)
         }
         commentButton.snp.makeConstraints { make in
-            make.size.equalTo(averageRateButton)
+            make.size.equalTo(20)
             make.centerY.equalTo(commentCountLabel)
             make.trailing.equalTo(safeAreaLayoutGuide).inset(10)
         }
@@ -253,25 +251,25 @@ final class EpisodeEndView: BaseView {
             make.top.equalTo(commentImageView.snp.bottom).offset(20)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(10)
         }
-        bestCommentLabel.snp.makeConstraints { make in
+        newCommentLabel.snp.makeConstraints { make in
             make.height.equalTo(16)
-            make.width.equalTo(46)
+            make.width.equalTo(44)
             make.top.equalToSuperview().inset(6)
             make.leading.equalToSuperview().inset(10)
         }
         commentCreatorLabel.snp.makeConstraints { make in
             make.height.equalTo(16)
             make.top.equalTo(6)
-            make.leading.equalTo(bestCommentLabel.snp.trailing).offset(4)
+            make.leading.equalTo(newCommentLabel.snp.trailing).offset(4)
             make.trailing.equalToSuperview().inset(10)
         }
         commentLabel.snp.makeConstraints { make in
-            make.top.equalTo(bestCommentLabel.snp.bottom).offset(10)
-            make.horizontalEdges.equalToSuperview().inset(10)
+            make.top.equalTo(newCommentLabel.snp.bottom).offset(10)
+            make.horizontalEdges.equalToSuperview().inset(20)
             make.bottom.equalToSuperview().inset(6)
         }
         nextEpisodeView.snp.makeConstraints { make in
-            make.height.equalTo(commentView)
+            make.height.equalTo(100)
             make.top.equalTo(commentView.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(10)
         }
@@ -298,22 +296,94 @@ final class EpisodeEndView: BaseView {
         }
     }
     
+    override func configInteractionWithViewController<T>(viewController: T) where T : UIViewController {
+        guard let vc = viewController as? EpisodeEndViewController else {
+            return
+        }
+        delegate = vc
+    }
+    
     override func configView() {
         super.configView()
         titleLabel.text = "멸망한 세계의 4급 인간"
         creatorLabel.text = "외투"
         averageRateLabel.text = "9.8"
         commentCountLabel.text = "62"
-        commentCreatorLabel.text = "서울막글리"
-        commentLabel.text = "ㅋㅋㅋ 말로는 형제들이라면서 속마음은 외계에서온 외노자취급하넼ㅋㅋㅋ"
+        commentCreatorLabel.text = ""
         nextEpisodeImageView.image = UIImage(named: "dummyImage_1")
         nextEpisodeLabel.text = "멸망한 세계의 4급 인간 283화"
         cosmosView.didTouchCosmos = { [weak self] rating in
-            self?.starRateLabel.text = String(rating)
+            self?.starRateLabel.text = String(Int(rating * 2))
         }
         cosmosView.didFinishTouchingCosmos = { [weak self] rating in
-            
+            // delegate 로 ViewModel에 input
         }
+    }
+    
+    override func configData(_ model: some Decodable) {
+        guard let episode = model as? PostsModel else {
+            return
+        }
+        print(#function, "episode: ", episode)
+        titleLabel.text = episode.title
+//        creatorLabel.text = episode.creatorHashTag
+//        averageRateLabel.text =
+        print(#function, "commentCount: ", episode.comments.count)
+        commentCountLabel.text = String(episode.comments.count)
+        commentToggle(lastComment: episode.comments.first)
+        
+        if let file = episode.files.first, let url = URL(string: APIConstants.URI + file) {
+            KingfisherManager.shared.setHeaders()
+            nextEpisodeImageView.kf.setImage(with: url) { [weak self] result in
+                switch result {
+                case .success(let data):
+                    self?.nextEpisodeImageView.image = data.image
+                case .failure(let error):
+                    self?.makeToast(error.errorDescription,duration: 3.0, position: .bottom)
+                    return
+                }
+            }
+        }
+        if let rawNextNumber = episode.content1, let nextNumber = Int(rawNextNumber) {
+            nextEpisodeLabel.text = episode.titleHashTag + " \(nextNumber + 2)화"
+        }
+            
+    }
+    
+    private func commentToggle(lastComment: Comment?) {
+        if let lastComment {
+            commentCreatorLabel.text = lastComment.creator.nick
+            commentLabel.text = lastComment.content
+            commentLabel.textAlignment = .left
+            commentLabel.textColor = Resource.Asset.CIColor.black
+            commentCreatorLabel.snp.updateConstraints { make in
+                make.height.equalTo(16)
+            }
+            newCommentLabel.snp.updateConstraints { make in
+                make.height.equalTo(16)
+            }
+            commentLabel.snp.remakeConstraints { make in
+                make.centerY.equalToSuperview()
+            }
+        } else {
+            newCommentLabel.isHidden = true
+            commentLabel.text = "등록된 댓글이 없습니다"
+            commentLabel.textAlignment = .center
+            commentLabel.textColor = Resource.Asset.CIColor.gray
+            commentCreatorLabel.snp.updateConstraints { make in
+                make.height.equalTo(0)
+            }
+            newCommentLabel.snp.updateConstraints { make in
+                make.height.equalTo(0)
+            }
+            commentLabel.snp.makeConstraints { make in
+                make.centerY.equalToSuperview()
+            }
+        }
+    }
+    
+    @objc func commentButtonTapped() {
+        delegate?.presentCommentViewController()
     }
     
 }

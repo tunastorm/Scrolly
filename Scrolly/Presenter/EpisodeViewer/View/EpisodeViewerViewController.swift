@@ -71,6 +71,7 @@ final class EpisodeViewerViewController: BaseViewController<EpisodeViewerView> {
             .disposed(by: disposeBag)
         
         output.model
+            .debug("output - model")
             .bind(with: self) { owner, result in
                 switch result {
                 case .success(let data):
@@ -114,6 +115,8 @@ final class EpisodeViewerViewController: BaseViewController<EpisodeViewerView> {
     
     @objc private func commentsButtonTapped() {
         print("댓글 클릭됨")
+        let vc = CommentViewController(view: CommentView(), viewModel: CommentViewModel(model: viewModel?.model))
+        present(vc, animated: true)
     }
     
     @objc private func nextButtonTapped() {
@@ -135,7 +138,7 @@ final class EpisodeViewerViewController: BaseViewController<EpisodeViewerView> {
 extension EpisodeViewerViewController: EpisodeViewerViewDelegate {
     
     func pushToEpisodeEndViewController() {
-        
+        nextButtonTapped()
     }
     
 }

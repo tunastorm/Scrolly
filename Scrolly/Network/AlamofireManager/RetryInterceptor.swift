@@ -14,6 +14,7 @@ final class RetryInterceptor: RetryPolicy {
     private let retryDelay: TimeInterval = 1
     
     override func retry(_ request: Request, for session: Session, dueTo error: any Error, completion: @escaping (RetryResult) -> Void) {
+        print(#function, "리트라이 로직 스타트")
         guard let statusCode = request.response?.statusCode, statusCode == 419 else {
             completion(.doNotRetry)
             print(#function, "리트라이 안함")

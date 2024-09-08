@@ -72,6 +72,10 @@ final class EpisodeStatusLabel: BaseView {
         freeLabel.isHidden = !(status == .freelabel)
         waitingFreeImageView.isHidden = !(status == .waitingFree)
         uploadLabel.isHidden = !(status == .upload)
+        let inset = status == .none ?  0 : 2
+        waitingFreeImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(inset)
+        }
     }
     
 }
