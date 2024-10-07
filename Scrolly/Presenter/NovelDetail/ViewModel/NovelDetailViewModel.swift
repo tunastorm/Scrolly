@@ -8,6 +8,8 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import RxDataSources
+import Differentiator
 
 final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
     
@@ -23,6 +25,11 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
     }
     
     private var cursor: [String] = ["0", "0"]
+    
+    var sectionList = [
+        NovelDetailSectionModel(header: CollectionViewHeaderView(), items: []),
+        NovelDetailSectionModel(header: CollectionViewHeaderView(), items: [])
+    ]
     
 //    private var postId :String?
     
@@ -41,12 +48,14 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
     private let output = Output(fetchedModel: PublishSubject<PostsModel>(),
                                 description: PublishSubject<PostsModel>(),
                                 episodes: PublishSubject<GetPostsModelResult>(),
-                                viewedList: PublishSubject<GetPostsModelResult>())
+                                viewedList: PublishSubject<GetPostsModelResult>(), 
+                                clearDataSource: PublishSubject<[NovelDetailSectionModel]>())
 
     struct Input {
+        let episodes: PublishSubject<Void>
         let viewedNovel: PublishSubject<PostsModel>
         let viewedList: BehaviorSubject<Void>
-        let nextCursor: PublishSubject<[String]>
+        let nextCursor: PublishSubject<(Int,String)>
         let prefetchItems: PublishSubject<[IndexPath]>
     }
     
@@ -55,6 +64,7 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
         let description: PublishSubject<PostsModel>
         let episodes: PublishSubject<GetPostsModelResult>
         let viewedList: PublishSubject<GetPostsModelResult>
+        let clearDataSource: PublishSubject<[NovelDetailSectionModel]>
     }
     
     func transform(input: Input) -> Output? {
@@ -63,17 +73,35 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
         }
         
         let novelInfo = Observable.just(model)
-        let updateLikedTime = PublishSubject<String>()
-        let updateEpisode = PublishSubject<String>()
+//        let updateLikedTime = PublishSubject<String>()
+//        let updateEpisode = PublishSubject<String>()
         
         input.nextCursor
-            .bind(with: self) { owner, cursours in
-                owner.cursor = cursours
+            .bind(with: self) { owner, cursour in
+                guard cursour.1 != "0" else {
+                    return
+                }
+                owner.cursor[cursour.0] = cursour.1
             }
             .disposed(by: disposeBag)
         
-        let episoeds = BehaviorSubject(value: model.hashTags.first)
-            .map { [weak self] in HashTagsQuery(next: self?.cursor[0], limit: "50", productId: APIConstants.ProductId.novelEpisode, hashTag: $0) }
+        input.prefetchItems
+            .bind(with: self) { owner, indexPaths in
+                guard indexPaths.count <= 3, indexPaths.last?.item == 19 else {
+                    return
+                }
+                print(#function, "cursor: ", owner.cursor)
+//                owner.output.clearDataSource.onNext([
+//                    owner.sectionList[0],
+//                    NovelDetailSectionModel(header: CollectionViewHeaderView(), items: [])
+//                ])
+                input.episodes.onNext(())
+                input.viewedList.onNext(())
+            }
+            .disposed(by: disposeBag)
+       
+       let episodes = input.episodes
+            .map { [weak self] in HashTagsQuery(next: self?.cursor[0], limit: "50", productId: APIConstants.ProductId.novelEpisode, hashTag:  model.hashTags.first) }
             .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags($0)) }
         
 //        let inputViewedNovel = input.viewedNovel
@@ -127,7 +155,7 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
 //            }
 //            .disposed(by: disposeBag)
         
-        PublishSubject.combineLatest(novelInfo, episoeds, viewedList)
+        PublishSubject.combineLatest(novelInfo, episodes, viewedList)
             .bind(with: self) { owner, results in
                 owner.output.fetchedModel.onNext(results.0)
                 owner.output.fetchedModel.onCompleted()

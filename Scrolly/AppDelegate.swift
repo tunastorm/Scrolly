@@ -8,6 +8,8 @@
 import UIKit
 import iamport_ios
 import IQKeyboardManagerSwift
+import FirebaseCore
+import FirebaseMessaging
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,6 +19,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.enableAutoToolbar = false
         IQKeyboardManager.shared.resignOnTouchOutside = true
+        
+        FirebaseApp.configure()
+        //원격 알림 등록
+        UNUserNotificationCenter.current().delegate = self
+        Messaging.messaging().delegate = self
+
+        let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+        UNUserNotificationCenter.current().requestAuthorization(
+          options: authOptions,
+          completionHandler: { _, _ in }
+        )
+
+        application.registerForRemoteNotifications()
+        
         return true
     }
 
@@ -39,5 +55,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     return true }
 
 
+}
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    // APNS에서 응답받은 디바이스 토큰을 파이어베이스로 전송
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        Messaging.messaging().apnsToken = deviceToken
+    }
+    
+}
+
+extension AppDelegate: MessagingDelegate {
+    // 현재 등록 토큰 가져오기
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        
+        Messaging.messaging().token { token, error in
+            if let error = error {
+                print("Error fetching FCM registration token: \(error)")
+            } else if let token = token {
+                print("FCM registration token: \(token)")
+            }
+        }
+        
+        // 토큰 갱신 모니터링
+        let dataDict: [String:String] = ["token": fcmToken ?? ""]
+        NotificationCenter.default.post(
+            name: Notification.Name("FCMToken"),
+            object: nil,
+            userInfo: dataDict
+        )
+        
+    }
+    
 }
 

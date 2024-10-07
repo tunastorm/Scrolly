@@ -82,8 +82,5 @@ enum APIError: Error {
         default: ""
         }
     }
-    
-    
-    
-    
+
 }

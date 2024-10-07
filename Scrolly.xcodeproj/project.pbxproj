@@ -146,6 +146,10 @@
 		BC8F1D422C70C406005D63CB /* UploadFilesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D412C70C406005D63CB /* UploadFilesModel.swift */; };
 		BC8F1D442C70C4C8005D63CB /* LocalFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D432C70C4C8005D63CB /* LocalFileManager.swift */; };
 		BC8F1D4A2C717864005D63CB /* KingfisherManager+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F1D492C717864005D63CB /* KingfisherManager+Extension.swift */; };
+		BC9873B42CB431F700D621E1 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = BC9873B32CB431F700D621E1 /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		BC9873B62CB431F700D621E1 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = BC9873B52CB431F700D621E1 /* FirebaseCrashlytics */; };
+		BC9873B82CB431F700D621E1 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = BC9873B72CB431F700D621E1 /* FirebaseMessaging */; };
+		BC9873BA2CB437BE00D621E1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC9873B92CB437BE00D621E1 /* GoogleService-Info.plist */; };
 		BCCBDA632C77250E00073E31 /* BannerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCBDA622C77250E00073E31 /* BannerCollectionViewCell.swift */; };
 		BCCBDA672C7739AD00073E31 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCBDA662C7739AD00073E31 /* UIImage+Extension.swift */; };
 		BCCBDA6C2C7837EE00073E31 /* RecommandCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCBDA6B2C7837EE00073E31 /* RecommandCollectionViewCell.swift */; };
@@ -290,6 +294,8 @@
 		BC8F1D412C70C406005D63CB /* UploadFilesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFilesModel.swift; sourceTree = "<group>"; };
 		BC8F1D432C70C4C8005D63CB /* LocalFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileManager.swift; sourceTree = "<group>"; };
 		BC8F1D492C717864005D63CB /* KingfisherManager+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KingfisherManager+Extension.swift"; sourceTree = "<group>"; };
+		BC9873B92CB437BE00D621E1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		BC9873BB2CB4393B00D621E1 /* Scrolly.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Scrolly.entitlements; sourceTree = "<group>"; };
 		BCCBDA622C77250E00073E31 /* BannerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerCollectionViewCell.swift; sourceTree = "<group>"; };
 		BCCBDA662C7739AD00073E31 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		BCCBDA6B2C7837EE00073E31 /* RecommandCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommandCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -309,8 +315,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC9873B42CB431F700D621E1 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				BC1277ED2C844CA300A056F3 /* RxSwift in Frameworks */,
 				BC8F1D042C6CB396005D63CB /* Kingfisher in Frameworks */,
+				BC9873B62CB431F700D621E1 /* FirebaseCrashlytics in Frameworks */,
 				BC8F1D152C6CB3C7005D63CB /* IQKeyboardManagerSwift in Frameworks */,
 				BC48A93B2C8170DF001C9B27 /* Then in Frameworks */,
 				BC48A9382C8170A9001C9B27 /* iamport-ios in Frameworks */,
@@ -319,6 +327,7 @@
 				BC8F1D0F2C6CB3B4005D63CB /* SnapKit in Frameworks */,
 				BC1277F02C844CD300A056F3 /* Differentiator in Frameworks */,
 				BC8F1D072C6CB3A0005D63CB /* Toast in Frameworks */,
+				BC9873B82CB431F700D621E1 /* FirebaseMessaging in Frameworks */,
 				BC1277EB2C844CA300A056F3 /* RxCocoa in Frameworks */,
 				BC8F1CFC2C6CB37C005D63CB /* Alamofire in Frameworks */,
 			);
@@ -803,6 +812,8 @@
 		BC8F1CD42C6CAE4B005D63CB /* Scrolly */ = {
 			isa = PBXGroup;
 			children = (
+				BC9873BB2CB4393B00D621E1 /* Scrolly.entitlements */,
+				BC9873B92CB437BE00D621E1 /* GoogleService-Info.plist */,
 				BC097C6D2C7484C50038A21C /* Presenter */,
 				BC8F1D182C6CC059005D63CB /* Storage */,
 				BC8F1CEB2C6CB074005D63CB /* Network */,
@@ -975,6 +986,9 @@
 				BC1277EF2C844CD300A056F3 /* Differentiator */,
 				BC1277F12C844CD300A056F3 /* RxDataSources */,
 				BC404B6C2C8B1B04001BA269 /* Cosmos */,
+				BC9873B32CB431F700D621E1 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				BC9873B52CB431F700D621E1 /* FirebaseCrashlytics */,
+				BC9873B72CB431F700D621E1 /* FirebaseMessaging */,
 			);
 			productName = Scrolly;
 			productReference = BC8F1CD22C6CAE4B005D63CB /* Scrolly.app */;
@@ -1015,6 +1029,7 @@
 				BC1277E92C844CA300A056F3 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				BC1277EE2C844CD300A056F3 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				BC404B6B2C8B1B04001BA269 /* XCRemoteSwiftPackageReference "Cosmos" */,
+				BC9873B22CB431F700D621E1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = BC8F1CD32C6CAE4B005D63CB /* Products */;
 			projectDirPath = "";
@@ -1031,6 +1046,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BC8F1CDF2C6CAE4D005D63CB /* Assets.xcassets in Resources */,
+				BC9873BA2CB437BE00D621E1 /* GoogleService-Info.plist in Resources */,
 				BC8F1CEA2C6CAF9C005D63CB /* .gitignore in Resources */,
 				BC8F1CE22C6CAE4D005D63CB /* Base in Resources */,
 			);
@@ -1320,6 +1336,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Scrolly/Scrolly.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = F8FT97JYZT;
@@ -1329,13 +1346,14 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = tunastorm.Scrolly;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tunastorm.Scrolly;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -1352,6 +1370,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Scrolly/Scrolly.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = F8FT97JYZT;
@@ -1361,13 +1380,14 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = tunastorm.Scrolly;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tunastorm.Scrolly;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -1483,6 +1503,14 @@
 				minimumVersion = 7.1.1;
 			};
 		};
+		BC9873B22CB431F700D621E1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.3.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1545,6 +1573,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BC8F1D132C6CB3C7005D63CB /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
 			productName = IQKeyboardManagerSwift;
+		};
+		BC9873B32CB431F700D621E1 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BC9873B22CB431F700D621E1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		BC9873B52CB431F700D621E1 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BC9873B22CB431F700D621E1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		BC9873B72CB431F700D621E1 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BC9873B22CB431F700D621E1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

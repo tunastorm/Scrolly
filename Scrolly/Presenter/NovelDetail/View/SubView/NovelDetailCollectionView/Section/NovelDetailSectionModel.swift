@@ -17,7 +17,7 @@ struct NovelDetailSectionModel {
     var items: [Item]
 }
 
-extension NovelDetailSectionModel: AnimatableSectionModelType {
+extension NovelDetailSectionModel: SectionModelType {
     
     typealias Item = PostsModel
     typealias Identity = UUID

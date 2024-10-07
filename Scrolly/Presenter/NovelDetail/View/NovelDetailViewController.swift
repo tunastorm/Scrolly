@@ -69,7 +69,7 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
         cell.configCell(itemIdentifier, indexPath: indexPath)
     }
 
-    lazy var detailDataSource = RxCollectionViewSectionedAnimatedDataSource<NovelDetailSectionModel> (
+    lazy var detailDataSource = RxCollectionViewSectionedReloadDataSource<NovelDetailSectionModel> (
         configureCell: { [weak self] dataSource, collectionView, indexPath, item in
             let section = NovelDetailSection.allCases[indexPath.section]
             
@@ -91,7 +91,7 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
         }
     )
     
-    private let input = NovelDetailViewModel.Input(viewedNovel: PublishSubject<PostsModel>(), viewedList: BehaviorSubject(value: ()), nextCursor: PublishSubject<[String]>(), prefetchItems: PublishSubject<[IndexPath]>())
+    private let input = NovelDetailViewModel.Input(episodes: PublishSubject<Void>(), viewedNovel: PublishSubject<PostsModel>(), viewedList: BehaviorSubject(value: ()), nextCursor: PublishSubject<(Int,String)>(), prefetchItems: PublishSubject<[IndexPath]>())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -110,37 +110,40 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
         guard let output = detailViewModel.transform(input: input) else {
             return
         }
-    
-        PublishSubject<[NovelDetailSectionModel]>
-            .combineLatest(output.fetchedModel, output.episodes, output.viewedList) { [weak self] novel, episodes, viewedList in
-                let headerView = CollectionViewHeaderView()
-                var sectionList = [
-                    NovelDetailSectionModel(header: headerView, items: []),
-                    NovelDetailSectionModel(header: headerView, items: [])
-                ]
-                guard let episodes = self?.fetchPostsModelList(episodes, cursorIndex: 0),
-                      let viewedList = self?.fetchPostsModelList(viewedList, cursorIndex: 0) else {
-                    return sectionList
-                }
-                
-                guard let fetchedEpisodes = self?.fetchViewedListToEpisode(episodes, viewedList) else {
-                    return sectionList
-                }
-                self?.headerRegistration = self?.collectionViewHeaderRegestration(sectionList)
-                sectionList[0].items = [novel]
-                sectionList[1].items = fetchedEpisodes
-                return sectionList
-            }
-            .bind(to: rootView.collectionView.rx.items(dataSource: detailDataSource))
-            .disposed(by: disposeBag)
+        
+        input.episodes.onNext(())
         
         rootView.collectionView.rx.prefetchItems
             .throttle(.seconds(1), scheduler: MainScheduler.asyncInstance)
             .observe(on: MainScheduler.asyncInstance)
             .asObservable()
             .bind(with: self) { owner, indexPaths in
-                print(#function, "indexPaths: ", indexPaths)
+                owner.input.prefetchItems.onNext(indexPaths)
             }
+            .disposed(by: disposeBag)
+        
+//        output.clearDataSource
+//            .bind(to: rootView.collectionView.rx.items(dataSource: detailDataSource))
+//            .disposed(by: disposeBag)
+        
+        PublishSubject<[NovelDetailSectionModel]>
+            .combineLatest(output.fetchedModel, output.episodes, output.viewedList) { [weak self] novel, episodes, viewedList in
+                let headerView = CollectionViewHeaderView()
+                
+                guard let episodes = self?.fetchPostsModelList(episodes, cursorIndex: 0),
+                      let viewedList = self?.fetchPostsModelList(viewedList, cursorIndex: 1) else {
+                    return detailViewModel.sectionList
+                }
+                guard let fetchedEpisodes = self?.fetchViewedListToEpisode(episodes, viewedList) else {
+                    return detailViewModel.sectionList
+                }
+                self?.headerRegistration = self?.collectionViewHeaderRegestration(detailViewModel.sectionList)
+                detailViewModel.sectionList[0].items = [novel]
+                detailViewModel.sectionList[1].items = fetchedEpisodes
+                print(#function, "items: ",detailViewModel.sectionList[1].items.count)
+                return detailViewModel.sectionList
+            }
+            .bind(to: rootView.collectionView.rx.items(dataSource: detailDataSource))
             .disposed(by: disposeBag)
         
     }
@@ -150,7 +153,7 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
         switch episodes {
         case .success(let model):
             list = sortingPostsModels(list: model.data)
-            
+            input.nextCursor.onNext((cursorIndex, model.nextCursor))
         case .failure(let error):
             showToastToView(error)
             return list

@@ -178,7 +178,7 @@ extension MainView: UIScrollViewDelegate {
         let currentPage = Int(scrollView.contentOffset.x/scrollView.frame.size.width)
         pageControl.currentPage = currentPage
     }
-    // 인덱스 조작해서 현재 페이지 구하는데 안전할까?
+    
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         var item: Int
         switch scrollView.scrollDirection {

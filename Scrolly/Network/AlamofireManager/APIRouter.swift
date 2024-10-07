@@ -64,7 +64,7 @@ extension APIRouter: TargetType {
         
         var combineHeaders: HTTPHeaders {
             let values = self.headers
-            var headers  = APIRouter.baseHeaders
+            var headers = APIRouter.baseHeaders
             values.forEach { key, value in
                 headers.add(name: key, value: value)
             }
