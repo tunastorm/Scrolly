@@ -168,10 +168,6 @@ iOS 16.0 이상
 
 <br>
 
-> ### ?????
-
-
-<br>
 
 회고
 -
@@ -191,6 +187,6 @@ iOS 16.0 이상
 
 > ### 개선사항
 * View와 viewModel, ViewModel과 DataSource간의 의존성 해소
-* 
+*   
 
-<br>
+<br> 
