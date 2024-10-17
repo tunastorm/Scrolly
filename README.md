@@ -4,7 +4,7 @@
 <br>
 
 <div align="center">
-  <img src = "https://github.com/user-attachments/assets/61809e71-67b6-44e0-b6db-1bf0006333ed" width="200" height="200"/>
+  <img src = "https://github.com/user-attachments/assets/ad7213c6-2dd0-41ef-bc36-c3c0168e938b" width="200" height="200"/>
 </div>
 <br>
 <div align = "center">
@@ -21,7 +21,7 @@
 <br>
 
 > ### 스크린샷
-![title](https://github.com/tunastorm/Log4Day/blob/tunastorm/ReadmeResource/Apple%20iPhone%2011%20Pro%20Max%20Screenshot%20All.png?raw=true)   
+![스크린샷 ALL](https://github.com/user-attachments/assets/fa8b7866-7a06-4f62-a79f-6eeb70082d62)
 
 <br>
 
