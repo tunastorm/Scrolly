@@ -138,11 +138,19 @@ iOS 16.0 이상
 
 <br>
 
+> ### URLRequestConvertible, TargetType 프로토콜을 채택한 Alamofire Router 패턴
+
+<br>
+
 > ### PDFViewer로 구현하는 웹소설 뷰어
 
 <br>
 
-> ### RxDataSource의 SectionModel
+> ### DiffableDataSource와 RxDataSource
+
+<br>
+
+> ### Network 상태코드, AFError 예외처리
 
 <br> 
 
@@ -160,11 +168,8 @@ iOS 16.0 이상
 
 <br>
 
-> ### 
-- 서비스 기획상 현재 2개의 뷰에서 지도 SDK를 사용해야만 하는 만큼 최소 200MB의 메모리 부하를 디폴트로 감당해야하는 상태
-- 원본 이미지를 그대로 사용하게되면 지도뷰에서 장시간 또는 대량의 작업이 일어날 경우 쉽게 메모리에 과도한 부하발생 가능
-- WWDC에서 SwiftUI에서 제공하는 Image의 resizable이나 UIGraphicsImageRenderer보다 더 효율적인 방법으로 소개된 ImageIO를 사용한 다운샘플링 구현
-- 전 후 성능비교
+> ### ?????
+
 
 <br>
 
@@ -186,7 +191,6 @@ iOS 16.0 이상
 
 > ### 개선사항
 * View와 viewModel, ViewModel과 DataSource간의 의존성 해소
-* 네트워크, Realm CRUD 등의 예외처리 및 alert등을 통한 결과 안내 로직 추가
-* 커스텀으로 구현한 무한 페이지네이션 뷰의 딱딱한 스크롤 애니메이션을 SwiftUI에 어울리게 개선
+* 
 
 <br>
