@@ -154,6 +154,74 @@ iOS 16.0 이상
 
 <br> 
 
+> ### MainViewController의 각 CollectionView가 사용하는 Section enum들의 인터페이스 구현
+
+* Interface - 구현부에서 특정 콜렉션뷰의 section별 sort, filtering 조건 구현
+
+```swift
+protocol MainSection: CaseIterable, Hashable {
+    var value: String { get }
+    var header: String? { get }
+    var allCase: [Self] { get }
+    var query: HashTagsQuery { get }
+    
+    func setViewedNovel(_ postList: [PostsModel]) -> [PostsModel]
+    
+    func convertData(_ model: [PostsModel]) -> [PostsModel]
+    
+}
+
+extension MainSection {
+    
+    func setViewedNovel(_ postList: [PostsModel]) -> [PostsModel] {
+        
+        let sortedList = postList.sorted {
+            guard let left = DateFormatManager.shared.stringToDate(value: $0.content4 ?? ""),
+                  let right = DateFormatManager.shared.stringToDate(value: $1.content4 ?? "") else {
+                return false
+            }
+            return left > right
+        }
+
+        var viewed: [PostsModel] = []
+        sortedList.forEach { post in
+            if viewed.last?.hashTags.first == post.hashTags.first {
+                return
+            }
+            viewed.append(post)
+        }
+        return viewed
+    }
+}
+```
+
+
+
+* MainViewController - 각 콜렉션 뷰의 Section별 Data Fetch
+
+```swift
+private func fetchDatas<T: MainSection>(sections: [T], resultList: [APIManager.ModelResult<GetPostsModel>]) {
+      var dataDict: [String:[PostsModel]] = [:]
+      var noDataSection: T?
+      resultList.enumerated().forEach { idx, result in
+          switch result {
+          case .success(let model):
+              if model.data.count == 0 {
+                  noDataSection = sections[idx]
+                  return
+              }
+              let section = sections[idx]
+              dataDict[section.value] = section.convertData(model.data)
+          case .failure(let error):
+             showToastToView(error)
+          }
+      }
+      configDataSource(sections: sections, noDataSection: noDataSection)
+      updateSnapShot(sections: sections, dataDict)
+}
+```
+
+<br>
 
 트러블 슈팅
 -
@@ -167,6 +235,8 @@ iOS 16.0 이상
 - Token Referesh 정상 수행
 
 <br>
+
+> ### 
 
 
 회고
