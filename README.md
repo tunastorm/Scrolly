@@ -388,6 +388,6 @@ final class APIClient {
 
 > ### 개선사항
 * View와 ViewModel, ViewModel과 DataSource간의 의존성 해소가 필요. POP를 적용해보자.
-* 웹소설 뷰어 화면이 EPUB 파일까지을 다룰 수 있으면 더 좋을 것.
+* 웹소설 뷰어 화면이 EPUB 파일까지 다룰 수 있으면 더 좋을 것.
 
 <br> 
