@@ -134,11 +134,170 @@ iOS 16.0 이상
 
 <br>
 
-> ### Single을 활용한 RxSwift Stream에서의 Networking
+> ### URLRequestConvertible, TargetType 프로토콜을 채택한 Alamofire Router 패턴
+
+
+
+<br>
+ 
+> ### 네트워크 통신 객체에서의 에러 예외처리 
+
+```swift
+final class APIClient {
+    
+    private init() { }
+    
+    typealias onSuccess<T> = ((T) -> Void)
+    typealias onFailure = ((_ error: APIError) -> Void)
+    
+    static let session = Session(interceptor: RetryInterceptor())
+        
+    // MARK: - request.responseDecodable
+    static func request<T>(_ object: T.Type,
+                           router: APIRouter,
+                           success: @escaping onSuccess<T>,
+                           failure: @escaping onFailure) where T:Decodable {
+        
+        session.request(router)
+            .validate(statusCode: 200...445)
+            .responseDecodable(of: object) { response in
+                responseHandler(response, success: success, failure: failure)
+            }
+        
+    }
+
+......
+
+    // MARK: - 네트워크 응답값 처리
+    private static func responseHandler<T: Decodable>(_ response: AFDataResponse<T>, success: @escaping (T) -> Void, failure: @escaping onFailure) {
+        if let error = responseErrorHandler(response) {
+            return failure(error)
+        }
+        switch response.result  {
+        case .success(let result):
+            success(result)
+        case .failure(let AFError):
+            let error = convertAFErrorToAPIError(AFError)
+            failure(error)
+        }
+    }
+
+    // MARK: - Response 에러 처리
+    private static func responseErrorHandler<T: Decodable>(_ response: AFDataResponse<T>) -> APIError? {
+        if let statusCode = response.response?.statusCode, let statusError = convertResponseStatus(statusCode) {
+            return statusError
+        }
+        return nil
+    }
+
+    // MARK: - Response 상태코드 변환
+    private static func convertResponseStatus(_ statusCode: Int) -> APIError? {
+        return switch statusCode {
+        case 200: nil
+        case 400: .invalidRequest
+        case 401: .invalidToken
+        case 402: .invalidNick
+        case 403: .accessForbidden
+        case 409: .validationFaild
+        case 410: .taskFailed
+        case 418: .expiredRefreshToken
+        case 419: .expiredToken
+        case 420: .invalidKey
+        case 429: .tooManyRequest
+        case 444: .invalidURL
+        case 445: .unAuthorizedRequest
+        case 300 ..< 400: .redirectError
+        case 402 ..< 500: .clientError
+        case 500 ..< 600: .serverError
+        default: .networkError
+        }
+    }
+
+    // MARK: - AFError 변환
+    private static func convertAFErrorToAPIError(_ error: AFError) -> APIError {
+        return switch error {
+        case .createUploadableFailed: .failedRequest
+        case .createURLRequestFailed: .clientError
+        case .downloadedFileMoveFailed: .invalidData
+        case .explicitlyCancelled: .canceled
+        case .invalidURL: .clientError
+        case .multipartEncodingFailed: .failedRequest
+        case .parameterEncodingFailed: .failedRequest
+        case .parameterEncoderFailed:  .failedRequest
+        case .requestAdaptationFailed:  .failedRequest
+        case .requestRetryFailed: .failedRequest
+        case .responseValidationFailed: .invalidResponse
+        case .responseSerializationFailed: .invalidData
+        case .serverTrustEvaluationFailed: .networkError
+        case .sessionDeinitialized: .invalidSession
+        case .sessionInvalidated: .invalidSession
+        case .sessionTaskFailed: .networkError
+        case .urlRequestValidationFailed: .clientError
+        }
+    }
+}
+
+```
 
 <br>
 
-> ### URLRequestConvertible, TargetType 프로토콜을 채택한 Alamofire Router 패턴
+> ### Single을 이용한 RxSwift Networking Stream 구현
+
+* Call API Client
+  
+```swift
+final class APIManager: APIManagerProvider {
+  
+    private init() { }
+    
+    static let shared = APIManager()
+    
+    typealias ModelResult<T:Decodable> = Result<T, APIError>
+    typealias DataResult = Result<Data, APIError>
+    typealias TokenHandler = (Decodable) -> Void
+    
+    func callRequestAPI<T: Decodable>(
+        model: T.Type,
+        router: APIRouter,
+        tokenHandler: TokenHandler? = nil
+    ) -> Single<ModelResult<T>> {
+        return Single.create { single in
+            APIClient.request(T.self, router: router) { model in
+                if let tokenHandler { tokenHandler(model) }
+                single(.success(.success(model)))
+            } failure: { error in
+                single(.success(.failure(error)))
+            }
+            return Disposables.create()
+       }
+    }
+
+......
+
+}
+
+```
+
+* DataFetchStream
+```swift
+ let episodes = input.episodes
+    .map { [weak self] in // request Query 세팅
+        HashTagsQuery(
+            next: self?.cursor[0],
+            limit: "50",
+            productId: APIConstants.ProductId.novelEpisode,
+            hashTag:  model.hashTags.first
+        )
+    }
+    .flatMap { // REST API Request 
+        APIManager.shared.callRequestAPI(
+            model: GetPostsModel.self,
+            router: .searchHashTags($0)
+        )
+    }
+```
+
+
 
 <br>
 
@@ -165,37 +324,10 @@ protocol MainSection: CaseIterable, Hashable {
     var allCase: [Self] { get }
     var query: HashTagsQuery { get }
     
-    func setViewedNovel(_ postList: [PostsModel]) -> [PostsModel]
-    
     func convertData(_ model: [PostsModel]) -> [PostsModel]
-    
-}
-
-extension MainSection {
-    
-    func setViewedNovel(_ postList: [PostsModel]) -> [PostsModel] {
-        
-        let sortedList = postList.sorted {
-            guard let left = DateFormatManager.shared.stringToDate(value: $0.content4 ?? ""),
-                  let right = DateFormatManager.shared.stringToDate(value: $1.content4 ?? "") else {
-                return false
-            }
-            return left > right
-        }
-
-        var viewed: [PostsModel] = []
-        sortedList.forEach { post in
-            if viewed.last?.hashTags.first == post.hashTags.first {
-                return
-            }
-            viewed.append(post)
-        }
-        return viewed
-    }
+    func setViewedNovel(_ postList: [PostsModel]) -> [PostsModel]
 }
 ```
-
-
 
 * MainViewController - 각 콜렉션 뷰의 Section별 Data Fetch
 
