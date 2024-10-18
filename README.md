@@ -106,17 +106,22 @@ iOS 16.0 이상
   <img src = "https://github.com/user-attachments/assets/fcd7a7ae-ed21-4d0a-8026-44f1f4261aa7">
 </div>
 
-> ### UIKit과 RxSwift를 결합한 MVVM Architecture
+> ### RxSwift EventStream과 Input/Output패턴으로 단방향 데이터 흐름의 MVVM Architecture 구현
+
+```swift
+
+
+```
 
 <br> 
 
-> ### 복수의 Section을 가진 CollectionView들의 DataSource에 동시에 네트워킹 결과값 패치하기
+> ### zip과 combineLatest로 복수의 Section을 가진 CollectionView들의 DataSource에 동시에 네트워킹 결과값 패치하기
 
  ![카테고리별 콜렉션 뷰 페이징 그래픽](https://github.com/user-attachments/assets/2d5d5afa-897c-4ecc-bea8-d48a1c0778c3)
 
 <br> 
 
-> ### MainViewController의 각CollectionView가 사용하는 Section enum들의 인터페이스 구현
+> ### MainViewController의 각 CollectionView에 필요한 Section enum들의 인터페이스 구현
 
 * Interface - 구현부에서 특정 콜렉션뷰의 section별 sort, filtering 조건 구현
 
@@ -162,9 +167,9 @@ private func fetchDatas<T: MainSection>(
 
 <br>
 
-> ### Single을 이용한 RxSwift Networking Stream 구현
+> ### Single을 이용한 1회성의 RxSwift Networking Stream 구현
 
-* Call API Client
+* 네트워킹 요청
   
 ```swift
 final class APIManager: APIManagerProvider {
@@ -199,9 +204,9 @@ final class APIManager: APIManagerProvider {
 
 ```
 
-* DataFetchStream
+* 네트워킹 결과 패치
 ```swift
- let episodes = input.episodes
+let episodes = input.episodes
     .map { [weak self] in // request Query 세팅
         HashTagsQuery(
             next: self?.cursor[0],
@@ -216,6 +221,18 @@ final class APIManager: APIManagerProvider {
             router: .searchHashTags($0)
         )
     }
+
+......
+
+PublishSubject.combineLatest(novelInfo, episodes, viewedList)
+    .bind(with: self) { owner, results in
+        owner.output.fetchedModel.onNext(results.0)
+        owner.output.fetchedModel.onCompleted()
+        owner.output.episodes.onNext(results.1)
+        owner.output.viewedList.onNext(results.2)
+    }
+    .disposed(by: disposeBag)
+
 ```
 <br>
  
@@ -308,6 +325,7 @@ final class APIClient {
 > ### URLRequestConvertible, TargetType 프로토콜을 채택한 Alamofire Router 패턴
 
 
+
 <br>
 
 > ### AccessToken 갱신 및 RefreshToken 만료 예외처리
@@ -359,7 +377,7 @@ final class APIClient {
 
 > ### 성취점
 
-* UIKit과 RxSwift를 결합한 MVVM 아키텍처 구현
+* RxSwift의 MVVM 아키텍처 구현
 * accessToken 인증 및 Alamofire Interceptor로 Token Refresh 구현
 * PG사 결제 구현
 * 네트워크 통신수행하는 APIClient 객체와 통신결과를 RxSwift Single Stream으로 래핑하는 APIManager객체를 구분, ViewModel의 Stream에서 호출하기 용이한 NetworkManager 객체 구현
