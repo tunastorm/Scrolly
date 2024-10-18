@@ -111,6 +111,7 @@ iOS 16.0 이상
 ```swift
 
 
+
 ```
 
 <br> 
@@ -120,6 +121,10 @@ iOS 16.0 이상
  ![카테고리별 콜렉션 뷰 페이징 그래픽](https://github.com/user-attachments/assets/2d5d5afa-897c-4ecc-bea8-d48a1c0778c3)
 
 <br> 
+
+> ### UICollectionView.CellRegistration으로 DiffableDataSource와 RxDataSource구성
+
+<br>
 
 > ### MainViewController의 각 CollectionView에 필요한 Section enum들의 인터페이스 구현
 
@@ -167,7 +172,7 @@ private func fetchDatas<T: MainSection>(
 
 <br>
 
-> ### Single을 이용한 1회성의 RxSwift Networking Stream 구현
+> ### RxSwift Single을 이용한 일회성의 EventStream으로 네트워크 통신 이벤트 관리  
 
 * 네트워킹 요청
   
@@ -236,7 +241,7 @@ PublishSubject.combineLatest(novelInfo, episodes, viewedList)
 ```
 <br>
  
-> ### 네트워크 통신 객체에서의 에러 예외처리 
+> ### enum으로 정의한 커스텀 에러로 네트워크 에러 예외처리 
 
 ```swift
 final class APIClient {
@@ -293,12 +298,14 @@ final class APIClient {
     // MARK: - Response 상태코드 변환
     private static func convertResponseStatus(_ statusCode: Int) -> APIError? {
         return switch statusCode {
+        // API 명세에 정의된 상태 코드 예외처리 
         case 200: nil
         case 400: .invalidRequest
 
         ......
 
         case 445: .unAuthorizedRequest
+        // 일반적인 상태코드 예외처리
         case 300 ..< 400: .redirectError
         case 402 ..< 500: .clientError
         case 500 ..< 600: .serverError
@@ -324,35 +331,31 @@ final class APIClient {
 
 > ### URLRequestConvertible, TargetType 프로토콜을 채택한 Alamofire Router 패턴
 
-
-
 <br>
 
-> ### AccessToken 갱신 및 RefreshToken 만료 예외처리
+> ### Alamofire Interceptor로 AccessToken 갱신 및 RefreshToken 만료 예외처리
 
 ![AccessToken 갱신 그래픽](https://github.com/user-attachments/assets/7654e0dc-25e4-4621-81c4-ea342fedbff1)
 
 <br>
 
-> ### 유료컨텐츠 PG 결제
+> ### 유료 컨텐츠 PG 결제와 결제 유효성 인증 구현
 
 ![유료 컨텐츠 결제 로직 그래픽](https://github.com/user-attachments/assets/77bd2620-65da-4846-bdbc-f417b6e69bf4)
 
 <br>
 
-> ### Post 방식 파일 업로드 / 다운로드
+> ### Alamofire로 Post 방식 파일 업로드 구현
 
 ![파일 업로드 다운로드 그래픽](https://github.com/user-attachments/assets/0ab45000-68d3-4612-8f55-b0f9c8cc34fc)
 
 <br>
 
-> ### PDFViewer로 구현하는 웹소설 뷰어
+> ### PDFKit으로 웹소설 뷰어 구현
+
 
 <br>
 
-> ### DiffableDataSource와 RxDataSource
-
-<br>
 
 트러블 슈팅
 -
@@ -366,9 +369,6 @@ final class APIClient {
 - Token Referesh 정상 수행
 
 <br>
-
-> ### 
-
 
 회고
 -
@@ -387,7 +387,7 @@ final class APIClient {
 <br>
 
 > ### 개선사항
-* View와 viewModel, ViewModel과 DataSource간의 의존성 해소
-*   
+* View와 ViewModel, ViewModel과 DataSource간의 의존성 해소가 필요. POP를 적용해보자.
+* 웹소설 뷰어 화면이 EPUB 파일까지을 다룰 수 있으면 더 좋을 것.
 
 <br> 
