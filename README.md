@@ -106,7 +106,7 @@ iOS 16.0 이상
   <img src = "https://github.com/user-attachments/assets/fcd7a7ae-ed21-4d0a-8026-44f1f4261aa7">
 </div>
 
-> ### RxSwift EventStream과 Input/Output패턴으로 단방향 데이터 흐름의 MVVM Architecture 구현
+> ### RxSwift와 Input/Output패턴으로 단방향 데이터 흐름의 MVVM 아키텍처 구현
 
 ```swift
 
