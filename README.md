@@ -153,23 +153,27 @@ final class APIClient {
     static let session = Session(interceptor: RetryInterceptor())
         
     // MARK: - request.responseDecodable
-    static func request<T>(_ object: T.Type,
-                           router: APIRouter,
-                           success: @escaping onSuccess<T>,
-                           failure: @escaping onFailure) where T:Decodable {
-        
+    static func request<T>(
+        _ object: T.Type,
+        router: APIRouter,
+        success: @escaping onSuccess<T>,
+        failure: @escaping onFailure
+    ) where T:Decodable {
         session.request(router)
             .validate(statusCode: 200...445)
             .responseDecodable(of: object) { response in
                 responseHandler(response, success: success, failure: failure)
             }
-        
     }
 
 ......
 
-    // MARK: - 네트워크 응답값 처리
-    private static func responseHandler<T: Decodable>(_ response: AFDataResponse<T>, success: @escaping (T) -> Void, failure: @escaping onFailure) {
+  // MARK: - 네트워크 응답값 처리
+    private static func responseHandler<T: Decodable>(
+        _ response: AFDataResponse<T>,
+        success: @escaping (T) -> Void,
+        failure: @escaping onFailure
+    ) {
         if let error = responseErrorHandler(response) {
             return failure(error)
         }
@@ -181,7 +185,7 @@ final class APIClient {
             failure(error)
         }
     }
-
+    
     // MARK: - Response 에러 처리
     private static func responseErrorHandler<T: Decodable>(_ response: AFDataResponse<T>) -> APIError? {
         if let statusCode = response.response?.statusCode, let statusError = convertResponseStatus(statusCode) {
@@ -189,7 +193,7 @@ final class APIClient {
         }
         return nil
     }
-
+    
     // MARK: - Response 상태코드 변환
     private static func convertResponseStatus(_ statusCode: Int) -> APIError? {
         return switch statusCode {
@@ -212,7 +216,7 @@ final class APIClient {
         default: .networkError
         }
     }
-
+    
     // MARK: - AFError 변환
     private static func convertAFErrorToAPIError(_ error: AFError) -> APIError {
         return switch error {
@@ -235,6 +239,7 @@ final class APIClient {
         case .urlRequestValidationFailed: .clientError
         }
     }
+
 }
 
 ```
@@ -332,24 +337,27 @@ protocol MainSection: CaseIterable, Hashable {
 * MainViewController - 각 콜렉션 뷰의 Section별 Data Fetch
 
 ```swift
-private func fetchDatas<T: MainSection>(sections: [T], resultList: [APIManager.ModelResult<GetPostsModel>]) {
-      var dataDict: [String:[PostsModel]] = [:]
-      var noDataSection: T?
-      resultList.enumerated().forEach { idx, result in
-          switch result {
-          case .success(let model):
-              if model.data.count == 0 {
-                  noDataSection = sections[idx]
-                  return
-              }
-              let section = sections[idx]
-              dataDict[section.value] = section.convertData(model.data)
-          case .failure(let error):
-             showToastToView(error)
-          }
-      }
-      configDataSource(sections: sections, noDataSection: noDataSection)
-      updateSnapShot(sections: sections, dataDict)
+private func fetchDatas<T: MainSection>(
+    sections: [T],
+    resultList: [APIManager.ModelResult<GetPostsModel>]
+) {
+    var dataDict: [String:[PostsModel]] = [:]
+    var noDataSection: T?
+    resultList.enumerated().forEach { idx, result in
+        switch result {
+        case .success(let model):
+            if model.data.count == 0 {
+                noDataSection = sections[idx]
+                return
+            }
+            let section = sections[idx]
+            dataDict[section.value] = section.convertData(model.data)
+        case .failure(let error):
+            showToastToView(error)\
+        }
+    }
+    configDataSource(sections: sections, noDataSection: noDataSection)
+    updateSnapShot(sections: sections, dataDict)
 }
 ```
 
