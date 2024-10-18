@@ -114,135 +114,51 @@ iOS 16.0 이상
 
  ![카테고리별 콜렉션 뷰 페이징 그래픽](https://github.com/user-attachments/assets/2d5d5afa-897c-4ecc-bea8-d48a1c0778c3)
 
-<br>
+<br> 
 
-> ### AccessToken 갱신 및 RefreshToken 만료 예외처리
+> ### MainViewController의 각CollectionView가 사용하는 Section enum들의 인터페이스 구현
 
-![AccessToken 갱신 그래픽](https://github.com/user-attachments/assets/7654e0dc-25e4-4621-81c4-ea342fedbff1)
-
-<br>
-
-> ### 유료컨텐츠 PG 결제
-
-![유료 컨텐츠 결제 로직 그래픽](https://github.com/user-attachments/assets/77bd2620-65da-4846-bdbc-f417b6e69bf4)
-
-<br>
-
-> ### Post 방식 파일 업로드 / 다운로드
-
-![파일 업로드 다운로드 그래픽](https://github.com/user-attachments/assets/0ab45000-68d3-4612-8f55-b0f9c8cc34fc)
-
-<br>
-
-> ### URLRequestConvertible, TargetType 프로토콜을 채택한 Alamofire Router 패턴
-
-
-
-<br>
- 
-> ### 네트워크 통신 객체에서의 에러 예외처리 
+* Interface - 구현부에서 특정 콜렉션뷰의 section별 sort, filtering 조건 구현
 
 ```swift
-final class APIClient {
+protocol MainSection: CaseIterable, Hashable {
+    var value: String { get }
+    var header: String? { get }
+    var allCase: [Self] { get }
+    var query: HashTagsQuery { get }
     
-    private init() { }
-    
-    typealias onSuccess<T> = ((T) -> Void)
-    typealias onFailure = ((_ error: APIError) -> Void)
-    
-    static let session = Session(interceptor: RetryInterceptor())
-        
-    // MARK: - request.responseDecodable
-    static func request<T>(
-        _ object: T.Type,
-        router: APIRouter,
-        success: @escaping onSuccess<T>,
-        failure: @escaping onFailure
-    ) where T:Decodable {
-        session.request(router)
-            .validate(statusCode: 200...445)
-            .responseDecodable(of: object) { response in
-                responseHandler(response, success: success, failure: failure)
-            }
-    }
-
-......
-
-  // MARK: - 네트워크 응답값 처리
-    private static func responseHandler<T: Decodable>(
-        _ response: AFDataResponse<T>,
-        success: @escaping (T) -> Void,
-        failure: @escaping onFailure
-    ) {
-        if let error = responseErrorHandler(response) {
-            return failure(error)
-        }
-        switch response.result  {
-        case .success(let result):
-            success(result)
-        case .failure(let AFError):
-            let error = convertAFErrorToAPIError(AFError)
-            failure(error)
-        }
-    }
-    
-    // MARK: - Response 에러 처리
-    private static func responseErrorHandler<T: Decodable>(_ response: AFDataResponse<T>) -> APIError? {
-        if let statusCode = response.response?.statusCode, let statusError = convertResponseStatus(statusCode) {
-            return statusError
-        }
-        return nil
-    }
-    
-    // MARK: - Response 상태코드 변환
-    private static func convertResponseStatus(_ statusCode: Int) -> APIError? {
-        return switch statusCode {
-        case 200: nil
-        case 400: .invalidRequest
-        case 401: .invalidToken
-        case 402: .invalidNick
-        case 403: .accessForbidden
-        case 409: .validationFaild
-        case 410: .taskFailed
-        case 418: .expiredRefreshToken
-        case 419: .expiredToken
-        case 420: .invalidKey
-        case 429: .tooManyRequest
-        case 444: .invalidURL
-        case 445: .unAuthorizedRequest
-        case 300 ..< 400: .redirectError
-        case 402 ..< 500: .clientError
-        case 500 ..< 600: .serverError
-        default: .networkError
-        }
-    }
-    
-    // MARK: - AFError 변환
-    private static func convertAFErrorToAPIError(_ error: AFError) -> APIError {
-        return switch error {
-        case .createUploadableFailed: .failedRequest
-        case .createURLRequestFailed: .clientError
-        case .downloadedFileMoveFailed: .invalidData
-        case .explicitlyCancelled: .canceled
-        case .invalidURL: .clientError
-        case .multipartEncodingFailed: .failedRequest
-        case .parameterEncodingFailed: .failedRequest
-        case .parameterEncoderFailed:  .failedRequest
-        case .requestAdaptationFailed:  .failedRequest
-        case .requestRetryFailed: .failedRequest
-        case .responseValidationFailed: .invalidResponse
-        case .responseSerializationFailed: .invalidData
-        case .serverTrustEvaluationFailed: .networkError
-        case .sessionDeinitialized: .invalidSession
-        case .sessionInvalidated: .invalidSession
-        case .sessionTaskFailed: .networkError
-        case .urlRequestValidationFailed: .clientError
-        }
-    }
-
+    func convertData(_ model: [PostsModel]) -> [PostsModel]
+    func setViewedNovel(_ postList: [PostsModel]) -> [PostsModel]
 }
-
 ```
+
+* MainViewController - 각 콜렉션 뷰의 Section별 Data Fetch
+
+```swift
+private func fetchDatas<T: MainSection>(
+    sections: [T],
+    resultList: [APIManager.ModelResult<GetPostsModel>]
+) {
+    var dataDict: [String:[PostsModel]] = [:]
+    var noDataSection: T?
+    resultList.enumerated().forEach { idx, result in
+        switch result {
+        case .success(let model):
+            if model.data.count == 0 {
+                noDataSection = sections[idx]
+                return
+            }
+            let section = sections[idx]
+            dataDict[section.value] = section.convertData(model.data)
+        case .failure(let error):
+            showToastToView(error)
+        }
+    }
+    configDataSource(sections: sections, noDataSection: noDataSection)
+    updateSnapShot(sections: sections, dataDict)
+}
+```
+
 
 <br>
 
@@ -301,8 +217,114 @@ final class APIManager: APIManagerProvider {
         )
     }
 ```
+<br>
+ 
+> ### 네트워크 통신 객체에서의 에러 예외처리 
+
+```swift
+final class APIClient {
+    
+    private init() { }
+    
+    typealias onSuccess<T> = ((T) -> Void)
+    typealias onFailure = ((_ error: APIError) -> Void)
+    
+    static let session = Session(interceptor: RetryInterceptor())
+        
+    // MARK: - request.responseDecodable
+    static func request<T>(
+        _ object: T.Type,
+        router: APIRouter,
+        success: @escaping onSuccess<T>,
+        failure: @escaping onFailure
+    ) where T:Decodable {
+        session.request(router)
+            .validate(statusCode: 200...445)
+            .responseDecodable(of: object) { response in
+                responseHandler(response, success: success, failure: failure)
+            }
+    }
+
+    ......
+
+    // MARK: - 네트워크 응답값 처리
+    private static func responseHandler<T: Decodable>(
+        _ response: AFDataResponse<T>,
+        success: @escaping (T) -> Void,
+        failure: @escaping onFailure
+    ) {
+        if let error = responseErrorHandler(response) {
+            return failure(error)
+        }
+        switch response.result  {
+        case .success(let result):
+            success(result)
+        case .failure(let AFError):
+            let error = convertAFErrorToAPIError(AFError)
+            failure(error)
+        }
+    }
+    
+    // MARK: - Response 에러 처리
+    private static func responseErrorHandler<T: Decodable>(_ response: AFDataResponse<T>) -> APIError? {
+        if let statusCode = response.response?.statusCode, let statusError = convertResponseStatus(statusCode) {
+            return statusError
+        }
+        return nil
+    }
+    
+    // MARK: - Response 상태코드 변환
+    private static func convertResponseStatus(_ statusCode: Int) -> APIError? {
+        return switch statusCode {
+        case 200: nil
+        case 400: .invalidRequest
+
+        ......
+
+        case 445: .unAuthorizedRequest
+        case 300 ..< 400: .redirectError
+        case 402 ..< 500: .clientError
+        case 500 ..< 600: .serverError
+        default: .networkError
+        }
+    }
+    
+    // MARK: - AFError 변환
+    private static func convertAFErrorToAPIError(_ error: AFError) -> APIError {
+        return switch error {
+        case .createUploadableFailed: .failedRequest
+
+        ......
+
+        case .urlRequestValidationFailed: .clientError
+        }
+    }
+
+}
+
+```
+<br>
+
+> ### URLRequestConvertible, TargetType 프로토콜을 채택한 Alamofire Router 패턴
 
 
+<br>
+
+> ### AccessToken 갱신 및 RefreshToken 만료 예외처리
+
+![AccessToken 갱신 그래픽](https://github.com/user-attachments/assets/7654e0dc-25e4-4621-81c4-ea342fedbff1)
+
+<br>
+
+> ### 유료컨텐츠 PG 결제
+
+![유료 컨텐츠 결제 로직 그래픽](https://github.com/user-attachments/assets/77bd2620-65da-4846-bdbc-f417b6e69bf4)
+
+<br>
+
+> ### Post 방식 파일 업로드 / 다운로드
+
+![파일 업로드 다운로드 그래픽](https://github.com/user-attachments/assets/0ab45000-68d3-4612-8f55-b0f9c8cc34fc)
 
 <br>
 
@@ -311,55 +333,6 @@ final class APIManager: APIManagerProvider {
 <br>
 
 > ### DiffableDataSource와 RxDataSource
-
-<br>
-
-> ### Network 상태코드, AFError 예외처리
-
-<br> 
-
-> ### MainViewController의 각 CollectionView가 사용하는 Section enum들의 인터페이스 구현
-
-* Interface - 구현부에서 특정 콜렉션뷰의 section별 sort, filtering 조건 구현
-
-```swift
-protocol MainSection: CaseIterable, Hashable {
-    var value: String { get }
-    var header: String? { get }
-    var allCase: [Self] { get }
-    var query: HashTagsQuery { get }
-    
-    func convertData(_ model: [PostsModel]) -> [PostsModel]
-    func setViewedNovel(_ postList: [PostsModel]) -> [PostsModel]
-}
-```
-
-* MainViewController - 각 콜렉션 뷰의 Section별 Data Fetch
-
-```swift
-private func fetchDatas<T: MainSection>(
-    sections: [T],
-    resultList: [APIManager.ModelResult<GetPostsModel>]
-) {
-    var dataDict: [String:[PostsModel]] = [:]
-    var noDataSection: T?
-    resultList.enumerated().forEach { idx, result in
-        switch result {
-        case .success(let model):
-            if model.data.count == 0 {
-                noDataSection = sections[idx]
-                return
-            }
-            let section = sections[idx]
-            dataDict[section.value] = section.convertData(model.data)
-        case .failure(let error):
-            showToastToView(error)\
-        }
-    }
-    configDataSource(sections: sections, noDataSection: noDataSection)
-    updateSnapShot(sections: sections, dataDict)
-}
-```
 
 <br>
 
