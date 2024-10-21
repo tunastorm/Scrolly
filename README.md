@@ -1,4 +1,4 @@
-![스크린샷 2024-10-22 오전 2 37 33](https://github.com/user-attachments/assets/20d78a87-1b1b-4153-b632-f61ee009051c)프로젝트 정보
+프로젝트 정보
 -
 
 <br>
@@ -331,6 +331,189 @@ final class APIClient {
 
 > ### URLRequestConvertible, TargetType 프로토콜을 채택한 Alamofire Router 패턴
 
+* Query
+```swift
+import Foundation
+
+struct LoginQuery: Encodable {
+
+    let email: String
+    let password: String
+    
+}
+
+struct GetPostsQuery: Encodable {
+    
+    let next: String?
+    let limit: String?
+    let productId: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case next, limit
+        case productId = "product_id"
+    }
+    
+}
+```
+
+* Router
+```swift
+import Foundation
+import Alamofire
+
+enum APIRouter {
+    ......
+    case login(_ query: LoginQuery)
+    ......
+    case getPosts(_ query: GetPostsQuery)
+    ......
+}
+
+extension APIRouter: TargetType {
+   
+    enum HeadersOption {
+        case json
+        case token
+        case tokenAndRefresh
+        case tokenAndMulipart
+        case tokenAndJson
+        
+        var headers: [String: String] {
+            return switch self {
+            case .json:
+                [ APIConstants.contentType : APIConstants.json ]
+            case .token:
+                [ APIConstants.authorization : UserDefaultsManager.token ]
+            case .tokenAndRefresh:
+                [ APIConstants.authorization : UserDefaultsManager.token,
+                  APIConstants.refresh : UserDefaultsManager.refresh ]
+            case .tokenAndMulipart:
+                [ APIConstants.authorization : UserDefaultsManager.token,
+                  APIConstants.contentType : APIConstants.multipart ]
+            case .tokenAndJson:
+                [ APIConstants.authorization : UserDefaultsManager.token,
+                  APIConstants.contentType : APIConstants.json ]
+            }
+        }
+        
+        var combineHeaders: HTTPHeaders {
+            let values = self.headers
+            var headers = APIRouter.baseHeaders
+            values.forEach { key, value in
+                headers.add(name: key, value: value)
+            }
+            return headers
+        }
+    
+    }
+    
+    // 열거형 asoociate value
+    var baseURL: String {
+        return APIConstants.baseURL
+    }
+    
+    var method: HTTPMethod {
+        switch self {
+        case .signUp, .emailValidation, .login, .uploadFiles, .uploadPosts, .uploadComments, .likePostsToggle, .likePostsToggleSub, .paymentValidation:
+            return .post
+        case .refreshAccessToken, .withdraw, .getPosts, .getPostsImage, .queryOnePosts, .getLikedPosts, .getLikedPostsSub, .getMyProfile, .searchHashTags, .paymentedList:
+            return .get
+        case .updatePosts, .updateComments, .updateMyProfile:
+            return .put
+        case .deletePosts, .deleteComments:
+            return .delete
+        }
+    }
+    
+    static var baseHeaders: HTTPHeaders {
+        [ APIConstants.key : APIKey.key ]
+    }
+    
+    var headers: HTTPHeaders {
+        switch self {
+        ......
+        case .getPosts:
+            return HeadersOption.token.combineHeaders
+        case .login:
+            return HeadersOption.json.combineHeaders
+        ......
+        }
+    }
+
+    var path: String {
+        return APIConstants.sesacPath(router: self)
+    }
+    
+    var body: Data? {
+        return switch self {
+        ......
+        case .login(let query): 
+            encodeQuery(query)
+        ......
+        default: nil
+        }
+    }
+    
+    var parameters: Encodable? {
+        switch self {
+        case .getPosts(let query): query
+        ......
+        default: nil
+        }
+    }
+    
+    var encoder: ParameterEncoder {
+        return URLEncodedFormParameterEncoder.default
+    }
+    
+    var description: String {
+        switch self {
+        ......
+        case .login: "login"
+        ......
+        case .getPosts: "getPosts"
+        ......
+        }
+    }
+    
+    private func encodeQuery(_ query: Encodable) -> Data? {
+        let encoder = JSONEncoder()
+        return try? encoder.encode(query)
+    }
+    
+}
+``` 
+
+* TargetType
+```swift
+import Foundation
+import Alamofire
+
+protocol TargetType: URLRequestConvertible {
+    var baseURL: String { get }
+    var method: HTTPMethod { get }
+    var path: String { get }
+    var headers: HTTPHeaders { get }
+    var body: Data? { get }
+    var parameters: Encodable? { get }
+    var encoder: ParameterEncoder { get }
+}
+
+extension TargetType {
+    
+    func asURLRequest() throws -> URLRequest {
+        let url = try (baseURL + APIConstants.version.latest + path).asURL()
+        var request = try URLRequest(url: url, method: method, headers: headers)
+        if let body {
+            request.httpBody = body
+        }
+        let combinedRequest = try parameters.map { try encoder.encode($0, into: request) } ?? request
+        return combinedRequest
+    }
+
+}
+```
+
 <br>
 
 > ### Alamofire Interceptor로 AccessToken 갱신 및 RefreshToken 만료 예외처리
@@ -351,8 +534,30 @@ final class APIClient {
 
 <br>
 
-> ### PDFKit으로 웹소설 뷰어 구현
+> ### PDFKit의 PDFView를 커스텀하여 웹소설 뷰어 구현
 
+* PDFView
+```swift
+private let pdfView = {
+        let view = PDFView()
+        view.backgroundColor = .white
+        view.displayMode = .singlePage
+        view.displayDirection = .horizontal
+        view.pageShadowsEnabled = false
+        view.usePageViewController(true, withViewOptions: nil)
+        view.maxScaleFactor = 0.5
+        view.minScaleFactor = 1.0
+        return view
+    }()
+```  
+* AutoLayout
+```swift
+pdfView.snp.makeConstraints { make in
+    make.verticalEdges.equalToSuperview()
+    make.left.equalToSuperview().offset(-120)
+    make.right.equalToSuperview().offset(120)
+}
+```
 
 <br>
 
@@ -365,7 +570,7 @@ final class APIClient {
 > ### Response.result의 타입이 Data일 때 Alamofire RetryPolicy의 실행 실패 이슈
 * 웹소설 감상에 사용되는 PDF파일을 다운로드 하는 API에서만 Token Refresh가 수행되지 않는 이슈 발생
 
-<div>
+<div align="center">
   <img src="https://github.com/user-attachments/assets/330de340-5ee0-4bfd-9272-09c0d808c239" width="230" height="500">
 </div>
 
