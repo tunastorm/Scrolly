@@ -884,7 +884,7 @@ pdfView.snp.makeConstraints { make in
 * PG사 결제 및 결제 유효성 검증 구현
 * 네트워크 통신수행하는 APIClient 객체와 통신결과를 RxSwift Single Stream으로 래핑하는 APIManager객체를 구분, ViewModel의 Stream에서 호출하기 용이한 NetworkManager 객체 구현
 * Compositional Layout과 Diffable DataSource, RxDataSource를 모두 사용
-* 복수의 section을 가진 여러 개의 콜렉션 뷰가 사용되는 ViewController의 네트워킹을 RxSwiftStream로 제어
+* 복수의 section을 가진 여러 개의 콜렉션 뷰가 사용되는 ViewController의 네트워킹을 RxSwift Stream로 제어
     
 <br>
 
