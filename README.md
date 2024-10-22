@@ -106,13 +106,282 @@ iOS 16.0 이상
   <img src = "https://github.com/user-attachments/assets/fcd7a7ae-ed21-4d0a-8026-44f1f4261aa7">
 </div>
 
+<br>
+
 > ### RxSwift와 Input/Output패턴으로 단방향 데이터 흐름의 MVVM 아키텍처 구현
 
+* ViewModel
+
 ```swift
+final class MainViewModel: BaseViewModel, ViewModelProvider {
+    
+    typealias PostListResults = Observable<PrimitiveSequence<SingleTrait, Result<GetPostsModel, APIError>>.Element>
+    
+    var model: PostsModel? {
+        get { return nil }
+        set { }
+    }
+    
+    private var recommandCall: [PublishSubject<Void>] = []
+    private var recommandResults: [Int : PostListResults] = [:]
+    private var maleResults: [Int : PublishSubject<HashTagsQuery>] = [:]
+    private var femaleResults: [Int : PublishSubject<HashTagsQuery>] = [:]
+    private var fantasyResults: [Int : PublishSubject<HashTagsQuery>] = [:]
+    private var romanceResults: [Int : PublishSubject<HashTagsQuery>] = [:]
 
+    private var output = Output(
+        filterList: BehaviorSubject<[HashTagSection.HashTag]>(value: HashTagSection.HashTag.allCases),
+        recommandDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
+        maleDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
+        femaleDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
+        fantasyDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
+        romanceDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
+        recommandCellTap: PublishSubject<PostsModel>()
+    )
+    
+    private let disposeBag = DisposeBag()
+    
+    struct Input {
+        let callRecommandData: PublishSubject<Void>
+        let hashTagCellTap: ControlEvent<IndexPath>
+        let srollViewPaging: PublishRelay<IndexPath>
+    }
+    
+    struct Output {
+        let filterList: BehaviorSubject<[HashTagSection.HashTag]>
+        let recommandDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>
+        let maleDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>
+        let femaleDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>
+        let fantasyDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>
+        let romanceDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>
+        let recommandCellTap: PublishSubject<PostsModel>
+    }
+    
+    func transform(input: Input) -> Output? {
+      
+        var novelInfoResults: [String : [PostListResults]] = [:]
+        
+        setAllSubjects()
+        callRecommandDatas()
+        
+        input.callRecommandData
+            .bind(with: self) { owner, _ in
+                owner.recommandCall.forEach { $0.onNext(()) }
+            }
+            .disposed(by: disposeBag)
+        
+        PublishSubject.combineLatest(recommandResults.sorted { $0.key < $1.key }.map{ $0.value })
+            .bind(with: self) { owner, results in
+                owner.output.recommandDatas.onNext(results)
+            }
+            .disposed(by: disposeBag)
+        
+        input.hashTagCellTap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, indexPath in
+                owner.callDataRouter(indexPath)
+            }
+            .disposed(by: disposeBag)
+        
+        input.srollViewPaging
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, indexPath in
+                guard indexPath.item >= 0, indexPath.item < HashTagSection.HashTag.allCases.count else {
+                    return
+                }
+                owner.callDataRouter(indexPath)
+            }
+            .disposed(by: disposeBag)
+        
+        (HashTagSection.HashTag.allCases).forEach { section in
+            var results: [Int: PublishSubject<HashTagsQuery>]
+            switch section {
+            case .male: results = maleResults
+            case .female: results = femaleResults
+            case .fantasy: results = fantasyResults
+            case .romance: results = romanceResults
+            default: return
+            }
+            
+            novelInfoResults[section.rawValue] = results.sorted { $0.key < $1.key }.map{ $0.value }.map { results in
+                results.flatMap{ APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags($0)) }
+            }
+        }
+     
+        PublishSubject.zip(novelInfoResults[HashTagSection.HashTag.male.rawValue] ?? [])
+            .bind(with: self) { owner, results in
+                owner.output.maleDatas.onNext(results)
+            }
+            .disposed(by: disposeBag)
+        
+        PublishSubject.zip(novelInfoResults[HashTagSection.HashTag.female.rawValue] ?? [])
+            .bind(with: self) { owner, results in
+                owner.output.femaleDatas.onNext(results)
+            }
+            .disposed(by: disposeBag)
 
+        PublishSubject.zip(novelInfoResults[HashTagSection.HashTag.fantasy.rawValue] ?? [])
+            .bind(with: self) { owner, results in
+                owner.output.fantasyDatas.onNext(results)
+            }.disposed(by: disposeBag)
+        
+        PublishSubject.zip(novelInfoResults[HashTagSection.HashTag.romance.rawValue] ?? [])
+            .bind(with: self) { owner, results in
+                owner.output.romanceDatas.onNext(results)
+            }.disposed(by: disposeBag)
+        
+        return output
+    }
 
+    private func setAllSubjects() {
+        //MARK: - HOT 추천
+        (0...RecommandSection.allCases.count-1).forEach { _ in recommandCall.append(PublishSubject<Void>()) }
+        //MARK: - 남성인기
+        (0...MaleSection.allCases.count-1).forEach { maleResults[$0] = PublishSubject<HashTagsQuery>() }
+        //MARK: - 여성인기
+        (0...FemaleSection.allCases.count-1).forEach { femaleResults[$0] = PublishSubject<HashTagsQuery>() }
+        //MARK: - 판타지
+        (0...FantasySection.allCases.count-1).forEach { fantasyResults[$0] = PublishSubject<HashTagsQuery>() }
+        //MARK: - 로맨스
+        (0...RomanceSection.allCases.count-1).forEach { romanceResults[$0] = PublishSubject<HashTagsQuery>() }
+    }
+    
+    private func callDataRouter(_ indexPath: IndexPath) {
+        switch HashTagSection.HashTag.allCases[indexPath.item] {
+        case .male: callDatas(for: MaleSection.allCases)
+        case .female: callDatas(for: FemaleSection.allCases)
+        case .fantasy: callDatas(for: FantasySection.allCases)
+        case .romance: callDatas(for: RomanceSection.allCases)
+        default: return
+        }
+    }
+
+    private func callDatas<T:MainSection>(for sections: [T]) {
+        var results: [Int : PublishSubject<HashTagsQuery>]
+        switch sections {
+        case is [MaleSection]: results = maleResults
+        case is [FemaleSection]: results = femaleResults
+        case is [FantasySection]: results = fantasyResults
+        case is [RomanceSection]: results = romanceResults
+        default: return
+        }
+        
+        results.keys.forEach { key in
+            let query = sections[key].query
+            if let result = results[key] {
+                result.onNext(query)
+                result.onCompleted()
+            }
+        }
+    }
+    
+    private func callRecommandDatas() {
+        recommandResults[RecommandSection.banner.index] = recommandCall[0]
+            .map { GetPostsQuery(next: nil, limit: "\(Int.random(in: 10...20))", productId: APIConstants.ProductId.novelInfo) }
+            .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
+        
+        recommandResults[RecommandSection.popular.index] = recommandCall[1]
+            .map { GetPostsQuery(next: nil, limit: "20", productId: APIConstants.ProductId.novelInfo) }
+            .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getPosts($0)) }
+      
+        recommandResults[RecommandSection.recently.index] = recommandCall[2]
+            .map { LikedPostsQuery(next: nil, limit: "50") }
+            .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .getLikedPostsSub($0)) }
+        
+        recommandResults[RecommandSection.newWaitingFree.index] = recommandCall[3]
+            .map { RecommandSection.newWaitingFree.query }
+            .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags($0)) }
+    }
+    
+}
 ```
+
+* ViewController
+```swift
+override func bindData() {
+
+    guard let mainViewModel = viewModel as? MainViewModel, let rootView else {
+        return
+    }
+    
+    rootView.collectionViewList.enumerated().forEach { idx, collectionView in
+        rxPushToDetailViewController(dataSource: idx, from: collectionView)
+    }
+    
+    let input = MainViewModel.Input(callRecommandData: callRecommandData, hashTagCellTap: rootView.hashTagView.rx.itemSelected, srollViewPaging: scrollViewPaging)
+    guard let output = mainViewModel.transform(input: input) else {
+        return
+    }
+    
+    input.callRecommandData.onNext(())
+    
+    output.filterList
+        .bind(with: self) { owner, values in
+            owner.configFilterDataSource()
+            owner.updateFilterSnapShot(values)
+        }
+        .disposed(by: disposeBag)
+    
+    output.recommandDatas
+        .bind(with: self) { owner, resultList in
+            print(#function, "resultList: ", resultList.count)
+            owner.fetchDatas(sections: RecommandSection.allCases, resultList: resultList)
+        }
+        .disposed(by: disposeBag)
+    
+    output.maleDatas
+        .bind(with: self) { owner, resultList in
+            owner.fetchDatas(sections: MaleSection.allCases, resultList: resultList)
+        }
+        .disposed(by: disposeBag)
+    
+    output.femaleDatas
+        .bind(with: self) { owner, resultList in
+            owner.fetchDatas(sections: FemaleSection.allCases, resultList: resultList)
+        }
+        .disposed(by: disposeBag)
+    
+    output.fantasyDatas
+        .bind(with: self) { owner, resultList in
+            owner.fetchDatas(sections: FantasySection.allCases, resultList: resultList)
+        }
+        .disposed(by: disposeBag)
+    
+    output.romanceDatas
+        .bind(with: self) { owner, resultList in
+            owner.fetchDatas(sections: RomanceSection.allCases, resultList: resultList)
+        }
+        .disposed(by: disposeBag)
+}
+
+private func fetchDatas<T: MainSection>(
+    sections: [T],
+    resultList: [APIManager.ModelResult<GetPostsModel>]
+) {
+    var dataDict: [String:[PostsModel]] = [:]
+    var noDataSection: T?
+    resultList.enumerated().forEach { idx, result in
+        switch result {
+        case .success(let model):
+            if model.data.count == 0 {
+                noDataSection = sections[idx]
+                return
+            }
+            let section = sections[idx]
+            dataDict[section.value] = section.convertData(model.data)
+        case .failure(let error):
+           showToastToView(error)
+        }
+    }
+    configDataSource(sections: sections, noDataSection: noDataSection)
+    updateSnapShot(sections: sections, dataDict)
+}
+
+```  
+
+
 
 <br> 
 
@@ -123,6 +392,17 @@ iOS 16.0 이상
 <br> 
 
 > ### UICollectionView.CellRegistration으로 DiffableDataSource와 RxDataSource구성
+
+* DiffableDataSource
+
+```swift
+
+```
+
+* RxDataSource
+```swift
+
+```
 
 <br>
 
@@ -600,8 +880,8 @@ pdfView.snp.makeConstraints { make in
 > ### 성취점
 
 * RxSwift의 MVVM 아키텍처 구현
-* accessToken 인증 및 Alamofire Interceptor로 Token Refresh 구현
-* PG사 결제 구현
+* AccessToken 인증 / 갱신 구현
+* PG사 결제 및 결제 유효성 검증 구현
 * 네트워크 통신수행하는 APIClient 객체와 통신결과를 RxSwift Single Stream으로 래핑하는 APIManager객체를 구분, ViewModel의 Stream에서 호출하기 용이한 NetworkManager 객체 구현
 * Compositional Layout과 Diffable DataSource, RxDataSource를 모두 사용
 * 복수의 section을 가진 여러 개의 콜렉션 뷰가 사용되는 ViewController의 네트워킹을 RxSwiftStream로 제어
