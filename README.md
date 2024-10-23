@@ -90,7 +90,7 @@ iOS 16.0 이상
 > ### 프로젝트 구성도
 
 <div align= "center">
-  <img src = "https://github.com/user-attachments/assets/fcd7a7ae-ed21-4d0a-8026-44f1f4261aa7">
+  <img src = "https://github.com/user-attachments/assets/fcd7a7ae-ed21-4d0a-8026-44f1f4261aa7" width="80%" height="auto">
 </div>
 
 <br>
@@ -119,7 +119,9 @@ iOS 16.0 이상
 
 > ### zip과 combineLatest로 복수의 Section을 가진 CollectionView들의 DataSource에 네트워크 통신 결과 패치하기
 
- ![카테고리별 콜렉션 뷰 페이징 그래픽](https://github.com/user-attachments/assets/2d5d5afa-897c-4ecc-bea8-d48a1c0778c3)
+<div align = "center">
+  <img src = "https://github.com/user-attachments/assets/2d5d5afa-897c-4ecc-bea8-d48a1c0778c3" width="80%" height="auto"/>
+</div>
 
 <br> 
 
@@ -229,19 +231,25 @@ private func fetchDatas<T: MainSection>(
 
 > ### Alamofire Interceptor로 AccessToken 갱신 및 RefreshToken 만료 예외처리
 
-![AccessToken 갱신 그래픽](https://github.com/user-attachments/assets/7654e0dc-25e4-4621-81c4-ea342fedbff1)
+<div align = "center">
+  <img src="https://github.com/user-attachments/assets/7654e0dc-25e4-4621-81c4-ea342fedbff1" width="80%" height="auto">
+</div>
 
 <br>
 
 > ### 유료 컨텐츠 PG 결제와 결제 유효성 인증 구현
 
-![유료 컨텐츠 결제 로직 그래픽](https://github.com/user-attachments/assets/77bd2620-65da-4846-bdbc-f417b6e69bf4)
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/77bd2620-65da-4846-bdbc-f417b6e69bf4" width="80%" height="auto"/>
+</div>
 
 <br>
 
 > ### Alamofire로 Post 방식 파일 업로드 구현
 
-![파일 업로드 다운로드 그래픽](https://github.com/user-attachments/assets/0ab45000-68d3-4612-8f55-b0f9c8cc34fc)
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/0ab45000-68d3-4612-8f55-b0f9c8cc34fc" width="80%" height="auto"/>
+</div>
 
 <br>
 
