@@ -19,7 +19,13 @@
 - 좋아하는 웹소설을 찾아 감상할 수 있는 서비스
 
 > ### 스크린샷
-![스크린샷 ALL](https://github.com/user-attachments/assets/fa8b7866-7a06-4f62-a79f-6eeb70082d62)
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/082f3b90-7958-4308-a2ee-2c061f95e802" width="22%" height="auto"/>
+  <img src="https://github.com/user-attachments/assets/cfad1e5c-14c8-4acc-b0d8-9656c4af9fbe" width="22%" height="auto"/>
+  <img src="https://github.com/user-attachments/assets/ddd576cd-8396-4c16-8abe-eae9b0d8643c" width="22%" height="auto"/>
+  <img src="https://github.com/user-attachments/assets/700d12d0-bf98-4f66-83e1-a77479dc9a61" width="22%" height="auto"/>
+</div>
 
 > ### 개발기간 
  2024.08.14 ~ 2024.08.31
