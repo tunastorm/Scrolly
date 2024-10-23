@@ -117,7 +117,7 @@ iOS 16.0 이상
   
 <br> 
 
-> ### zip과 combineLatest로 복수의 Section을 가진 CollectionView들의 DataSource에 동시에 네트워킹 결과값 패치하기
+> ### zip과 combineLatest로 복수의 Section을 가진 CollectionView들의 DataSource에 네트워크 통신 결과 패치하기
 
  ![카테고리별 콜렉션 뷰 페이징 그래픽](https://github.com/user-attachments/assets/2d5d5afa-897c-4ecc-bea8-d48a1c0778c3)
 
