@@ -142,7 +142,9 @@ iOS 16.0 이상
 
 <br>
 
-> ### MainViewController의 각 CollectionView에 필요한 Section enum들의 인터페이스 구현
+> ### DiffableDataSource와 CompositionalLayout으로 구성된 각 콜렉션 뷰에 필요한 섹션 enum들의 인터페이스 구현
+
+* g
 
 * Interface - 구현부에서 특정 콜렉션뷰의 section별 sort, filtering 조건 구현
 
@@ -190,162 +192,29 @@ private func fetchDatas<T: MainSection>(
 
 > ### RxSwift Single을 이용한 일회성의 EventStream으로 네트워크 통신 이벤트 관리  
 
-* 네트워킹 요청
+* Alamofire로 네트워크 통신을 수행하는 기능을 네트워크 매니저에서 분리해 네트워크 클라이언트 객체 구성
   
-```swift
-final class APIManager: APIManagerProvider {
-  
-    private init() { }
-    
-    static let shared = APIManager()
-    
-    typealias ModelResult<T:Decodable> = Result<T, APIError>
-    typealias DataResult = Result<Data, APIError>
-    typealias TokenHandler = (Decodable) -> Void
-    
-    func callRequestAPI<T: Decodable>(
-        model: T.Type,
-        router: APIRouter,
-        tokenHandler: TokenHandler? = nil
-    ) -> Single<ModelResult<T>> {
-        return Single.create { single in
-            APIClient.request(T.self, router: router) { model in
-                if let tokenHandler { tokenHandler(model) }
-                single(.success(.success(model)))
-            } failure: { error in
-                single(.success(.failure(error)))
-            }
-            return Disposables.create()
-       }
-    }
+* 매니저에서는 클라이언트가 반환하는 Result를 SingleStream으로 래핑해서 ViewModel의 데이터 갱신 Stream으로 반환
+* ViewModel의 데이터 갱신 Stream에서는 flatMap으로 Result가 담긴 SingleStream을 언래핑하여 OutputStream으로 방출
+  - 네트워킹 Stream은 1회성으로 소비되고, ViewModel의 데이터 갱신 Stream은 계속해서 유지되는 구조  
+* Request를 위한 Query 구조체와 Router를 선택하는 부분까지 데이터 갱신 Stream의 map안 에서 수행한 후 flatMap에서 네트워크 매니저를 호출
+* 네트워크 통신 작업이 온전히 RxSwift Stream 내에서 이루어지는 구조  
 
-......
-
-}
-
-```
-
-* 네트워킹 결과 패치
-```swift
-let episodes = input.episodes
-    .map { [weak self] in // request Query 세팅
-        HashTagsQuery(
-            next: self?.cursor[0],
-            limit: "50",
-            productId: APIConstants.ProductId.novelEpisode,
-            hashTag:  model.hashTags.first
-        )
-    }
-    .flatMap { // REST API Request 
-        APIManager.shared.callRequestAPI(
-            model: GetPostsModel.self,
-            router: .searchHashTags($0)
-        )
-    }
-
-......
-
-PublishSubject.combineLatest(novelInfo, episodes, viewedList)
-    .bind(with: self) { owner, results in
-        owner.output.fetchedModel.onNext(results.0)
-        owner.output.fetchedModel.onCompleted()
-        owner.output.episodes.onNext(results.1)
-        owner.output.viewedList.onNext(results.2)
-    }
-    .disposed(by: disposeBag)
-
-```
 <br>
  
-> ### enum으로 정의한 커스텀 에러로 네트워크 에러 예외처리 
+> ### enum으로 정의한 커스텀 에러로 네트워크 에러 예외처리
 
-```swift
-final class APIClient {
-    
-    private init() { }
-    
-    typealias onSuccess<T> = ((T) -> Void)
-    typealias onFailure = ((_ error: APIError) -> Void)
-    
-    static let session = Session(interceptor: RetryInterceptor())
-        
-    // MARK: - request.responseDecodable
-    static func request<T>(
-        _ object: T.Type,
-        router: APIRouter,
-        success: @escaping onSuccess<T>,
-        failure: @escaping onFailure
-    ) where T:Decodable {
-        session.request(router)
-            .validate(statusCode: 200...445)
-            .responseDecodable(of: object) { response in
-                responseHandler(response, success: success, failure: failure)
-            }
-    }
-
-    ......
-
-    // MARK: - 네트워크 응답값 처리
-    private static func responseHandler<T: Decodable>(
-        _ response: AFDataResponse<T>,
-        success: @escaping (T) -> Void,
-        failure: @escaping onFailure
-    ) {
-        if let error = responseErrorHandler(response) {
-            return failure(error)
-        }
-        switch response.result  {
-        case .success(let result):
-            success(result)
-        case .failure(let AFError):
-            let error = convertAFErrorToAPIError(AFError)
-            failure(error)
-        }
-    }
-    
-    // MARK: - Response 에러 처리
-    private static func responseErrorHandler<T: Decodable>(_ response: AFDataResponse<T>) -> APIError? {
-        if let statusCode = response.response?.statusCode, let statusError = convertResponseStatus(statusCode) {
-            return statusError
-        }
-        return nil
-    }
-    
-    // MARK: - Response 상태코드 변환
-    private static func convertResponseStatus(_ statusCode: Int) -> APIError? {
-        return switch statusCode {
-        // API 명세에 정의된 상태 코드 예외처리 
-        case 200: nil
-        case 400: .invalidRequest
-
-        ......
-
-        case 445: .unAuthorizedRequest
-        // 일반적인 상태코드 예외처리
-        case 300 ..< 400: .redirectError
-        case 402 ..< 500: .clientError
-        case 500 ..< 600: .serverError
-        default: .networkError
-        }
-    }
-    
-    // MARK: - AFError 변환
-    private static func convertAFErrorToAPIError(_ error: AFError) -> APIError {
-        return switch error {
-        case .createUploadableFailed: .failedRequest
-
-        ......
-
-        case .urlRequestValidationFailed: .clientError
-        }
-    }
+* 네트워크 클라이언트에서 사용되는 AF.request.responseDecodable, AF.upload.responseDecodable, AF.request.responseData 메서드의 응답값에 대한 처리를 responseHandler라는 메서드로 일원화
+* responseHadler의 내부에서 네트워크 상태코드 예외처리, AFError의 예외처리를 수행해 enum으로 정의한 커스텀 에러로 변환
+* 상태코드의 예외처리 시에는 API 명세에 정의된 에러 상태코드들의 예외처리도 구현
 
 }
 
-```
 <br>
 
 > ### URLRequestConvertible, TargetType 프로토콜을 채택한 Alamofire Router 패턴
+
+* Router에서 
 
 * Query
 ```swift
