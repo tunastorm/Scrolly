@@ -136,7 +136,8 @@ iOS 16.0 이상
   - RxDataSource와 Differentiator에서 제공하는 SectionModelType 프로토콜의 구현체에서 콜렉션 뷰의 각 섹션이 표현할 데이터를 정의
   - OutputStream에서 SectionModelType 구현체들의 배열을 RxDataSorce에 바인딩하여 콜렉션 뷰를 다시 그림
 
-* DiffableDataSource와 RxDataSource의 콜렉션뷰 갱신은 특정 섹션이나 데이터의 변경점 단위가 아닌 전체 콜렉션뷰 단위로 이루어지므로 Output Stream으로 전달되는 데이터는 반드시 전체 콜렉션뷰를 표현할 수 있어야 함
+* DiffableDataSource와 RxDataSource의 콜렉션 뷰 갱신은 특정 섹션이나 데이터의 변경점 단위가 아닌 전체 콜렉션뷰 단위로 이루어진다
+  - Output Stream으로 전달되는 데이터는 반드시 전체 콜렉션뷰를 표현할 수 있어야 하고, 그렇지 않으면 일부 섹션만 화면에 다시 그려지게 됨
   - 필요한 데이터가 비동기 작업을 통해 갱신되는 경우 전체 작업이 마무리되는 시점을 관리해주어야 한다
 
 <br>
