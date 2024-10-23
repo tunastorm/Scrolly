@@ -100,11 +100,12 @@ iOS 16.0 이상
 * ViewModel
   - Input과 Output 구조체에 Subject를 초기화하고 이를 ViewModel의 input, output 프로퍼티에 초기화
   - Input을 인자로 받고 Output을 반환하는 transform 메서드에 input Stream과 output Stream의 작업을 정의
-  - transform 메서드가 한 번 실행되면 input과 output Stream의 구독 발생, 이후 input Stream 방출되면 연산 수행후 output Stream 방출
+  - transform 메서드가 최초 1회 실행되면 input과 output Stream의 구독 발생, 이후 input Stream 방출되면 연산 수행후 output Stream 방출
     
-* View
-  - 
-
+* ViewController
+  - bind 메서드에 viewModel의 transform 실행 및 이후 RxCocoa로 UIView 객체들에서 방출되는 Stream에 대한 로직 구현
+  - viewDidLoad 시점에 bind 메서드 실행
+  
 <br> 
 
 > ### zip과 combineLatest로 복수의 Section을 가진 CollectionView들의 DataSource에 동시에 네트워킹 결과값 패치하기
