@@ -114,14 +114,14 @@ iOS 16.0 이상
 
 <br> 
 
-> ### UICollectionView.CellRegistration으로 DiffableDataSource와 RxDataSource구성
+> ### UICollectionView.CellRegistration과 SupplementaryRegistration으로 DiffableDataSource와 RxDataSource구성
 
 * DiffableDataSource
-
-```swift
-
-```
-
+  - UICollectionView.SupplementaryRegistration과 Cell 유형별 UICollectionView.CellRegistration 객체를 생성
+  - UICollectionViewDiffableDataSource의 생성시, UICollectionView.dequeueConfiguredReusableCell의 생성자에 CellRegistration 주입해 UICollectionViewCell 생성
+  - UICollectionViewDiffableDataSource 인스턴스의 supplementaryViewProvider 프로퍼티에 클로저를 할당하고 내부에서 UICollectionView.dequeueConfiguredReusableSupplementary UICollectionView.SupplementaryRegistration 주입해 UICollectionReusableView를 반환
+  - NSDiffableDataSourceSnapshot을 생성한 후 Output Stream을 통해 ViewModel에서 전달받은 데이터를 패치한 뒤 UICollectionViewDiffableDataSource.apply메서드로 콜렉션 뷰 최신화
+  
 * RxDataSource
 ```swift
 
