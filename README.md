@@ -116,16 +116,28 @@ iOS 16.0 이상
 
 > ### UICollectionView.CellRegistration과 SupplementaryRegistration으로 DiffableDataSource와 RxDataSource구성
 
+* UICollectionView.CellRegistration
+  - CellRegistration은 콜렉션뷰에 사용될 UICollectionViewCell을 정의하는데 사용됨
+  - 콜렉션 뷰를 구성하는 여러 유형의 Cell을 정의하여 각 섹션에서 사용할 수 있음
+
+* UICollectionView.SupplementaryRegistration
+  - SupplementaryRegistration은 각 section의 헤더 뷰를 구성하는데 사용됨
+  - 사용될 CollectionView에 register 되어야 함
+
 * DiffableDataSource
-  - UICollectionView.SupplementaryRegistration과 Cell 유형별 UICollectionView.CellRegistration 객체를 생성
-  - UICollectionViewDiffableDataSource의 생성시, UICollectionView.dequeueConfiguredReusableCell의 생성자에 CellRegistration 주입해 UICollectionViewCell 생성
-  - UICollectionViewDiffableDataSource 인스턴스의 supplementaryViewProvider 프로퍼티에 클로저를 할당하고 내부에서 UICollectionView.dequeueConfiguredReusableSupplementary UICollectionView.SupplementaryRegistration 주입해 UICollectionReusableView를 반환
-  - NSDiffableDataSourceSnapshot을 생성한 후 Output Stream을 통해 ViewModel에서 전달받은 데이터를 패치한 뒤 UICollectionViewDiffableDataSource.apply메서드로 콜렉션 뷰 최신화
+  - 섹션의 헤더 뷰를 생성하는 SupplementaryRegistration과 콜렉션뷰에 사용되는 Cell 유형별 CellRegistration 객체를 생성
+  - UICollectionViewDiffableDataSource의 생성시, dequeueConfiguredReusableCell함수에 CellRegistration을 넘겨 UICollectionViewCell 생성
+  - UICollectionViewDiffableDataSource 인스턴스의 supplementaryViewProvider 프로퍼티에 클로저를 할당하고 내부에서 dequeueConfiguredReusableSupplementary 함수에 SupplementaryRegistration 주입해 UICollectionReusableView를 반환
+  - Output Stream을 통해 ViewModel에서 데이터를 전달받을 때마다 NSDiffableDataSourceSnapshot을 생성한 후, 새로운 스냅샷을 UICollectionViewDiffableDataSource.apply로 적용해 콜렉션 뷰 다시 그림
   
 * RxDataSource
-```swift
+  - DataSource를 생성할 때 CellRegistration과 SupplementaryRegistration을 동시에 받음
+  - 데아터를 패치할 때 snapshot을 apply하지 않음
+  - RxDataSource와 Differentiator에서 제공하는 SectionModelType 프로토콜의 구현체에서 콜렉션 뷰의 각 섹션이 표현할 데이터를 정의
+  - OutputStream에서 SectionModelType 구현체들의 배열을 RxDataSorce에 바인딩하여 콜렉션 뷰를 다시 그림
 
-```
+* DiffableDataSource와 RxDataSource의 콜렉션뷰 갱신은 특정 섹션이나 데이터의 변경점 단위가 아닌 전체 콜렉션뷰 단위로 이루어지므로 Output Stream으로 전달되는 데이터는 반드시 전체 콜렉션뷰를 표현할 수 있어야 함
+  - 필요한 데이터가 비동기 작업을 통해 갱신되는 경우 전체 작업이 마무리되는 시점을 관리해주어야 한다
 
 <br>
 
