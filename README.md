@@ -210,7 +210,7 @@ private func fetchDatas<T: MainSection>(
  
 > ### enum으로 정의한 커스텀 에러로 네트워크 에러 예외처리
 
-* 네트워크 클라이언트에서 사용되는 AF.request.responseDecodable, AF.upload.responseDecodable, AF.request.responseData 메서드의 응답값에 대한 처리를 responseHandler라는 메서드로 일원화
+* 네트워크 클라이언트에서 사용되는 session.request.responseDecodable, session.upload.responseDecodable, session.request.responseData 메서드의 응답값에 대한 처리를 responseHandler라는 메서드로 일원화
 * responseHandler의 내부에서 네트워크 상태코드 예외처리, AFError의 예외처리를 수행해 enum으로 정의한 커스텀 에러로 변환
 * 상태코드의 예외처리 시에는 API 명세에 정의된 에러 상태코드들의 예외처리도 구현
 
@@ -293,7 +293,7 @@ pdfView.snp.makeConstraints { make in
 
 * Retry Policy 실패 case
   - Limitation만큼 retry
-  - 토큰 갱신이 성공하기 전에 AF.request.DataResponse의 결과를 래핑하는 Single Stream이 먼저 Dispose되고 있음
+  - 토큰 갱신이 성공하기 전에 session.request.DataResponse의 결과를 래핑하는 Single Stream이 먼저 Dispose되고 있음
   
   ![스크린샷 2024-10-22 오전 2 37 33](https://github.com/user-attachments/assets/0ba5b024-6686-426a-927b-827544fee45d)
 
