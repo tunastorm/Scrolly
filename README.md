@@ -222,8 +222,6 @@ private func fetchDatas<T: MainSection>(
 * responseHandler의 내부에서 네트워크 상태코드 예외처리, AFError의 예외처리를 수행해 enum으로 정의한 커스텀 에러로 변환
 * 상태코드의 예외처리 시에는 API 명세에 정의된 에러 상태코드들의 예외처리도 구현
 
-}
-
 <br>
 
 > ### URLRequestConvertible, TargetType 프로토콜을 채택한 Alamofire Router 패턴
