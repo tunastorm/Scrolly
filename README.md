@@ -97,14 +97,23 @@ iOS 16.0 이상
 
 > ### RxSwift와 Input/Output 패턴으로 단방향 데이터 흐름의 MVVM 아키텍처 구현
 
-* ViewModel
+* 콘셉트
+  - ViewModel에 UIKit을 import하지 않음
+  - View와 ViewController의 역할을 분리
+
+* ViewModel: Model 가공 및 비즈니스 로직 구현
   - Input과 Output 구조체에 Subject를 초기화하고 이를 ViewModel의 input, output 프로퍼티에 초기화
   - Input을 인자로 받고 Output을 반환하는 transform 메서드에 input Stream과 output Stream의 작업을 정의
   - transform 메서드가 최초 1회 실행되면 input과 output Stream의 구독 발생, 이후 input Stream 방출되면 연산 수행후 output Stream 방출
     
-* ViewController
+* ViewController: CollectionView의 DataSource와 화면전환 제어
   - bind 메서드에 viewModel의 transform 실행 및 이후 RxCocoa로 UIView 객체들에서 방출되는 Stream에 대한 로직 구현
   - viewDidLoad 시점에 bind 메서드 실행
+  - rootView의 대리자로서 화면전환 제어
+
+* View: UI
+  - UIView 객체들을 소유하고 화면 구현 담당
+  - UIView 객체들의 대리자로서 UI수준의 이벤트 제어
   
 <br> 
 
@@ -143,9 +152,7 @@ iOS 16.0 이상
 <br>
 
 > ### DiffableDataSource와 CompositionalLayout으로 구성된 각 콜렉션 뷰에 필요한 섹션 enum들의 인터페이스 구현
-
-* g
-
+ 
 * Interface - 구현부에서 특정 콜렉션뷰의 section별 sort, filtering 조건 구현
 
 ```swift
@@ -186,7 +193,6 @@ private func fetchDatas<T: MainSection>(
     updateSnapShot(sections: sections, dataDict)
 }
 ```
-
 
 <br>
 
