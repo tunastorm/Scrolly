@@ -101,7 +101,7 @@ iOS 16.0 이상
 
 <br>
 
-> ### RxSwift와 Input/Output 패턴으로 단방향 데이터 흐름의 MVVM 아키텍처 구현
+> ### RxSwift와 Input/Output 패턴으로 단방향 데이터 흐름의 MVVM 아키텍처 설계
 
 * 콘셉트
   - ViewModel에 UIKit을 import하지 않음
