@@ -330,7 +330,7 @@ pdfView.snp.makeConstraints { make in
 <br>
 
 > ### 개선사항
-* View와 ViewModel, ViewModel과 DataSource간의 의존성 해소가 필요. POP를 적용해보자.
-* 웹소설 뷰어 화면이 EPUB 파일까지 다룰 수 있으면 더 좋을 것.
+* View와 ViewModel, ViewModel과 DataSource간의 의존성 해소가 필요. POP를 학습해보면 좋을 것 같다.
+* 웹소설 뷰어 화면이 EPUB 파일까지 다룰 수 있으면 실제 서비스엡과 더 유사할 것이다.
 
 <br> 
