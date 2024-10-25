@@ -303,7 +303,7 @@ pdfView.snp.makeConstraints { make in
 
 * Retry Policy 실패 case
   - Limitation만큼 retry
-  - 토큰 갱신이 성공하기 전에 session.request.DataResponse의 결과를 래핑하는 Single Stream이 먼저 Dispose되고 있음
+  - 토큰 갱신에는 성공하지만 session.request.DataResponse의 결과를 래핑하는 Single Stream이 Dispose되고 있음
   
   ![스크린샷 2024-10-22 오전 2 37 33](https://github.com/user-attachments/assets/0ba5b024-6686-426a-927b-827544fee45d)
 
@@ -320,9 +320,9 @@ pdfView.snp.makeConstraints { make in
 
 > ### 성취점
 
-* RxSwift의 MVVM 아키텍처 구현
-* AccessToken 인증 / 갱신 구현
-* PG사 결제 및 결제 유효성 검증 구현
+* RxSwift로 단방향 MVVM 아키텍처 구현
+* JWT 기반 AccessToken 인증 / 갱신 구현
+* 유료 컨텐츠 결제를 위한 PG사 결제 및 결제 유효성 검증
 * 네트워크 통신수행하는 APIClient 객체와 통신결과를 RxSwift Single Stream으로 래핑하는 APIManager객체를 구분, ViewModel의 Stream에서 호출하기 용이한 NetworkManager 객체 구현
 * Compositional Layout과 Diffable DataSource, RxDataSource를 모두 사용
 * 복수의 section을 가진 여러 개의 콜렉션 뷰가 사용되는 ViewController의 네트워킹을 RxSwift Stream로 제어
