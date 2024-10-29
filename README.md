@@ -217,6 +217,7 @@ private func fetchDatas<T: MainSection>(
 > ### enum으로 정의한 커스텀 에러로 네트워크 에러 예외처리
 
 * 네트워크 클라이언트에서 사용되는 session.request.responseDecodable, session.upload.responseDecodable, session.request.responseData 메서드의 응답값에 대한 처리를 responseHandler라는 메서드로 일원화
+  
 * responseHandler의 내부에서 네트워크 상태코드 예외처리, AFError의 예외처리를 수행해 enum으로 정의한 커스텀 에러로 변환
 * 상태코드의 예외처리 시에는 API 명세에 정의된 에러 상태코드들의 예외처리도 구현
 
@@ -225,6 +226,7 @@ private func fetchDatas<T: MainSection>(
 > ### URLRequestConvertible, TargetType 프로토콜을 채택한 Alamofire Router 패턴
 
 * 네트워크 통신 Router의 case가 비대해질 것을 고려하여 URLRequestConvertible과 직접 구현한 TargetType 프로토콜 채택
+  
 * Router는 각 case별로 필요한 baseURL, HTTPHeader, HTTPMethod, Body, Parameter, encoder를 연산프로퍼티를 통해 반환받도록 설계
 * 파라미터의 경우 필요한 값들을 Query 구조체에 정의하고 Router의 case에 연관값으로 선언해 case를 선택할 때 함께 전달받도록 설계
 * TargetType 프로토콜의 구현체에서 Router의 case에 해당하는 연산프로퍼티들의 반환값을 조합해 URLRequest객체를 생성하여 네트워크 클라이언트로 반환  
@@ -292,7 +294,7 @@ pdfView.snp.makeConstraints { make in
 * 웹소설 감상에 사용되는 PDF파일을 다운로드 하는 API에서만 Token Refresh가 수행되지 않는 이슈 발생
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/330de340-5ee0-4bfd-9272-09c0d808c239" width="230" height="500">
+  <img src="https://github.com/user-attachments/assets/330de340-5ee0-4bfd-9272-09c0d808c239" width="230" height="500"/>
 </div>
 
 * Retry Policy 성공 case
@@ -310,6 +312,37 @@ pdfView.snp.makeConstraints { make in
 * 트러블 슈팅
 
 * Token Referesh 정상 수행
+
+<br>
+
+> ### ViewController의 Push/Pop 동작에 따라 NavigationBar의 Hidden 여부 toggle하는 애니메이션을 자연스럽게 개선하기
+
+ * 기존에는 NavigationController?.NavigationBar.isHidden 사용
+   - Swipe 액션으로 pop 동작 중 NavigationBar의 애니메이션이 매우 부자연스러움
+   <br>
+   <div align="center">
+     <img src="https://github.com/user-attachments/assets/a11873eb-5039-4815-a744-cd9fc62f93da" width="22%" height="auto"/>
+   </div>
+
+ * NavigationController?.setNavigationBarHidden(_:animated:)로 화면전환시 NavigationBar에 애니메이션 설정
+   - interactivePopGestureRecognizer를 사용할 수 없는 상태
+   - Swipe 액션으로 pop할 수 없으므로 대응 필요
+   <br>
+    
+   <div align="center">
+     <img src="https://github.com/user-attachments/assets/9c204b32-58c9-4a2e-9a48-01c94ba4705b" width="22%" height="auto"/>
+   </div>
+
+ * UIGestureRecognizerDelegate 채택하여 swipe pop 활성화
+   
+   - gestureRecognizerShouldBegin 메서드에서 gestureRecognize 사용 여부 분기 처리
+   - ViewController를 navigationController.interactivePopGestureRecognizer의 대리자로 설정
+   - NavigationController?.setNavigationBarHidden(_:animated:)로 NavigtaionBar의 Hidden 여부 toggle
+   
+   <br>
+   <div align="center">
+     <img src="https://github.com/user-attachments/assets/98dcdf6e-f2a1-47db-a728-d738cc27c58b" width="22%" height="auto"/>
+   </div>
 
 <br>
 
