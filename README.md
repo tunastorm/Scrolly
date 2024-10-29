@@ -318,7 +318,7 @@ pdfView.snp.makeConstraints { make in
 > ### ViewController의 Push/Pop 동작에 따라 NavigationBar의 Hidden 여부 toggle하는 애니메이션을 자연스럽게 개선하기
 
  * 기존에는 NavigationController?.NavigationBar.isHidden 사용
-   - Swipe 액션으로 pop 동작 중 NavigationBar의 애니메이션이 매우 부자연스러움
+   - Swipe 액션으로 pop 동작 중 NavigationBar의 애니메이션이 매우 부자연스러운 문제 발생
    <br>
    <div align="center">
      <img src="https://github.com/user-attachments/assets/a11873eb-5039-4815-a744-cd9fc62f93da" width="22%" height="auto"/>
@@ -326,7 +326,7 @@ pdfView.snp.makeConstraints { make in
 
  * NavigationController?.setNavigationBarHidden(_:animated:)로 화면전환시 NavigationBar에 애니메이션 설정
    - interactivePopGestureRecognizer를 사용할 수 없는 상태
-   - Swipe 액션으로 pop할 수 없으므로 대응 필요
+   - Swipe 액션으로 pop할 수 없으므로 추가적인 개선 필요
    <br>
     
    <div align="center">
