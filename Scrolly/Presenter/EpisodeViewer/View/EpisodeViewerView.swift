@@ -32,7 +32,6 @@ final class EpisodeViewerView: BaseView {
         addSubview(pdfView)
     }
     
-    
     override func configLayout() {
         pdfView.snp.makeConstraints { make in
             make.verticalEdges.equalToSuperview()

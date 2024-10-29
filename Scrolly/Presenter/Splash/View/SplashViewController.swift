@@ -28,6 +28,7 @@ final class SplashViewController: BaseViewController<SplashView> {
         let input = SplashViewModel.Input()
         guard let viewModel = viewModel as? SplashViewModel,
               let output = viewModel.transform(input: input) else {
+            print("viewModel 또는 output 없음")
             return
         }
         
@@ -39,16 +40,21 @@ final class SplashViewController: BaseViewController<SplashView> {
                 case .failure(let error):
                     owner.nextView = LoginViewController(view: LoginView(), viewModel: LoginViewModel())
                 }
+                let timer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(owner.changeRootview), userInfo: nil, repeats: false)
+                timer.tolerance = 0.2
+                
             }
             .disposed(by: disposeBag)
         
-        let timer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(changeRootview), userInfo: nil, repeats: false)
-        timer.tolerance = 0.2
     }
     
-    
     @objc func changeRootview() {
-        guard let nextView, let sceneDelgate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate else {
+        guard let nextView else {
+            print("nextView 없음")
+            return
+        }
+        guard let sceneDelgate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate else {
+            print("SceneDelgate 없음")
             return
         }
         sceneDelgate.changeRootVCWithNavi(nextView, animated: false)

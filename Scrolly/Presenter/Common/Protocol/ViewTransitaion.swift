@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ViewTransition {
-   
+    
     func pushAfterView<T: UIViewControllerProvider>(view: T, backButton: Bool, animated: Bool)
     
     func presentAfterView<T: UIViewControllerProvider>(view: T, presentationStyle: UIModalPresentationStyle, animated: Bool)

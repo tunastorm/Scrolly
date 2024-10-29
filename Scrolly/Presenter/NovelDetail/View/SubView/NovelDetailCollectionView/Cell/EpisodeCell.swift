@@ -151,7 +151,7 @@ final class EpisodeCell: BaseCollectionViewCell {
         price = identifier.price
         backgroundColor = identifier.content4 == "true" ? Resource.Asset.CIColor.lightGray : .clear
         viewed = identifier.content4 == "true"
-        let date = DateFormatManager.shared.stringToformattedString(value: identifier.createdAt, before: .dateAndTimeWithTimezone, after: .dotSperatedyyyMMdd)
+                let date = DateFormatManager.shared.stringToformattedString(value: identifier.createdAt, before: .dateAndTimeWithTimezone, after: .dotSperatedyyyMMdd)
         uploadDateLabel.text = date
         
         var isShow = true

@@ -9,7 +9,6 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-
 final class MainViewModel: BaseViewModel, ViewModelProvider {
     
     typealias PostListResults = Observable<PrimitiveSequence<SingleTrait, Result<GetPostsModel, APIError>>.Element>
@@ -27,14 +26,16 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
     private var romanceResults: [Int : PublishSubject<HashTagsQuery>] = [:]
 //    private var dateResults: [Int : PublishSubject<HashTagsQuery>] = [:]
 
-    private var output = Output(filterList: BehaviorSubject<[HashTagSection.HashTag]>(value: HashTagSection.HashTag.allCases),
-                                recommandDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
-                                maleDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
-                                femaleDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
-                                fantasyDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
-                                romanceDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
-//                                dateDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
-                                recommandCellTap: PublishSubject<PostsModel>())
+    private var output = Output(
+        filterList: BehaviorSubject<[HashTagSection.HashTag]>(value: HashTagSection.HashTag.allCases),
+        recommandDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
+        maleDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
+        femaleDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
+        fantasyDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
+        romanceDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
+//           dateDatas: PublishSubject<[APIManager.ModelResult<GetPostsModel>]>(),
+        recommandCellTap: PublishSubject<PostsModel>()
+    )
     
     private let disposeBag = DisposeBag()
     
@@ -106,7 +107,6 @@ final class MainViewModel: BaseViewModel, ViewModelProvider {
             
             novelInfoResults[section.rawValue] = results.sorted { $0.key < $1.key }.map{ $0.value }.map { results in
                 results.flatMap{ APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags($0)) }
-//                .debug("\(section.rawValue) 네크워킹")
             }
         }
      

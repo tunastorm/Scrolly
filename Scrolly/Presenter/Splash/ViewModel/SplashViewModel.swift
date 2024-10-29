@@ -38,6 +38,7 @@ final class SplashViewModel: BaseViewModel, ViewModelProvider {
             BehaviorSubject(value: ())
                 .bind(with: self) { owner, _ in
                     APIManager.shared.callRequestRefreshToken { result in
+                        print("토큰 리프레시 결과 받음")
                         owner.output.refreshtoken.onNext(result)
                         owner.output.refreshtoken.onCompleted()
                     }

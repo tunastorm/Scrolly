@@ -51,17 +51,29 @@ final class MainViewController: BaseViewController<MainView> {
         rootView?.delegate = self
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        navigationItem.backBarButtonItem?.isHidden = true
-        navigationItem.backBarButtonItem?.isEnabled = false
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+        navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
-    override func configNavigationbar(backgroundColor: UIColor, backButton: Bool = true, shadowImage: Bool, foregroundColor: UIColor = .black, barbuttonColor: UIColor = .black, showProfileButton: Bool = true, titlePosition: TitlePosition = .center) {
-        super.configNavigationbar(backgroundColor: .white, shadowImage: false, foregroundColor: Resource.Asset.CIColor.blue, titlePosition: .left)
+    override func configNavigationbar(
+        backgroundColor: UIColor,
+        backButton: Bool = true,
+        shadowImage: Bool,
+        foregroundColor: UIColor = .black,
+        barbuttonColor: UIColor = .black,
+        showProfileButton: Bool = true,
+        titlePosition: TitlePosition = .center
+    ) {
+        super.configNavigationbar(
+            backgroundColor: .white,
+            shadowImage: false,
+            foregroundColor: Resource.Asset.CIColor.blue,
+            titlePosition: .left
+        )
         navigationItem.title = Resource.UIConstants.Text.appTitle
         navigationItem.rightBarButtonItem?.isEnabled = true
-        navigationController?.navigationBar.isHidden = false
+        navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
     override func configInteraction() {
@@ -96,7 +108,6 @@ final class MainViewController: BaseViewController<MainView> {
     
         output.recommandDatas
             .bind(with: self) { owner, resultList in
-                print(#function, "resultList: ", resultList.count)
                 owner.fetchDatas(sections: RecommandSection.allCases, resultList: resultList)
             }
             .disposed(by: disposeBag)
@@ -136,7 +147,10 @@ final class MainViewController: BaseViewController<MainView> {
         callRecommandData.onNext(())
     }
     
-    private func fetchDatas<T: MainSection>(sections: [T], resultList: [APIManager.ModelResult<GetPostsModel>]) {
+    private func fetchDatas<T: MainSection>(
+        sections: [T],
+        resultList: [APIManager.ModelResult<GetPostsModel>]
+    ) {
         var dataDict: [String:[PostsModel]] = [:]
         var noDataSection: T?
         resultList.enumerated().forEach { idx, result in
@@ -147,8 +161,7 @@ final class MainViewController: BaseViewController<MainView> {
                     return
                 }
                 let section = sections[idx]
-                dataDict[section.value] = section.callConvertData(section, model.data)
-                print(#function, "정렬됨: ", dataDict[section.value]?.count)
+                dataDict[section.value] = section.convertData(model.data)
             case .failure(let error):
                showToastToView(error)
             }
@@ -157,7 +170,7 @@ final class MainViewController: BaseViewController<MainView> {
         updateSnapShot(sections: sections, dataDict)
     }
     
-    private func rxPushToDetailViewController(dataSource idx: Int, from collectionView: BaseCollectionViewController) {
+    private func rxPushToDetailViewController(dataSource idx: Int, from collectionView: BaseCollectionView) {
     
         collectionView.rx.itemSelected
             .bind(with: self) { [weak self] owner, indexPath in
@@ -194,12 +207,19 @@ final class MainViewController: BaseViewController<MainView> {
         guard let collectionView = rootView?.hashTagView else {
             return
         }
-         let cellRegistration = filterCellRegistration()
-         filterDataSource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
-             let cell = collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: itemIdentifier)
-             return cell
-         })
-     }
+        let cellRegistration = filterCellRegistration()
+        filterDataSource = UICollectionViewDiffableDataSource(
+            collectionView: collectionView,
+            cellProvider: { collectionView, indexPath, itemIdentifier in
+                let cell = collectionView.dequeueConfiguredReusableCell(
+                    using: cellRegistration,
+                    for: indexPath,
+                    item: itemIdentifier
+                )
+                return cell
+            }
+        )
+    }
     
     private func updateFilterSnapShot(_ hashTags: [HashTagSection.HashTag]) {
         var snapShot = NSDiffableDataSourceSnapshot<HashTagSection, HashTagSection.HashTag>()
@@ -223,7 +243,7 @@ final class MainViewController: BaseViewController<MainView> {
         
         let headerRegistration = collectionViewHeaderRegestration(sections, noDataSection)
         
-        var collectionView: BaseCollectionViewController?
+        var collectionView: BaseCollectionView?
         switch sections {
         case is [RecommandSection]: collectionView = rootView?.recommandView
         case is [MaleSection]: collectionView = rootView?.maleView
@@ -249,111 +269,138 @@ final class MainViewController: BaseViewController<MainView> {
         }
     }
     
-    private func configRecommandDataSource(_ collectionView: BaseCollectionViewController, _ headerRegistration: HeaderRegistration) {
-        recommandDataSource = UICollectionViewDiffableDataSource<RecommandSection, PostsModel>(collectionView: collectionView, cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
-            let section = RecommandSection.allCases[indexPath.section]
-            guard let bannerCellRegistration = self?.bannerCellRegistration,
-                  let recommandCellRegistration = self?.recommandCellRegistration,
-                    let recentlyCellRegistration = self?.recentlyCellRegistration else {
-                return UICollectionViewCell()
+    private func configRecommandDataSource(_ collectionView: BaseCollectionView, _ headerRegistration: HeaderRegistration) {
+        recommandDataSource = UICollectionViewDiffableDataSource<RecommandSection, PostsModel>(
+            collectionView: collectionView,
+            cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
+                let section = RecommandSection.allCases[indexPath.section]
+                guard let bannerCellRegistration = self?.bannerCellRegistration,
+                      let recommandCellRegistration = self?.recommandCellRegistration,
+                        let recentlyCellRegistration = self?.recentlyCellRegistration else {
+                    return UICollectionViewCell()
+                }
+                switch section {
+                case .banner:
+                    return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
+                case .popular, .newWaitingFree:
+                    return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
+                case .recently:
+                    return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
+                }
             }
-            switch section {
-            case .banner:
-                return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
-            case .popular, .newWaitingFree:
-                return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
-            case .recently:
-                return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
-            }
-        })
+        )
         recommandDataSource?.supplementaryViewProvider = { [weak self] (view, kind, index) in
             return self?.rootView?.recommandView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
         }
     }
     
-    private func configMaleDataSource(_ collectionView: BaseCollectionViewController, _ headerRegistration: HeaderRegistration) {
-        maleDataSource = UICollectionViewDiffableDataSource<MaleSection, PostsModel>(collectionView: collectionView, cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
-            let section = MaleSection.allCases[indexPath.section]
-            guard let bannerCellRegistration = self?.bannerCellRegistration,
-                  let recommandCellRegistration = self?.recommandCellRegistration,
-                    let recentlyCellRegistration = self?.recentlyCellRegistration else {
-                return UICollectionViewCell()
+    private func configMaleDataSource(
+        _ collectionView: BaseCollectionView,
+        _ headerRegistration: HeaderRegistration
+    ) {
+        maleDataSource = UICollectionViewDiffableDataSource<MaleSection, PostsModel>(
+            collectionView: collectionView,
+            cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
+                let section = MaleSection.allCases[indexPath.section]
+                guard let bannerCellRegistration = self?.bannerCellRegistration,
+                      let recommandCellRegistration = self?.recommandCellRegistration,
+                        let recentlyCellRegistration = self?.recentlyCellRegistration else {
+                    return UICollectionViewCell()
+                }
+                switch section {
+                case .banner:
+                    return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
+                case .popular, .newWaitingFree:
+                    return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
+    //            case .recently:
+    //                return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
+                }
             }
-            switch section {
-            case .banner:
-                return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
-            case .popular, .newWaitingFree:
-                return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
-//            case .recently:
-//                return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
-            }
-        })
+        )
         maleDataSource?.supplementaryViewProvider = { [weak self] (view, kind, index) in
             return self?.rootView?.maleView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
         }
     }
     
-    private func configFemaleDataSource(_ collectionView: BaseCollectionViewController, _ headerRegistration: HeaderRegistration) {
-        femaleDataSource = UICollectionViewDiffableDataSource<FemaleSection, PostsModel>(collectionView: collectionView, cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
-            let section = FemaleSection.allCases[indexPath.section]
-            guard let bannerCellRegistration = self?.bannerCellRegistration,
-                  let recommandCellRegistration = self?.recommandCellRegistration,
-                    let recentlyCellRegistration = self?.recentlyCellRegistration else {
-                return UICollectionViewCell()
+    private func configFemaleDataSource(
+        _ collectionView: BaseCollectionView,
+        _ headerRegistration: HeaderRegistration
+    ) {
+        femaleDataSource = UICollectionViewDiffableDataSource<FemaleSection, PostsModel>(
+            collectionView: collectionView,
+            cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
+                let section = FemaleSection.allCases[indexPath.section]
+                guard let bannerCellRegistration = self?.bannerCellRegistration,
+                      let recommandCellRegistration = self?.recommandCellRegistration,
+                        let recentlyCellRegistration = self?.recentlyCellRegistration else {
+                    return UICollectionViewCell()
+                }
+                switch section {
+                case .banner:
+                    return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
+                case .popular, .newWaitingFree:
+                    return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
+    //            case .recently:
+    //                return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
+                }
             }
-            switch section {
-            case .banner:
-                return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
-            case .popular, .newWaitingFree:
-                return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
-//            case .recently:
-//                return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
-            }
-        })
+        )
         femaleDataSource?.supplementaryViewProvider = { [weak self] (view, kind, index) in
             return self?.rootView?.femaleView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
         }
     }
     
-    private func configFantasyDataSource(_ collectionView: BaseCollectionViewController, _ headerRegistration: HeaderRegistration) {
-        fantasyDataSource = UICollectionViewDiffableDataSource<FantasySection, PostsModel>(collectionView: collectionView, cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
-            let section = FantasySection.allCases[indexPath.section]
-            guard let bannerCellRegistration = self?.bannerCellRegistration,
-                  let recommandCellRegistration = self?.recommandCellRegistration,
-                    let recentlyCellRegistration = self?.recentlyCellRegistration else {
-                return UICollectionViewCell()
+    private func configFantasyDataSource(
+        _ collectionView: BaseCollectionView,
+        _ headerRegistration: HeaderRegistration
+    ) {
+        fantasyDataSource = UICollectionViewDiffableDataSource<FantasySection, PostsModel>(
+            collectionView: collectionView,
+            cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
+                let section = FantasySection.allCases[indexPath.section]
+                guard let bannerCellRegistration = self?.bannerCellRegistration,
+                      let recommandCellRegistration = self?.recommandCellRegistration,
+                        let recentlyCellRegistration = self?.recentlyCellRegistration else {
+                    return UICollectionViewCell()
+                }
+                switch section {
+                case .banner:
+                    return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
+                case .popular, .newWaitingFree:
+                    return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
+    //            case .recently:
+    //                return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
+                }
             }
-            switch section {
-            case .banner:
-                return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
-            case .popular, .newWaitingFree:
-                return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
-//            case .recently:
-//                return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
-            }
-        })
+        )
         fantasyDataSource?.supplementaryViewProvider = { [weak self] (view, kind, index) in
             return self?.rootView?.fantasyView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
         }
     }
     
-    private func configRomanceDataSource(_ collectionView: BaseCollectionViewController, _ headerRegistration: HeaderRegistration) {
-        romanceDataSource = UICollectionViewDiffableDataSource<RomanceSection, PostsModel>(collectionView: collectionView, cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
-            let section = RomanceSection.allCases[indexPath.section]
-            guard let bannerCellRegistration = self?.bannerCellRegistration,
-                  let recommandCellRegistration = self?.recommandCellRegistration,
-                  let recentlyCellRegistration = self?.recentlyCellRegistration else {
-                return UICollectionViewCell()
+    private func configRomanceDataSource(
+        _ collectionView: BaseCollectionView,
+        _ headerRegistration: HeaderRegistration
+    ) {
+        romanceDataSource = UICollectionViewDiffableDataSource<RomanceSection, PostsModel>(
+            collectionView: collectionView,
+            cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
+                let section = RomanceSection.allCases[indexPath.section]
+                guard let bannerCellRegistration = self?.bannerCellRegistration,
+                      let recommandCellRegistration = self?.recommandCellRegistration,
+                      let recentlyCellRegistration = self?.recentlyCellRegistration else {
+                    return UICollectionViewCell()
+                }
+                switch section {
+                case .banner:
+                    return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
+                case .popular, .newWaitingFree:
+                    return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
+    //            case .recently:
+    //                return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
+                }
             }
-            switch section {
-            case .banner:
-                return collectionView.dequeueConfiguredReusableCell(using: bannerCellRegistration, for: indexPath, item: itemIdentifier)
-            case .popular, .newWaitingFree:
-                return collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: itemIdentifier)
-//            case .recently:
-//                return collectionView.dequeueConfiguredReusableCell(using: recentlyCellRegistration, for: indexPath, item: itemIdentifier)
-            }
-        })
+        )
         romanceDataSource?.supplementaryViewProvider = { [weak self] (view, kind, index) in
             return self?.rootView?.romanceView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
         }

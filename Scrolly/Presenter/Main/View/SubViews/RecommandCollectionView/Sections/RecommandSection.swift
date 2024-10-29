@@ -46,8 +46,8 @@ enum RecommandSection: String, MainSection {
         }
     }
     
-    func convertData(_ section: RecommandSection, _ model: [PostsModel]) -> [PostsModel] {
-        switch section {
+    func convertData(_ model: [PostsModel]) -> [PostsModel] {
+        switch self {
         case .banner:
             return model.shuffled()
         case .popular:

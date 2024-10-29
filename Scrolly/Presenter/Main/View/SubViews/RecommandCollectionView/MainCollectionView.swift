@@ -8,7 +8,7 @@
 import UIKit
 
 
-final class MainCollectionView: BaseCollectionViewController {
+final class MainCollectionView: BaseCollectionView {
     
     private static var screenSize: CGRect?
     

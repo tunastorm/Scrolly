@@ -48,8 +48,8 @@ enum FemaleSection: String, MainSection {
         }
     }
     
-    func convertData(_ section: FemaleSection, _ model: [PostsModel]) -> [PostsModel] {
-        switch section {
+    func convertData(_ model: [PostsModel]) -> [PostsModel] {
+        switch self {
         case .banner:
             return model.shuffled()
         case .popular:

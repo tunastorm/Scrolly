@@ -47,11 +47,11 @@ final class EpisodeViewerViewModel: BaseViewModel, ViewModelProvider {
         
         let title = Observable.just(model?.title)
         
-        let file = BehaviorSubject(value: model)
+        let file = BehaviorRelay(value: model)
             .map{ $0?.files[1] ?? "" }
             .flatMap{ APIManager.shared.callRequestData(.getPostsImage($0)) }
            
-        BehaviorSubject.combineLatest(title, file)
+        BehaviorRelay.combineLatest(title, file)
             .bind(with: self) { owner, results in
                 guard let title = results.0 else {
                     print(#function, "타이틀 없음")
@@ -59,7 +59,6 @@ final class EpisodeViewerViewModel: BaseViewModel, ViewModelProvider {
                 }
                 owner.output.title.accept(title)
                 owner.output.model.accept(results.1)
-//                owner.output.model.onCompleted()
             }
             .disposed(by: disposeBag)
         

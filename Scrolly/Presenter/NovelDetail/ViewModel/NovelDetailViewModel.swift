@@ -90,7 +90,6 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
                 guard indexPaths.count <= 3, indexPaths.last?.item == 19 else {
                     return
                 }
-                print(#function, "cursor: ", owner.cursor)
 //                owner.output.clearDataSource.onNext([
 //                    owner.sectionList[0],
 //                    NovelDetailSectionModel(header: CollectionViewHeaderView(), items: [])
@@ -101,8 +100,20 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
             .disposed(by: disposeBag)
        
        let episodes = input.episodes
-            .map { [weak self] in HashTagsQuery(next: self?.cursor[0], limit: "50", productId: APIConstants.ProductId.novelEpisode, hashTag:  model.hashTags.first) }
-            .flatMap { APIManager.shared.callRequestAPI(model: GetPostsModel.self, router: .searchHashTags($0)) }
+            .map { [weak self] in
+                HashTagsQuery(
+                    next: self?.cursor[0],
+                    limit: "50",
+                    productId: APIConstants.ProductId.novelEpisode,
+                    hashTag:  model.hashTags.first
+                )
+            }
+            .flatMap {
+                APIManager.shared.callRequestAPI(
+                    model: GetPostsModel.self,
+                    router: .searchHashTags($0)
+                )
+            }
         
 //        let inputViewedNovel = input.viewedNovel
 //            .asDriver(onErrorJustReturn: PostsModel())
@@ -124,7 +135,7 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
         
         
         input.viewedNovel
-            .map{ [weak self] model in
+            .map{ model in
 //                self?.postId = model.postId
                 return (model.postId, LikeQuery(likeStatus: true))
             }
@@ -132,8 +143,8 @@ final class NovelDetailViewModel: BaseViewModel, ViewModelProvider {
 //            .debug("input - viewedNovel")
             .bind(with: self) { owner, result in
                 switch result {
-                case .success(let model):
-                    input.viewedList.onNext(())
+                case .success(let model): return
+//                    input.viewedList.onNext(())
 //                    guard let id = owner.postId else { return }
 //                    updateEpisode.onNext(id)
                 case .failure(let error): return

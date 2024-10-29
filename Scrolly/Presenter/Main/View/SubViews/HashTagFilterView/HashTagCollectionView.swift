@@ -8,7 +8,7 @@
 import UIKit
 
 
-final class HashTagCollectionView: BaseCollectionViewController {
+final class HashTagCollectionView: BaseCollectionView {
     
     static func createLayout() -> UICollectionViewCompositionalLayout {
         let screenWidth = UIScreen.main.bounds.width

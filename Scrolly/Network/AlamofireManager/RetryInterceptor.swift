@@ -10,10 +10,13 @@ import Alamofire
 
 final class RetryInterceptor: RetryPolicy {
     
-    private let retryLimitation = 3
+//    private let retryLimitation = 1
     private let retryDelay: TimeInterval = 1
     
+    
     override func retry(_ request: Request, for session: Session, dueTo error: any Error, completion: @escaping (RetryResult) -> Void) {
+        print("retry 가능한 상태코드:", retryableHTTPStatusCodes)
+        print("retry 가능한 URLErrorCodes:", retryableURLErrorCodes)
         print(#function, "리트라이 로직 스타트")
         guard let statusCode = request.response?.statusCode, statusCode == 419 else {
             completion(.doNotRetry)
@@ -24,14 +27,17 @@ final class RetryInterceptor: RetryPolicy {
         getToken { isSuccess, error in
             print(#function, "리트라이 isSuccess: \(isSuccess)")
             if isSuccess {
-                if request.retryCount < self.retryLimit {
+                if request.retryCount < Self.defaultRetryLimit {
                     completion(.retryWithDelay(self.retryDelay))
+                } else {
+                    print("리트라이 회수 초과")
                 }
                 return
             }
             if let error {
                 NotificationCenter.default.post(name: NSNotification.Name(RefreshTokenNotification.expired), object: nil, userInfo: nil)
             }
+            print("결국 리트라이 안함")
             completion(.doNotRetry)
         }
     }

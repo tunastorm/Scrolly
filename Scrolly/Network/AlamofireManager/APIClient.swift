@@ -18,26 +18,29 @@ final class APIClient {
     typealias onFailure = ((_ error: APIError) -> Void)
     
     static let session = Session(interceptor: RetryInterceptor())
-        
-    static func request<T>(_ object: T.Type,
-                           router: APIRouter,
-                           success: @escaping onSuccess<T>,
-                           failure: @escaping onFailure) where T:Decodable {
-        
+    
+    // MARK: - request.responseDecodable
+    static func request<T>(
+        _ object: T.Type,
+        router: APIRouter,
+        success: @escaping onSuccess<T>,
+        failure: @escaping onFailure
+    ) where T:Decodable {
         session.request(router)
-            .validate(statusCode: 200...445)
+            .validate(statusCode: 200...500)
             .responseDecodable(of: object) { response in
                 responseHandler(response, success: success, failure: failure)
             }
-        
     }
     
-    static func upload<T>(_ object: T.Type,
-                          query: Encodable,
-                          router: APIRouter,
-                          success: @escaping onSuccess<T>,
-                          failure: @escaping onFailure) where T: Decodable {
-        
+    // MARK: - POST Upload
+    static func upload<T>(
+        _ object: T.Type,
+        query: Encodable,
+        router: APIRouter,
+        success: @escaping onSuccess<T>,
+        failure: @escaping onFailure
+    ) where T: Decodable {
         session.upload(multipartFormData: { multipartFormData in
             switch router {
             case .uploadFiles: setUploadFilesForm(multipartFormData, query as! UploadFilesQuery)
@@ -45,34 +48,10 @@ final class APIClient {
             default: return
             }
         }, with: router)
-        .validate(statusCode: 200...419)
+        .validate(statusCode: 200...500)
         .responseDecodable(of: T.self ) { response in
             responseHandler(response, success: success, failure: failure)
         }
-        
-    }
-    
-    static func requestData (router: APIRouter,
-                             success: @escaping (Data) -> Void,
-                             failure: @escaping onFailure) {
-        
-        session.request(router)
-            .validate(statusCode: 200...445)
-            .responseData(completionHandler: { response in
-                responseHandler(response, success: success, failure: failure)
-            })
-    }
-    
-    static func requestDelete (router: APIRouter,
-                               success: @escaping (Data?) -> Void,
-                               failure: @escaping onFailure) {
-        
-        session.request(router)
-            .validate(statusCode: 200...445)
-            .response { response in
-                dump(response.result)
-                responseHandler(response, success: success, failure: failure)
-            }
     }
     
     private static func setUploadFilesForm(_ multipartFormData: MultipartFormData, _ query: UploadFilesQuery)  {
@@ -83,7 +62,6 @@ final class APIClient {
             multipartFormData.append(file, withName: "files", fileName: query.names[idx] + fileType, mimeType: mimeType)
         }
     }
-    
     
     private static func setUpdateMyProfileForm(_ multipartFormData: MultipartFormData, _ query: MyProfileQuery) {
         if let nick = query.nick {
@@ -100,7 +78,41 @@ final class APIClient {
         }
     }
     
-    private static func responseHandler<T: Decodable>(_ response: AFDataResponse<T>, success: @escaping (T) -> Void, failure: @escaping onFailure) {
+    // MARK: - request.responseData
+    static func requestData (
+        router: APIRouter,
+        success: @escaping (Data) -> Void,
+        failure: @escaping onFailure
+    ) {
+        session.request(router)
+            .validate(statusCode: 200...500)
+//            .responseString { response in
+//                print("responseData.result:", response.result)
+//            }
+            .responseData(completionHandler: { response in
+                responseHandler(response, success: success, failure: failure)
+            })
+    }
+    
+    // MARK: - request.response
+    static func requestDelete (
+        router: APIRouter,
+        success: @escaping (Data?) -> Void,
+        failure: @escaping onFailure
+    ) {
+        session.request(router)
+            .validate(statusCode: 200...500)
+            .response { response in
+                responseHandler(response, success: success, failure: failure)
+            }
+    }
+    
+    // MARK: - 네트워크 응답값 처리
+    private static func responseHandler<T: Decodable>(
+        _ response: AFDataResponse<T>,
+        success: @escaping (T) -> Void,
+        failure: @escaping onFailure
+    ) {
         if let error = responseErrorHandler(response) {
             return failure(error)
         }
@@ -113,16 +125,15 @@ final class APIClient {
         }
     }
     
+    // MARK: - Response 에러 처리
     private static func responseErrorHandler<T: Decodable>(_ response: AFDataResponse<T>) -> APIError? {
         if let statusCode = response.response?.statusCode, let statusError = convertResponseStatus(statusCode) {
             return statusError
         }
-//        guard let decodedData = response.value else {
-//            return .noResponseData
-//        }
         return nil
     }
     
+    // MARK: - Response 상태코드 변환
     private static func convertResponseStatus(_ statusCode: Int) -> APIError? {
         return switch statusCode {
         case 200: nil
@@ -145,6 +156,7 @@ final class APIClient {
         }
     }
     
+    // MARK: - AFError 변환
     private static func convertAFErrorToAPIError(_ error: AFError) -> APIError {
         return switch error {
         case .createUploadableFailed: .failedRequest

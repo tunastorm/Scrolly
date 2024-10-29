@@ -34,10 +34,10 @@ final class MainView: BaseView {
                                          collectionViewLayout: MainCollectionView.createLayout(FantasySection.allCases))
     let romanceView = MainCollectionView(frame: .zero,
                                          collectionViewLayout: MainCollectionView.createLayout(RomanceSection.allCases))
-    let dateView = MainCollectionView(frame: .zero,
-                         collectionViewLayout: MainCollectionView.createLayout(DateSection.allCases))
+//    let dateView = MainCollectionView(frame: .zero,
+//                         collectionViewLayout: MainCollectionView.createLayout(DateSection.allCases))
     
-    lazy var collectionViewList = [ recommandView, maleView, femaleView, fantasyView, romanceView, dateView ]
+    lazy var collectionViewList = [ recommandView, maleView, femaleView, fantasyView, romanceView ]
     
 //    private let bannerPageLabel = UILabel().then {
 //        $0.font = Resource.Asset.Font.boldSystem13
@@ -77,7 +77,7 @@ final class MainView: BaseView {
         scrollView.snp.makeConstraints { make in
             make.top.equalTo(hashTagView.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide)
-            make.bottom.equalTo(safeAreaLayoutGuide)
+            make.bottom.equalToSuperview()
         }
         contentView.snp.makeConstraints { make in
             make.edges.equalTo(scrollView.contentLayoutGuide)
@@ -109,12 +109,12 @@ final class MainView: BaseView {
             make.verticalEdges.equalToSuperview()
             make.leading.equalTo(fantasyView.snp.trailing)
         }
-        dateView.snp.makeConstraints { make in
-            make.width.equalTo(screenSize.width)
-            make.verticalEdges.equalToSuperview()
-            make.leading.equalTo(romanceView.snp.trailing)
-            make.trailing.equalToSuperview()
-        }
+//        dateView.snp.makeConstraints { make in
+//            make.width.equalTo(screenSize.width)
+//            make.verticalEdges.equalToSuperview()
+//            make.leading.equalTo(romanceView.snp.trailing)
+//            make.trailing.equalToSuperview()
+//        }
     }
     
     override func configView() {

@@ -36,7 +36,11 @@ final class APIManager: APIManagerProvider {
     typealias DataResult = Result<Data, APIError>
     typealias TokenHandler = (Decodable) -> Void
     
-    func callRequestAPI<T: Decodable>(model: T.Type, router: APIRouter, tokenHandler: TokenHandler? = nil) -> Single<ModelResult<T>> {
+    func callRequestAPI<T: Decodable>(
+        model: T.Type,
+        router: APIRouter,
+        tokenHandler: TokenHandler? = nil
+    ) -> Single<ModelResult<T>> {
         return Single.create { single in
             APIClient.request(T.self, router: router) { model in
                 if let tokenHandler { tokenHandler(model) }
@@ -45,7 +49,7 @@ final class APIManager: APIManagerProvider {
                 single(.success(.failure(error)))
             }
             return Disposables.create()
-       }
+        }
     }
     
     func callRequestRefreshToken(completion: @escaping (ModelResult<RefreshTokenModel>) -> Void) {
@@ -59,7 +63,11 @@ final class APIManager: APIManagerProvider {
         }
     }
     
-    func callRequestUploadFiles<T: Decodable>(model: T.Type, _ router: APIRouter, _ query: Encodable) -> Single<ModelResult<T>> {
+    func callRequestUploadFiles<T: Decodable>(
+        model: T.Type,
+        _ router: APIRouter,
+        _ query: Encodable
+    ) -> Single<ModelResult<T>> {
         return Single.create { single in
             APIClient.upload(T.self, query: query, router: router) { model in
                 single(.success(.success(model)))
@@ -67,22 +75,22 @@ final class APIManager: APIManagerProvider {
                 single(.success(.failure(error)))
             }
             return Disposables.create()
-        }.debug(router.description)
+        }
     }
     
     func callRequestData(_ router: APIRouter) -> Single<DataResult> {
         return Single.create { single in
             APIClient.requestData(router: router) { data in
+                guard !data.isEmpty else { return }
                 single(.success(.success(data)))
             } failure: { error in
                 single(.success(.failure(error)))
             }
             return Disposables.create()
         }.debug(router.description)
-
     }
     
-    func callRequestDelete(_ router:APIRouter) -> Single<VoidResult> {
+    func callRequestDelete(_ router: APIRouter) -> Single<VoidResult> {
         return Single.create { single in
             APIClient.requestDelete(router: router) { data in
                 single(.success(.success(())))
@@ -90,7 +98,7 @@ final class APIManager: APIManagerProvider {
                 single(.success(.failure(error)))
             }
             return Disposables.create()
-        }.debug(router.description)
+        }
     }
     
     func callRequestLogin(_ router: APIRouter) -> Single<ModelResult<LoginModel>> {

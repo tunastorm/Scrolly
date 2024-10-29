@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NovelDetailTableView: BaseCollectionViewController {
+final class NovelDetailTableView: BaseCollectionView {
     
     private static var screenSize: CGRect?
     

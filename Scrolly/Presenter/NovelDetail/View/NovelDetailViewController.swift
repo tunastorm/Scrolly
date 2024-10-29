@@ -38,7 +38,7 @@ protocol EpisodeCellDelegate {
 
 
 final class NovelDetailViewController: BaseViewController<NovelDetailView> {
-
+    
     typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<CollectionViewHeaderView>
     typealias CellRegistration<T: BaseCollectionViewCell> = UICollectionView.CellRegistration<T, PostsModel>
     
@@ -91,12 +91,22 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
         }
     )
     
-    private let input = NovelDetailViewModel.Input(episodes: PublishSubject<Void>(), viewedNovel: PublishSubject<PostsModel>(), viewedList: BehaviorSubject(value: ()), nextCursor: PublishSubject<(Int,String)>(), prefetchItems: PublishSubject<[IndexPath]>())
-    
+    private let input = NovelDetailViewModel.Input(
+        episodes: PublishSubject<Void>(),
+        viewedNovel: PublishSubject<PostsModel>(),
+        viewedList: BehaviorSubject(value: ()),
+        nextCursor: PublishSubject<(Int,String)>(),
+        prefetchItems: PublishSubject<[IndexPath]>()
+    )
+
     override func viewDidLoad() {
         super.viewDidLoad()
         rootView?.delegate = self
-        navigationController?.navigationBar.isHidden = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+    
+    override func viewIsAppearing(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(true, animated: true)
         navigationItem.backBarButtonItem?.isHidden = true
         navigationItem.backBarButtonItem?.isEnabled = false
         navigationItem.rightBarButtonItem?.isEnabled = false
@@ -128,7 +138,6 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
         
         PublishSubject<[NovelDetailSectionModel]>
             .combineLatest(output.fetchedModel, output.episodes, output.viewedList) { [weak self] novel, episodes, viewedList in
-                let headerView = CollectionViewHeaderView()
                 
                 guard let episodes = self?.fetchPostsModelList(episodes, cursorIndex: 0),
                       let viewedList = self?.fetchPostsModelList(viewedList, cursorIndex: 1) else {
@@ -172,6 +181,7 @@ final class NovelDetailViewController: BaseViewController<NovelDetailView> {
     
     private func fetchViewedListToEpisode(_ episodeList: [PostsModel], _ viewedList: [PostsModel]) -> [PostsModel] {
         var fetchedList = episodeList
+        print("본 소설 목록:",viewedList)
         let viewedIds = viewedList.map { $0.postId }
         episodeList.enumerated().forEach { idx, episode in
             if viewedIds.contains(episode.postId) {
@@ -248,7 +258,7 @@ extension NovelDetailViewController: EpisodeCellDelegate {
                 return
             }
             input.viewedNovel.onNext(model)
-            input.viewedList.onNext(())
+//            input.viewedList.onNext(())
             NotificationCenter.default.post(name: NSNotification.Name(NovelViewedNotification.viewed), object: nil, userInfo: nil)
             let vc = EpisodeViewerViewController(view: EpisodeViewerView(), viewModel: EpisodeViewerViewModel(novel: model))
             pushAfterView(view: vc, backButton: true, animated: true)
@@ -278,3 +288,16 @@ extension NovelDetailViewController: EpisodeCellDelegate {
     }
     
 }
+
+extension NovelDetailViewController: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if let nav = navigationController,
+           nav.isNavigationBarHidden && nav.viewControllers.count > 1 {
+            return true
+        }
+        return false
+    }
+    
+}
+

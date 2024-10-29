@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class CommentTableView: BaseCollectionViewController {
+final class CommentTableView: BaseCollectionView {
     
     private static var screenSize: CGRect?
     

@@ -26,6 +26,7 @@ final class NovelDetailView: BaseView {
     private let backButton = CustomButton().then {
         $0.configImage(image: Resource.Asset.SystemImage.chevronLeft)
     }
+    
     private let profileButton = CustomButton().then {
         $0.configImage(image: Resource.Asset.SystemImage.lineThreeHorizontal)
     }
