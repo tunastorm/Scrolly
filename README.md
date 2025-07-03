@@ -300,8 +300,7 @@ pdfView.snp.makeConstraints { make in
    </div>
 
  * NavigationController?.setNavigationBarHidden(_:animated:)로 화면전환시 NavigationBar에 애니메이션 설정
-   - NavigationBar의 애니메이션은 개선되었지만
-   - interactivePopGestureRecognizer가 비활성화 되어 Swipe 액션으로 pop할 수 없는 상태이므로 추가적인 개선 필요
+   - NavigationBar의 애니메이션은 개선되었지만, interactivePopGestureRecognizer가 비활성화 되어 Swipe 액션으로 pop할 수 없는 상태이므로 추가적인 개선 필요
    <br>
     
    <div align="center">
