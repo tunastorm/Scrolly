@@ -290,31 +290,6 @@ pdfView.snp.makeConstraints { make in
 
 <br>
 
-> ### Response.result의 타입이 Data일 때 Alamofire RetryPolicy의 실행 실패 이슈
-* 웹소설 감상에 사용되는 PDF파일을 다운로드 하는 API에서만 Token Refresh가 수행되지 않는 이슈 발생
-
-<div align="center">
-  <img src="https://github.com/user-attachments/assets/330de340-5ee0-4bfd-9272-09c0d808c239" width="230" height="500"/>
-</div>
-
-* Retry Policy 성공 case
-  - RetryPolicy에 설정한 Limitation(설정값: 3)만큼 retry
-  - 토큰 갱신 성공 후 기존 request 재수행하여 결과 반환
-  
-  ![스크린샷 2024-10-22 오전 2 10 38](https://github.com/user-attachments/assets/5e55d4f3-9d7a-45a8-a064-7a5e90b762ad)
-
-* Retry Policy 실패 case
-  - Limitation만큼 retry
-  - 토큰 갱신에는 성공하지만 session.request.DataResponse의 결과를 래핑하는 Single Stream이 Dispose되고 있음
-  
-  ![스크린샷 2024-10-22 오전 2 37 33](https://github.com/user-attachments/assets/0ba5b024-6686-426a-927b-827544fee45d)
-
-* 트러블 슈팅
-
-* Token Referesh 정상 수행
-
-<br>
-
 > ### ViewController의 Push/Pop 동작에 따라 NavigationBar의 Hidden 여부 toggle하는 애니메이션을 자연스럽게 개선하기
 
  * 기존에는 NavigationController?.NavigationBar.isHidden 사용
